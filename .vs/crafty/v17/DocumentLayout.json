@@ -1,0 +1,174 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\luo20\\crafty\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|c:\\users\\luo20\\crafty\\assets\\scripts\\gridmatrix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridmatrix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\imagedraghandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\imagedraghandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|c:\\users\\luo20\\crafty\\assets\\scripts\\contentpreviews\\content\\piggypreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\contentpreviews\\content\\piggypreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\contentpreviews\\accessory\\wheelpreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\contentpreviews\\accessory\\wheelpreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\contentpreviews\\crate\\cratepreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\contentpreviews\\crate\\cratepreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\interfaces\\icontentpreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\interfaces\\icontentpreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\applytorque.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\applytorque.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\crafty\\assets\\scripts\\mouseraycast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mouseraycast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PiggyPreview.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Content\\PiggyPreview.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ContentPreviews\\Content\\PiggyPreview.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Content\\PiggyPreview.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ContentPreviews\\Content\\PiggyPreview.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwA0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-30T00:08:05.554Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CratePreview.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Crate\\CratePreview.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ContentPreviews\\Crate\\CratePreview.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Crate\\CratePreview.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ContentPreviews\\Crate\\CratePreview.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwBIAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T23:49:10.33Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WheelPreview.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Accessory\\WheelPreview.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ContentPreviews\\Accessory\\WheelPreview.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ContentPreviews\\Accessory\\WheelPreview.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ContentPreviews\\Accessory\\WheelPreview.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T23:45:28.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IContentPreview.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\Interfaces\\IContentPreview.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Interfaces\\IContentPreview.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\Interfaces\\IContentPreview.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Interfaces\\IContentPreview.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBEAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T23:20:47.153Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ImageDragHandler.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ImageDragHandler.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ImageDragHandler.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ImageDragHandler.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ImageDragHandler.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAuwEsAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T21:09:39.721Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Util.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\Util.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Util.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\Util.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Util.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAArwAoAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T19:54:11.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GridMatrix.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\GridMatrix.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GridMatrix.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\GridMatrix.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GridMatrix.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAADgv7gAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T03:12:06.627Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MouseRaycast.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\MouseRaycast.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MouseRaycast.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\MouseRaycast.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MouseRaycast.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAmwAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-29T02:30:37.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ApplyTorque.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ApplyTorque.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ApplyTorque.cs",
+              "ToolTip": "C:\\Users\\luo20\\crafty\\Assets\\Scripts\\ApplyTorque.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ApplyTorque.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-28T04:15:17.152Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
