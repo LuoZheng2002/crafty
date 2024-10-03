@@ -17,5 +17,5 @@ public abstract class LoadPreview: DirectionalPreview
 }
 public abstract class AccessoryPreview: DirectionalPreview
 {
-
+	public abstract (int h_delta, int w_delta, int l_delta) AttachDir();
 }

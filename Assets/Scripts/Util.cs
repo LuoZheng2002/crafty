@@ -6,6 +6,23 @@ public class Util
 {
 	// occupied type
 	// update
+
+	public static List<(Quaternion, (int, int, int))> WheelRotations = new ()
+	{
+		(Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
+		(Quaternion.Euler(0f, 90.0f, 0f),(1, 0, 0)),
+		(Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
+		(Quaternion.Euler(90.0f, 0.0f, 90.0f),(0, -1, 0)),
+		(Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
+		(Quaternion.Euler(90.0f, 0.0f, 270.0f),(0, 1, 0)),
+		(Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
+		(Quaternion.Euler(90.0f, 90.0f, 90.0f),(0, 0, 1)),
+		(Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
+		(Quaternion.Euler(90.0f, -90.0f, 90.0f),(0, 0, -1)),
+		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
+		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
+	};
+
 	public enum ContentType
 	{
 		None,

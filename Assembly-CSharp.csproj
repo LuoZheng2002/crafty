@@ -61,15 +61,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ApplyTorque.cs" />
+    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelTurner.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
+    <Compile Include="Assets\Scripts\DragLook.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
     <Compile Include="Assets\Scripts\MouseRaycast.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelPreview.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
+    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelMotor.cs" />
     <Compile Include="Assets\Scripts\ImageDragHandler.cs" />
     <Compile Include="Assets\Scripts\ContentCollection.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IContentPreview.cs" />
+    <Compile Include="Assets\Scripts\GoalReached.cs" />
+    <Compile Include="Assets\Scripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\GridLayer.cs" />
+    <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Crate\CratePreview.cs" />
     <Compile Include="Assets\Scripts\DragManager.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Content\PiggyPreview.cs" />

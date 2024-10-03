@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5686348058367407658}
   - component: {fileID: 1755931741496284424}
   - component: {fileID: 1471500972917243671}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 2587270629425496011}
   - component: {fileID: 6599311003529120631}
   - component: {fileID: 1652204546776489305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2930053490791987855}
   serializedVersion: 4
-  m_Mass: 0.8
+  m_Mass: 0.5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -146,7 +146,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &6599311003529120631
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 5931196167600126652}
   - component: {fileID: 6215678105986705545}
   - component: {fileID: 421762745048371110}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,8 +275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 845841578399613302}
   - component: {fileID: 5623082294270828048}
-  - component: {fileID: 6312208593148538954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,17 +309,17 @@ WheelCollider:
   m_Radius: 0.4
   m_SuspensionSpring:
     spring: 2000
-    damper: 10
-    targetPosition: 0.5
-  m_SuspensionDistance: 0.42
+    damper: 1
+    targetPosition: 0.2
+  m_SuspensionDistance: 0.4
   m_ForceAppPointDistance: 0
   m_Mass: 0.2
   m_WheelDampingRate: 0.01
   m_ForwardFriction:
     m_ExtremumSlip: 0.3
-    m_ExtremumValue: 5
+    m_ExtremumValue: 10
     m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 4
+    m_AsymptoteValue: 9
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.5
@@ -337,21 +336,6 @@ WheelCollider:
   m_LayerOverridePriority: 0
   m_Enabled: 0
   m_ProvidesContacts: 0
---- !u!114 &6312208593148538954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3524755462578816379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48127ee4968169d40b856e853a6ec75c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  torque_factor: 5
-  max_turn_angle: 30
-  allow_turn: 1
 --- !u!1 &3931871622778869924
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +347,7 @@ GameObject:
   - component: {fileID: 3023052231133506314}
   - component: {fileID: 8505523122176278314}
   - component: {fileID: 3387386388858500456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +430,7 @@ GameObject:
   - component: {fileID: 4572672679383135244}
   - component: {fileID: 2538552695282863037}
   - component: {fileID: 7620003080472058562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +511,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3356696845282761597}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -7,11 +7,16 @@ using UnityEngine;
 
 public class GridMatrix : MonoBehaviour
 {
+	public bool first_person = true;
+	public float camera_move_speed = 5.0f;
+	public float camera_rotation_time = 0.5f;
 	public GameObject gridPrefab;
 	public int height = 2;
 	public int width = 3;
 	public int length = 5;
 	GridCell[,,] grids;
+	public float position_spring = 1000.0f;
+	public float position_damper = 1000.0f;
 
 	PiggyPreview piggyPreview;
 
@@ -70,6 +75,7 @@ public class GridMatrix : MonoBehaviour
 				{
 					Debug.Assert(gridPrefab != null);
 					GameObject grid = Instantiate(gridPrefab, transform.position + new Vector3(j, i, k), Quaternion.identity);
+					grid.transform.parent = transform;
 					Debug.Assert(grid != null);
 					GridCell gridComponent = grid.GetComponent<GridCell>();
 					Debug.Assert(gridComponent != null);
@@ -88,7 +94,8 @@ public class GridMatrix : MonoBehaviour
 		ConfigurableJoint configurableJoint = (a as MonoBehaviour).AddComponent<ConfigurableJoint>();
 		configurableJoint.connectedBody = (b as MonoBehaviour).GetComponent<Rigidbody>();
 		JointDrive drive = new JointDrive();
-		drive.positionSpring = 1000;
+		drive.positionSpring = position_spring;
+		drive.positionDamper = position_damper;
 		drive.maximumForce = 1000000;
 		configurableJoint.xDrive = drive;
 		configurableJoint.yDrive = drive;
@@ -136,9 +143,11 @@ public class GridMatrix : MonoBehaviour
 					{
 						accessory.Build();
 						// to do
-						if (i + 1 < height && crates[i + 1, j, k] != null)
+						(var h, var w, var l) = accessory.AttachDir();
+						(var new_h, var new_w, var new_l) = (h + i, w + j, l + k);
+						if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l] != null)
 						{
-							CreateJoint(accessory, crates[i + 1, j, k]);
+							CreateJoint(accessory, crates[new_h, new_w, new_l]);
 						}
 					}
 				}
@@ -163,10 +172,65 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
-
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
 		loads = new LoadPreview[height, width, length];
+	}
+
+	IEnumerator CameraToPig(PiggyPreview piggyPreview)
+	{
+		while ((Camera.main.transform.position - piggyPreview.transform.position).magnitude > 0.1f)
+		{
+			if ((Camera.main.transform.position - piggyPreview.transform.position).magnitude < 1.0f)
+			{
+				Transform piggyMesh = piggyPreview.transform.Find("Mesh");
+				piggyMesh.gameObject.SetActive(false);
+			}
+			Camera.main.transform.LookAt(piggyPreview.transform);
+			Camera.main.transform.position += (piggyPreview.transform.position - Camera.main.transform.position).normalized * Time.deltaTime * camera_move_speed;
+			yield return null;
+		}
+		Camera.main.transform.position = piggyPreview.transform.position;
+		float time_remaining = camera_rotation_time;
+		Quaternion initial_rotation = Camera.main.transform.rotation;
+		while (time_remaining > 0)
+		{
+			Camera.main.transform.rotation = Quaternion.Slerp(initial_rotation, piggyPreview.transform.rotation, 1.0f - time_remaining / camera_rotation_time) ;
+			time_remaining -= Time.deltaTime;
+			yield return null;
+		}
+		Camera.main.transform.rotation = piggyPreview.transform.rotation;
+	}
+	void Trash()
+	{
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				for (int k = 0; k < length; k++)
+				{
+					if (crates[i, j, k] != null)
+					{
+						Destroy(crates[i, j, k].gameObject);
+						crates[i, j, k] = null;
+					}
+					if (loads[i, j, k] != null)
+					{
+						Destroy(loads[i, j, k].gameObject);
+						loads[i, j, k] = null;
+					}
+					if (accessories[i, j, k] != null)
+					{
+						Destroy(accessories[i , j, k].gameObject);
+						accessories[i, j, k] = null;
+					}
+				}
+			}
+		}
+	}
+	bool InGrid(int h, int w, int l)
+	{
+		return h >= 0 && h < height && w >= 0 && w < width && l >= 0 && l < length;
 	}
 	private void Update()
 	{
@@ -182,10 +246,71 @@ public class GridMatrix : MonoBehaviour
 			if (piggyPreview!= null)
 			{
 				Camera.main.transform.parent = piggyPreview.transform;
+				if (first_person)
+				{
+					StartCoroutine(CameraToPig(piggyPreview));
+				}				
 				piggyPreview = null;
 			}
+			CanvasDrag canvasDrag = GameObject.Find("ScreenDrag").GetComponent<CanvasDrag>();
+			Debug.Assert(canvasDrag != null);
+			canvasDrag.active = true;
+		}
+		if (Input.GetKeyDown(KeyCode.Delete))
+		{
+			Trash();
 		}
 		UpdateActiveFromMouse();
+
+		if (Input.GetMouseButtonDown(0))
+		{
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			int hitCount = Physics.RaycastNonAlloc(ray, hits);
+			GridCell closestGrid = null;
+			float minDistance = 100000.0f;
+			for (int i = 0; i < hitCount; i++)
+			{
+				GameObject hitObject = hits[i].collider.gameObject;
+				GridCell hitGrid = hitObject.GetComponent<GridCell>();
+				if (hitGrid == null)
+				{
+					continue;
+				}
+				// grid -> frame/accessory -> contained object
+				// multiple grid accessory?
+				if (!hitGrid.Active)
+				{
+					continue;
+				}
+				if (accessories[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null
+					&& loads[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null)
+				{
+					continue;
+				}
+
+				float distance = Util.GetDistanceFromRayToPoint(ray, hitObject.transform.position);
+				if (distance < minDistance)
+				{
+					closestGrid = hitGrid;
+					minDistance = distance;
+				}
+			}
+			if (closestGrid!= null)
+			{
+				Debug.Log("Capture a component to change direction");
+				DirectionalPreview directionalPreview = null;
+				if (accessories[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx] != null)
+				{
+					directionalPreview = accessories[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx];
+				}
+				else if (loads[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx] != null)
+				{
+					directionalPreview = loads[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx];
+				}
+				Debug.Assert(directionalPreview != null);
+				directionalPreview.ChangeDirection();
+			}
+		}
 	}
 
 	void UpdateActiveFromMouse()
