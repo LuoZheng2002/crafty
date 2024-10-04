@@ -1,11 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Util
 {
 	// occupied type
 	// update
+	public enum GameStateType
+	{
+		Intro,
+		Build,
+		Play,
+		Outro
+	}
 
 	public static List<(Quaternion, (int, int, int))> WheelRotations = new ()
 	{
@@ -37,6 +45,9 @@ public class Util
 		IronCrate,
 
 		// accessory
+		Wheel,
+		TurnWheel,
+		MotorWheel,
 		Propeller,
 		Fan,
 
@@ -51,9 +62,9 @@ public class Util
 	// 
 	public struct GridContentInfo
 	{
-		public CratePreview? crate;
-		public AccessoryPreview? accessory;
-		public LoadPreview? load;
+		public CratePreview crate;
+		public AccessoryPreview accessory;
+		public LoadPreview load;
 		public bool Occupied { get { return crate != null || load != null || accessory != null; } }
 		public bool AllowAccessory { get { return crate == null && load == null && accessory == null; } }
 		public bool AllowCrate { get { return crate == null && accessory == null; } }
@@ -75,5 +86,43 @@ public class Util
 		float distance = Vector3.Distance(closestPointOnRay, point);
 		return distance;
 	}
+	public static void CreateJoint(MonoBehaviour a, MonoBehaviour b, float position_spring, float position_damper)
+	{
+		Debug.Log("Added a configurable joint");
+		ConfigurableJoint configurableJoint = a.AddComponent<ConfigurableJoint>();
+		configurableJoint.connectedBody = b.GetComponent<Rigidbody>();
+		JointDrive drive = new JointDrive();
+		drive.positionSpring = position_spring;
+		drive.positionDamper = position_damper;
+		drive.maximumForce = 1000000;
+		configurableJoint.xDrive = drive;
+		configurableJoint.yDrive = drive;
+		configurableJoint.zDrive = drive;
+		configurableJoint.rotationDriveMode = RotationDriveMode.XYAndZ;
+		configurableJoint.angularXDrive = drive;
+		configurableJoint.angularYZDrive = drive;
+	}
 
+	public static Quaternion QuaternionSmoothDamp(Quaternion current, Quaternion target, ref Quaternion velocity, float smoothTime, float deltaTime)
+	{
+		// Smoothly interpolate towards the target rotation
+		float angle = Quaternion.Angle(current, target);
+
+		if (angle > 0f)
+		{
+			float t = Mathf.SmoothDampAngle(0f, angle, ref velocity.w, smoothTime, Mathf.Infinity, deltaTime);
+			Quaternion result = Quaternion.Slerp(current, target, t / angle);
+
+			// Approximate velocity to track angular velocity
+			velocity = Quaternion.Euler(
+				Mathf.SmoothDampAngle(current.eulerAngles.x, target.eulerAngles.x, ref velocity.x, smoothTime),
+				Mathf.SmoothDampAngle(current.eulerAngles.y, target.eulerAngles.y, ref velocity.y, smoothTime),
+				Mathf.SmoothDampAngle(current.eulerAngles.z, target.eulerAngles.z, ref velocity.z, smoothTime)
+			);
+
+			return result;
+		}
+
+		return target;
+	}
 }

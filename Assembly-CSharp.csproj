@@ -60,25 +60,30 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.43f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\ApplyTorque.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelTurner.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
+    <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\DragLook.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
     <Compile Include="Assets\Scripts\MouseRaycast.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelPreview.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelMotor.cs" />
-    <Compile Include="Assets\Scripts\ImageDragHandler.cs" />
     <Compile Include="Assets\Scripts\ContentCollection.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IContentPreview.cs" />
+    <Compile Include="Assets\Scripts\EventBus.cs" />
     <Compile Include="Assets\Scripts\GoalReached.cs" />
-    <Compile Include="Assets\Scripts\CanvasDrag.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ImageDragHandler.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\FirstPerson.cs" />
     <Compile Include="Assets\Scripts\GridLayer.cs" />
     <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Crate\CratePreview.cs" />
-    <Compile Include="Assets\Scripts\DragManager.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Content\PiggyPreview.cs" />
+    <Compile Include="Assets\Scripts\GameState.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Confirm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -995,6 +1000,10 @@
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">

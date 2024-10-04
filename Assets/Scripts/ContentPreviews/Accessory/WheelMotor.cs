@@ -18,7 +18,7 @@ public class WheelMotor : MonoBehaviour
 		float v_input = Input.GetAxis("Vertical");  // "Vertical" corresponds to W/S or Up/Down keys
 
 		// Apply motor torque based on input
-		float torque = v_input * torque_factor + 0.01f;  // Adjust multiplier for more/less power
+		float torque = v_input * torque_factor;  // Adjust multiplier for more/less power
 		wheelCollider.motorTorque = torque;
 	}
 }

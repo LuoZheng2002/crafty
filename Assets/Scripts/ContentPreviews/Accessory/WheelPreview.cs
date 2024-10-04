@@ -13,14 +13,13 @@ public class WheelPreview : AccessoryPreview
 		Rigidbody rb = GetComponent<Rigidbody>();
 		Collider c = GetComponent<Collider>();
 		rb.useGravity = true;
-		// c.enabled = true;
+		c.enabled = true;
 		cylinderTransform = transform.Find("Cylinder");
 		Debug.Assert(cylinderTransform != null);
 		wheelCollider = transform.Find("Collider").GetComponent<WheelCollider>();
 		Debug.Assert(wheelCollider != null);
 		wheelCollider.enabled = true;
 		built = true;
-		wheelCollider.motorTorque = 0.01f;
 	}
 
 	public override void ChangeDirection()
@@ -36,17 +35,13 @@ public class WheelPreview : AccessoryPreview
 	{
 		throw new System.NotImplementedException();
 	}
-	void UpdateWheel()
-	{
-		wheelCollider.GetWorldPose(out Vector3 pos, out Quaternion quat);
-		cylinderTransform.position = pos;
-		cylinderTransform.rotation = quat;
-	}
 	private void Update()
 	{
 		if (built)
 		{
-			UpdateWheel();
+			wheelCollider.GetWorldPose(out var pos, out var quat);
+			cylinderTransform.position = pos;
+			cylinderTransform.rotation = quat;
 		}
 	}
 

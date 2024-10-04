@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GridMatrix : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 	}
-
+	
 	bool Occupied(int height, int width, int length)
 	{
 		return crates[height, width, length] != null || accessories[height, width, length] != null || loads[height, width, length] != null;
@@ -60,18 +61,25 @@ public class GridMatrix : MonoBehaviour
 	{
 		return loads[height, width, length] == null && accessories[height, width, length] == null;
 	}
-	private void Start()
+
+	Subscription<TrashEvent> subscriptionTrash;
+	Subscription<GameStateChangedEvent> subscriptionGameStateChanged;
+
+	private void OnEnable()
 	{
+		subscriptionTrash = EventBus.Subscribe<TrashEvent>(OnTrash);
+		subscriptionGameStateChanged = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+
 		grids = new GridCell[height, width, length];
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
 		loads = new LoadPreview[height, width, length];
 		// infos = new Util.GridContentInfo[height, width, length];
-		for(int i = 0;i < height; i++)
+		for (int i = 0; i < height; i++)
 		{
-			for(int j = 0;j < width; j++)
+			for (int j = 0; j < width; j++)
 			{
-				for (int k = 0;k < length; k++)
+				for (int k = 0; k < length; k++)
 				{
 					Debug.Assert(gridPrefab != null);
 					GameObject grid = Instantiate(gridPrefab, transform.position + new Vector3(j, i, k), Quaternion.identity);
@@ -88,68 +96,83 @@ public class GridMatrix : MonoBehaviour
 		}
 		SetLayerActive(activeLayerIndex, true);
 	}
-	void CreateJoint(MonoBehaviour a, MonoBehaviour b)
+	private void OnDisable()
 	{
-		Debug.Log("Added a configurable joint");
-		ConfigurableJoint configurableJoint = (a as MonoBehaviour).AddComponent<ConfigurableJoint>();
-		configurableJoint.connectedBody = (b as MonoBehaviour).GetComponent<Rigidbody>();
-		JointDrive drive = new JointDrive();
-		drive.positionSpring = position_spring;
-		drive.positionDamper = position_damper;
-		drive.maximumForce = 1000000;
-		configurableJoint.xDrive = drive;
-		configurableJoint.yDrive = drive;
-		configurableJoint.zDrive = drive;
-		configurableJoint.rotationDriveMode = RotationDriveMode.XYAndZ;
-		configurableJoint.angularXDrive = drive;
-		configurableJoint.angularYZDrive = drive;
+		EventBus.Unsubscribe(subscriptionTrash);
+		Trash();
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				for (int k = 0; k < length; k++)
+				{
+					GridCell grid = grids[i, j, k];
+					Debug.Assert(grid != null);
+					Destroy(grid.gameObject);
+				}
+			}
+		}		
+	}
+	private void Start()
+	{
+		
+	}
+	
+	void BuildAndStickCrates(int h_idx, int w_idx, int l_idx)
+	{
+		CratePreview crate = crates[h_idx, w_idx, l_idx];
+		if (crate != null)
+		{
+			crate.Build();
+			List<(int, int, int)> deltas = new(){ (1, 0, 0), (0, 1, 0), (0, 0, 1) };
+			foreach (var delta in deltas)
+			{
+				(int h, int w, int l) = delta;
+				(int new_h, int new_w, int new_l) = (h_idx+h, w_idx + w, l_idx+l);
+				if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l]!=null)
+				{
+					Util.CreateJoint(crate, crates[new_h, new_w, new_l], position_spring, position_damper);
+				}
+			}
+		}	
+	}
+	void BuildAndStickAccessories(int h_idx, int w_idx, int l_idx)
+	{
+		AccessoryPreview accessory = accessories[h_idx, w_idx, l_idx];
+		if (accessory != null)
+		{
+			accessory.Build();
+			// to do
+			(var h, var w, var l) = accessory.AttachDir();
+			(var new_h, var new_w, var new_l) = (h + h_idx, w + w_idx, l + l_idx);
+			if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l] != null)
+			{
+				Util.CreateJoint(accessory, crates[new_h, new_w, new_l], position_spring, position_damper);
+			}
+		}
+	}
+	void BuildAndStickLoads(int h_idx, int w_idx, int l_idx)
+	{
+		LoadPreview load = loads[h_idx, w_idx, l_idx];
+		if (load != null)
+		{
+			load.Build();
+			// to do
+			if (crates[h_idx, w_idx, l_idx] != null)
+			{
+				Util.CreateJoint(load, crates[h_idx, w_idx, l_idx], position_spring, position_damper);
+			}
+		}
 	}
 	void Build()
 	{
-		for(int i = 0;i < height;i++)
-		{
-			for(int j = 0; j < width; j++)
-			{
-				for(int k = 0; k < length; k++)
-				{
-					CratePreview crate = crates[i, j, k];
-					if (crates[i, j, k] != null)
-					{
-						crates[i, j, k].Build();
-						if (i+1 < height && crates[i+1, j, k] != null)
-						{
-							CreateJoint(crate, crates[i + 1, j, k] );
-						}
-						if (j+1 < width && crates[i, j+1, k] != null)
-						{
-							CreateJoint(crate, crates[i, j + 1, k] );
-						}
-						if (k+1 < length && crates[i, j, k+1] != null)
-						{
-							CreateJoint(crate, crates[i, j, k + 1]);
-						}
-					}
-				}
-			}
-		}
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
 			{
 				for (int k = 0; k < length; k++)
-				{ 
-					AccessoryPreview accessory = accessories[i, j, k];
-					if (accessory != null)
-					{
-						accessory.Build();
-						// to do
-						(var h, var w, var l) = accessory.AttachDir();
-						(var new_h, var new_w, var new_l) = (h + i, w + j, l + k);
-						if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l] != null)
-						{
-							CreateJoint(accessory, crates[new_h, new_w, new_l]);
-						}
-					}
+				{
+					BuildAndStickCrates(i, j, k);
 				}
 			}
 		}
@@ -159,47 +182,32 @@ public class GridMatrix : MonoBehaviour
 			{
 				for (int k = 0; k < length; k++)
 				{
-					LoadPreview load = loads[i, j, k];
-					if (load != null)
-					{
-						load.Build();
-						// to do
-						if (crates[i, j, k] != null)
-						{
-							CreateJoint(load, crates[i, j, k]);
-						}
-					}
+					BuildAndStickAccessories(i, j, k);
 				}
 			}
 		}
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				for (int k = 0; k < length; k++)
+				{
+					BuildAndStickLoads(i, j, k);
+				}
+			}
+		}
+
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
 		loads = new LoadPreview[height, width, length];
-	}
 
-	IEnumerator CameraToPig(PiggyPreview piggyPreview)
+		enabled = false;
+	}
+	// build -> play -> end
+	
+	void OnTrash(TrashEvent e)
 	{
-		while ((Camera.main.transform.position - piggyPreview.transform.position).magnitude > 0.1f)
-		{
-			if ((Camera.main.transform.position - piggyPreview.transform.position).magnitude < 1.0f)
-			{
-				Transform piggyMesh = piggyPreview.transform.Find("Mesh");
-				piggyMesh.gameObject.SetActive(false);
-			}
-			Camera.main.transform.LookAt(piggyPreview.transform);
-			Camera.main.transform.position += (piggyPreview.transform.position - Camera.main.transform.position).normalized * Time.deltaTime * camera_move_speed;
-			yield return null;
-		}
-		Camera.main.transform.position = piggyPreview.transform.position;
-		float time_remaining = camera_rotation_time;
-		Quaternion initial_rotation = Camera.main.transform.rotation;
-		while (time_remaining > 0)
-		{
-			Camera.main.transform.rotation = Quaternion.Slerp(initial_rotation, piggyPreview.transform.rotation, 1.0f - time_remaining / camera_rotation_time) ;
-			time_remaining -= Time.deltaTime;
-			yield return null;
-		}
-		Camera.main.transform.rotation = piggyPreview.transform.rotation;
+		Trash();
 	}
 	void Trash()
 	{
@@ -232,6 +240,10 @@ public class GridMatrix : MonoBehaviour
 	{
 		return h >= 0 && h < height && w >= 0 && w < width && l >= 0 && l < length;
 	}
+	void OnGameStateChanged(GameStateChangedEvent e)
+	{
+		Build();
+	}
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
@@ -239,22 +251,6 @@ public class GridMatrix : MonoBehaviour
 			SetLayerActive(activeLayerIndex, false);
 			activeLayerIndex = (activeLayerIndex + 1) % height;
 			SetLayerActive(activeLayerIndex, true);
-		}
-		if (Input.GetKeyDown(KeyCode.Return))
-		{
-			Build();
-			if (piggyPreview!= null)
-			{
-				Camera.main.transform.parent = piggyPreview.transform;
-				if (first_person)
-				{
-					StartCoroutine(CameraToPig(piggyPreview));
-				}				
-				piggyPreview = null;
-			}
-			CanvasDrag canvasDrag = GameObject.Find("ScreenDrag").GetComponent<CanvasDrag>();
-			Debug.Assert(canvasDrag != null);
-			canvasDrag.active = true;
 		}
 		if (Input.GetKeyDown(KeyCode.Delete))
 		{
@@ -408,6 +404,7 @@ public class GridMatrix : MonoBehaviour
 				if (preview != null)
 				{
 					piggyPreview = preview;
+					EventBus.Publish(new PiggyInstantiatedEvent(piggyPreview));
 				}
 				break;
 		}
