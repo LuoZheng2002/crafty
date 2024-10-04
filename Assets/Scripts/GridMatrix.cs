@@ -67,6 +67,7 @@ public class GridMatrix : MonoBehaviour
 
 	private void OnEnable()
 	{
+		Debug.Log("Grid matrix enabled");
 		subscriptionTrash = EventBus.Subscribe<TrashEvent>(OnTrash);
 		subscriptionGameStateChanged = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
 
@@ -98,6 +99,7 @@ public class GridMatrix : MonoBehaviour
 	}
 	private void OnDisable()
 	{
+		Debug.Log("Grid Matrix disabled");
 		EventBus.Unsubscribe(subscriptionTrash);
 		Trash();
 		for (int i = 0; i < height; i++)
@@ -242,7 +244,10 @@ public class GridMatrix : MonoBehaviour
 	}
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
-		Build();
+		if (e.state == Util.GameStateType.Play)
+		{
+			Build();
+		}		
 	}
 	private void Update()
 	{

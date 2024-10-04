@@ -36,12 +36,22 @@ public class GameState : MonoBehaviour
 	public PiggyCameraPivot piggyCameraPivot;
 	Transform piggyCameraEndTransform;
 	bool camera_follow_pig = false;
-	public int current_level_num = 0;
+	public int current_level_num = 1;
 	public float move_to_pig_time = 0.5f;
 	public float camera_rotation_time = 0.5f;
+	public float retry_move_time = 0.5f;
+	public float rise_height = 10.0f;
+	public float rise_time = 2.0f;
 	bool first_person = true;
 	Transform cameraRefTransform;
 	bool piggy_permit_invisible = false;
+
+	Level CurrentLevel { get
+		{
+			Level level = GameObject.Find($"Level{current_level_num}").GetComponent<Level>();
+			Debug.Assert(level != null);
+			return level;
+		} }
 	private void Start()
 	{
 		piggyCameraPivot = GameObject.Find("PiggyCameraPivot").GetComponent<PiggyCameraPivot>();
@@ -51,8 +61,36 @@ public class GameState : MonoBehaviour
 		EventBus.Subscribe<PiggyInstantiatedEvent>(OnPiggyInstantiated);
 		EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
 		EventBus.Subscribe<FirstPersonChangedEvent>(OnFirstPersonChanged);
+		EventBus.Subscribe<RetryEvent>(OnRetry);
 	}
-
+	void OnRetry(RetryEvent e)
+	{
+		piggyCameraPivot.EndFollow();
+		camera_follow_pig = false;
+		piggy_permit_invisible = false;
+		StartCoroutine(MoveCameraToGrid());
+	}
+	IEnumerator MoveCameraToGrid()
+	{
+		float startTime = Time.time;
+		float endTime = startTime + retry_move_time;
+		Transform cameraTransform = Camera.main.transform;
+		Vector3 startPosition = cameraTransform.position;
+		Quaternion startRotation = cameraTransform.rotation;
+		Transform dummyCameraTransform = CurrentLevel.transform.Find("GridMatrix").Find("DummyCamera");
+		Debug.Assert(dummyCameraTransform != null, "dummy camera transform is null");
+		while (Time.time < endTime)
+		{
+			float progress = (Time.time - startTime) / retry_move_time;
+			cameraTransform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
+			cameraTransform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
+			yield return null;
+		}
+		cameraTransform.position = dummyCameraTransform.position;
+		cameraTransform.rotation = dummyCameraTransform.rotation;
+		// grid matrix will be enabled at transition to build
+		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
+	}
 	IEnumerator CameraToPig()
 	{
 		Debug.Assert(piggyPreview != null);
@@ -85,7 +123,7 @@ public class GameState : MonoBehaviour
 		Quaternion cameraStartRotation = cameraTransform.rotation;
 		while (Time.time < end_time)
 		{
-			Debug.Log("Rotating");
+			// Debug.Log("Rotating");
 			cameraTransform.rotation = Quaternion.Slerp(cameraStartRotation, cameraRefTransform.rotation, (Time.time - start_time) / camera_rotation_time);
 			yield return null;
 		}
@@ -129,7 +167,7 @@ public class GameState : MonoBehaviour
     }
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
-		Debug.Log("Game state changed event fired");
+		// Debug.Log("Game state changed event fired");
 		switch(e.state)
 		{
 			case Util.GameStateType.Intro:
@@ -148,15 +186,23 @@ public class GameState : MonoBehaviour
 	}
 	void TransitionToIntro(int level_num)
 	{
-
+		piggyCameraPivot.EndFollow();
+		piggyCameraPivot.dragEulerAngle = Vector3.zero;
 	}
 	void TransitionToBuild()
 	{
+		piggy_permit_invisible = false;
+		piggyCameraPivot.EndFollow();
+		piggyCameraPivot.dragEulerAngle = Vector3.zero;
+		GridMatrix gridMatrix = CurrentLevel.transform.Find("GridMatrix").GetComponent<GridMatrix>();
+		Debug.Assert(gridMatrix != null, "grid matrix is null");
+		gridMatrix.enabled = true;
+		// Debug.Log("transition to build enabled");
 
 	}
 	void TransitionToPlay()
 	{
-		Debug.Log("Transitioning to play");
+		// Debug.Log("Transitioning to play");
 		piggyCameraPivot.StartFollow(piggyPreview);
 		// coroutine that moves camera to position
 		StartCoroutine(CameraToPig());
@@ -164,6 +210,26 @@ public class GameState : MonoBehaviour
 	}
 	void TransitionToOutro()
 	{
-
+		camera_follow_pig = false;
+		StartCoroutine(RiseAndWatch());
+	}
+	IEnumerator RiseAndWatch()
+	{
+		float start_time = Time.time;
+		float end_time = start_time + rise_time;
+		Transform cameraTransform = Camera.main.transform;
+		Vector3 initialPos = cameraTransform.position;
+		Vector3 goalPos = cameraTransform.position + new Vector3(0, rise_height, 0);
+		while(Time.time < end_time)
+		{
+			cameraTransform.position = Vector3.Lerp(initialPos, goalPos, (Time.time - start_time) / rise_time);
+			cameraTransform.LookAt(piggyPreview.transform);
+			yield return null;
+		}
+		while(piggy_permit_invisible)
+		{
+			cameraTransform.LookAt(piggyPreview.transform);
+			yield return null;
+		}
 	}
 }

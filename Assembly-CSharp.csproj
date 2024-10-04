@@ -66,11 +66,15 @@
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\DragLook.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
+    <Compile Include="Assets\Scripts\Retry.cs" />
     <Compile Include="Assets\Scripts\MouseRaycast.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelPreview.cs" />
+    <Compile Include="Assets\Scripts\Level.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Replay.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelMotor.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\GenerateItems.cs" />
     <Compile Include="Assets\Scripts\ContentCollection.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IContentPreview.cs" />

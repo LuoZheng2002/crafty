@@ -31,6 +31,18 @@ public class Util
 		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
 	};
 
+	public static Dictionary<int, List<(Content, int)>> LevelItems = new()
+	{
+		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4) } }
+	};
+
+	public static Dictionary<Content, ContentType> ContentInfos = new()
+	{
+		{Content.Pig, ContentType.Load }, // content preview, sprite
+		{Content.WoodenCrate, ContentType.Crate },
+		{Content.Wheel, ContentType.Accessory }
+	};
+
 	public enum ContentType
 	{
 		None,
