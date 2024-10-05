@@ -177,4 +177,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea201423de0353d44b1924e40c48ae95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  torque_factor: 4
+  torque_factor: 6

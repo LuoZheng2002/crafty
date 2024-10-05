@@ -10,6 +10,9 @@ public class CanvasSwitch : MonoBehaviour
 	private void Start()
 	{
         EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+		buildCanvas.SetActive(false);
+		playCanvas.SetActive(false);
+		outroCanvas.SetActive(false);
 	}
 	void OnGameStateChanged(GameStateChangedEvent e)
     {

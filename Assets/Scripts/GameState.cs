@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,8 +33,12 @@ public class FirstPersonChangedEvent
 
 public class GameState : MonoBehaviour
 {
-    PiggyPreview piggyPreview;
-	public PiggyCameraPivot piggyCameraPivot;
+	public static int unlocked_levels = 1;
+	public static int start_level = 1;
+	public static GameState instance;
+	PiggyPreview piggyPreview;
+	PiggyCameraPivot piggyCameraPivot;
+	public GameObject cameraAnimationPrefab;
 	Transform piggyCameraEndTransform;
 	bool camera_follow_pig = false;
 	public int current_level_num = 1;
@@ -46,14 +51,36 @@ public class GameState : MonoBehaviour
 	Transform cameraRefTransform;
 	bool piggy_permit_invisible = false;
 
-	Level CurrentLevel { get
+	public Level CurrentLevel { get
 		{
 			Level level = GameObject.Find($"Level{current_level_num}").GetComponent<Level>();
 			Debug.Assert(level != null);
+			
 			return level;
 		} }
-	private void Start()
+	public GridMatrix CurrentGridMatrix
 	{
+		get
+		{
+			GridMatrix gridMatrix = CurrentLevel.transform.Find("GridMatrix").GetComponent<GridMatrix>();
+			Debug.Assert(gridMatrix != null);
+			// ToastManager.Toast($"Current Grid Matrix: {current_level_num}");
+			return gridMatrix;
+		}
+	}
+	
+	private void Awake()
+	{
+		//if (instance == null)
+		//{
+		//	instance = this;
+		//	DontDestroyOnLoad(gameObject);
+		//}
+		//else
+		//{
+		//	Debug.LogError("Duplicate gamestate detected");
+		//	Destroy(gameObject); // Prevent duplicates
+		//}
 		piggyCameraPivot = GameObject.Find("PiggyCameraPivot").GetComponent<PiggyCameraPivot>();
 		Debug.Assert(piggyCameraPivot != null);
 		piggyCameraEndTransform = piggyCameraPivot.transform.GetChild(0);
@@ -62,6 +89,41 @@ public class GameState : MonoBehaviour
 		EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
 		EventBus.Subscribe<FirstPersonChangedEvent>(OnFirstPersonChanged);
 		EventBus.Subscribe<RetryEvent>(OnRetry);
+		EventBus.Subscribe<NextEvent>(OnNext);
+		EventBus.Subscribe<AnimationExitEvent>(OnAnimationExit);
+	}
+	private void OnEnable()
+	{
+		InitializeGridMatrix(start_level);
+		StartCoroutine(EnableHelper());
+	}
+	private void Start()
+	{
+	}
+	IEnumerator EnableHelper()
+	{
+		yield return null;
+		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, start_level));
+	}
+	void InitializeGridMatrix(int next_level)
+	{
+		for (int level_num = 1; level_num <= Util.LevelItems.Count; level_num++)
+		{
+			current_level_num = level_num;
+			CurrentGridMatrix.enabled = false;
+		}
+		current_level_num = next_level;
+	}
+	void OnNext(NextEvent e)
+	{
+		if (current_level_num >= Util.LevelItems.Count) // count starting from 1
+		{
+			Debug.Log($"Current level num: {current_level_num}, Util.levelItems.count: {Util.LevelItems.Count}");
+			Debug.LogError("No more level to play");
+			return;
+		}
+		current_level_num++;
+		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, current_level_num));
 	}
 	void OnRetry(RetryEvent e)
 	{
@@ -72,6 +134,7 @@ public class GameState : MonoBehaviour
 	}
 	IEnumerator MoveCameraToGrid()
 	{
+		yield return null;
 		float startTime = Time.time;
 		float endTime = startTime + retry_move_time;
 		Transform cameraTransform = Camera.main.transform;
@@ -82,13 +145,16 @@ public class GameState : MonoBehaviour
 		while (Time.time < endTime)
 		{
 			float progress = (Time.time - startTime) / retry_move_time;
-			cameraTransform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
-			cameraTransform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
+			Camera.main.transform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
+			Camera.main.transform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
+			Debug.Log($"camera main: {Camera.main.transform.position.x}, {Camera.main.transform.position.y},{Camera.main.transform.position.z}");
 			yield return null;
 		}
 		cameraTransform.position = dummyCameraTransform.position;
 		cameraTransform.rotation = dummyCameraTransform.rotation;
+		Debug.Log($"dummy camera transform position: {dummyCameraTransform.position.x}, {dummyCameraTransform.position.y}, {dummyCameraTransform.position.z}");
 		// grid matrix will be enabled at transition to build
+		Debug.Log("Move camera to grid called");
 		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
 	}
 	IEnumerator CameraToPig()
@@ -164,6 +230,17 @@ public class GameState : MonoBehaviour
 			Camera.main.transform.position = cameraRefTransform.position;
 			Camera.main.transform.rotation = cameraRefTransform.rotation;
 		}
+		Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
+			{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 }, 
+			{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
+
+		foreach (var pair in keycodes)
+		{
+			if (Input.GetKeyDown(pair.Value))
+			{
+				EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, pair.Key));
+			}
+		}
     }
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
@@ -184,21 +261,62 @@ public class GameState : MonoBehaviour
 				break;
 		}
 	}
+	//IEnumerator TransitionToIntroHelper()
+	//{
+	//	yield return null;
+	//	Transform dummyCameraTransform = CurrentLevel.transform.Find("GridMatrix").Find("DummyCamera");
+	//	Camera.main.transform.position = dummyCameraTransform.position;
+	//	Camera.main.transform.rotation = dummyCameraTransform.rotation;
+	//}
 	void TransitionToIntro(int level_num)
 	{
+		InitializeGridMatrix(level_num);
+		current_level_num = level_num;
 		piggyCameraPivot.EndFollow();
 		piggyCameraPivot.dragEulerAngle = Vector3.zero;
+		ToastManager.Toast($"Intro level {level_num}");
+
+		StartCoroutine(PlayAnimation());
+		// StartCoroutine(MoveCameraToGrid());
+		
+
+		// StartCoroutine(TransitionToIntroHelper());
+		// Invoke(nameof(GoToBuild), 1.0f);
 	}
+	IEnumerator PlayAnimation()
+	{
+		GameObject cameraAnim = Instantiate(cameraAnimationPrefab, Vector3.zero, Quaternion.identity);
+		Animator animator = cameraAnim.GetComponent<Animator>();
+		yield return null;
+		Camera.main.transform.parent = animator.transform;
+		yield return null;
+		animator.Rebind();
+		yield return null;
+		animator.SetTrigger($"level{current_level_num}");
+	}
+
+	void OnAnimationExit(AnimationExitEvent e)
+	{
+		Debug.Log("Animation exit called");
+		// Camera.main.transform.parent = null;
+		// cameraAnimator.Rebind();
+		StartCoroutine(MoveCameraToGrid());
+	}
+	//void GoToBuild()
+	//{
+	//	ToastManager.Toast("Gone to build");
+	//	EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
+	//}
 	void TransitionToBuild()
 	{
+		ToastManager.Toast("Tansition to build called");
 		piggy_permit_invisible = false;
 		piggyCameraPivot.EndFollow();
 		piggyCameraPivot.dragEulerAngle = Vector3.zero;
-		GridMatrix gridMatrix = CurrentLevel.transform.Find("GridMatrix").GetComponent<GridMatrix>();
+		GridMatrix gridMatrix = CurrentGridMatrix;
 		Debug.Assert(gridMatrix != null, "grid matrix is null");
 		gridMatrix.enabled = true;
 		// Debug.Log("transition to build enabled");
-
 	}
 	void TransitionToPlay()
 	{
@@ -211,6 +329,10 @@ public class GameState : MonoBehaviour
 	void TransitionToOutro()
 	{
 		camera_follow_pig = false;
+		if (unlocked_levels < current_level_num + 1 && current_level_num < Util.LevelItems.Count)
+		{
+			unlocked_levels = current_level_num + 1;
+		}
 		StartCoroutine(RiseAndWatch());
 	}
 	IEnumerator RiseAndWatch()
@@ -220,13 +342,13 @@ public class GameState : MonoBehaviour
 		Transform cameraTransform = Camera.main.transform;
 		Vector3 initialPos = cameraTransform.position;
 		Vector3 goalPos = cameraTransform.position + new Vector3(0, rise_height, 0);
-		while(Time.time < end_time)
+		while(Time.time < end_time && piggyPreview != null)
 		{
 			cameraTransform.position = Vector3.Lerp(initialPos, goalPos, (Time.time - start_time) / rise_time);
 			cameraTransform.LookAt(piggyPreview.transform);
 			yield return null;
 		}
-		while(piggy_permit_invisible)
+		while(piggy_permit_invisible && piggyPreview != null)
 		{
 			cameraTransform.LookAt(piggyPreview.transform);
 			yield return null;

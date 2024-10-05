@@ -4,8 +4,35 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
-
+public class ContentTypeChangedEvent
+{
+	public Util.ContentType contentType;
+    public ContentTypeChangedEvent(Util.ContentType contentType)
+    {
+		this.contentType = contentType;   
+    }
+}
+// to do: add content event
+public class AddContentEvent
+{
+	public Util.ContentType contentType;
+	public ContentPreview content;
+    public AddContentEvent(Util.ContentType contentType, ContentPreview content)
+    {
+		this.contentType = contentType;
+		this.content = content;
+    }
+}
+public class ItemCountChangeEvent
+{
+	public Util.Content content;
+	public int delta;
+	public ItemCountChangeEvent(Util.Content content, int delta)
+	{
+		this.content = content;
+		this.delta = delta;
+	}
+}
 public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public int initial_count = 5;
@@ -16,10 +43,11 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	public ContentPreview contentPreview;
 	private RectTransform rectTransform;
 	private CanvasGroup canvasGroup;
-	GridMatrix gridMatrix;
+	// GridMatrix gridMatrix;
 	public Util.ContentType contentType;
 	public Util.Content content;
 	Text text;
+	GameState gameState;
 	public Text Text
 	{
 		get
@@ -31,16 +59,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			return text;
 		}
 	}
-	public class ItemCountChangeEvent
-	{
-		public Util.Content content;
-		public int delta;
-        public ItemCountChangeEvent(Util.Content content, int delta)
-        {
-            this.content = content;
-			this.delta = delta;
-        }
-    }
+	
 	void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();
@@ -48,12 +67,15 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	}
 	private void Start()
 	{
-		gridMatrix = GameObject.Find("GridMatrix").GetComponent<GridMatrix>();
-		gridMatrix.GridSelectionChanged += OnSelectionChanged;
+		// gridMatrix = GameObject.Find("GridMatrix").GetComponent<GridMatrix>();
+		// gridMatrix.GridSelectionChanged += OnSelectionChanged;
+		EventBus.Subscribe<GridSelectionChangedEvent>(OnSelectionChanged);
 		EventBus.Subscribe<ItemCountChangeEvent>(OnItemCountChange);
 		EventBus.Subscribe<TrashEvent>(OnTrash);
 		count = initial_count;
 		Text.text = count.ToString();
+
+		gameState = GameObject.Find("GameState").GetComponent<GameState>();
 	}
 	void OnTrash(TrashEvent e)
 	{
@@ -68,9 +90,9 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Text.text = count.ToString();
 		}
 	}
-	void OnSelectionChanged(GridCell selection)
+	void OnSelectionChanged(GridSelectionChangedEvent e)
 	{
-		selectedGrid = selection;
+		selectedGrid = e.gridCell;
 		if (instantiatedObject != null)
 		{
 			DragHelper();
@@ -80,7 +102,8 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	{
 		if (count > 0)
 		{
-			gridMatrix.currentContentType = contentType;
+			EventBus.Publish(new ContentTypeChangedEvent(contentType));
+			// gridMatrix.currentContentType = contentType;
 			// Disable raycast to allow dropping
 			// canvasGroup.blocksRaycasts = false;
 			// Debug.Log("On begin drag");
@@ -90,7 +113,10 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
 			GameObject prefab = contentPreview.gameObject;
+			Transform gridMatrixTransform = gameState.CurrentGridMatrix.transform;
 			instantiatedObject = Instantiate(prefab, instantiatePos, Quaternion.identity);
+			instantiatedObject.transform.parent = gridMatrixTransform;
+			instantiatedObject.transform.localRotation = Quaternion.identity;
 			EventBus.Publish(new ItemCountChangeEvent(content, -1));
 		}
 	}
@@ -100,6 +126,9 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		{
 			return;
 		}
+		// awkward fix
+		instantiatedObject.transform.localRotation = Quaternion.identity;
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		// Get the direction of the ray
 		Vector3 rayDirection = ray.direction;
@@ -124,12 +153,13 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		{
 			return;
 		}
-		gridMatrix.currentContentType = Util.ContentType.None;
+		EventBus.Publish(new ContentTypeChangedEvent(Util.ContentType.None));
 		// Enable raycast again
 		// canvasGroup.blocksRaycasts = true;
 		if (selectedGrid != null)
 		{
-			gridMatrix.AddContent(contentType, instantiatedObject.GetComponent<ContentPreview>());
+			// gridMatrix.AddContent(contentType, instantiatedObject.GetComponent<ContentPreview>());
+			EventBus.Publish(new AddContentEvent(contentType, instantiatedObject.GetComponent<ContentPreview>()));
 			instantiatedObject = null;
 		}
 		else

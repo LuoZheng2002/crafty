@@ -26,7 +26,7 @@ public class WheelPreview : AccessoryPreview
 	{
 		Debug.Log("Direction Changed");
 		current_rotation = ++current_rotation % Util.WheelRotations.Count;
-		transform.rotation = Util.WheelRotations[current_rotation].Item1;
+		transform.localRotation = Util.WheelRotations[current_rotation].Item1;
 		(var h, var w, var l) =AttachDir();
 		Debug.Log($"Attach dir: (h{h}, w{w}, l{l})");
 	}

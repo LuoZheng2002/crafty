@@ -6,6 +6,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public class GridSelectionChangedEvent
+{
+	public GridCell gridCell;
+    public GridSelectionChangedEvent(GridCell gridCell)
+    {
+        this.gridCell = gridCell;
+    }
+}
 public class GridMatrix : MonoBehaviour
 {
 	public bool first_person = true;
@@ -31,7 +39,7 @@ public class GridMatrix : MonoBehaviour
 	public int activeLayerIndex = 0;
 	private RaycastHit[] hits = new RaycastHit[10];
 
-	public event Action<GridCell> GridSelectionChanged;
+	// public event Action<GridCell> GridSelectionChanged;
 
 	public Util.ContentType currentContentType;
 	void SetLayerActive(int index, bool active)
@@ -64,13 +72,20 @@ public class GridMatrix : MonoBehaviour
 
 	Subscription<TrashEvent> subscriptionTrash;
 	Subscription<GameStateChangedEvent> subscriptionGameStateChanged;
-
+	Subscription<AddContentEvent> subscriptionAddContent;
+	Subscription<ContentTypeChangedEvent> subscriptionContentTypeChanged;
+	private void Start()
+	{
+		Transform cube = transform.Find("Cube");
+		Destroy(cube.gameObject);
+	}
 	private void OnEnable()
 	{
 		Debug.Log("Grid matrix enabled");
 		subscriptionTrash = EventBus.Subscribe<TrashEvent>(OnTrash);
 		subscriptionGameStateChanged = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
-
+		subscriptionAddContent = EventBus.Subscribe<AddContentEvent>(AddContent);
+		subscriptionContentTypeChanged = EventBus.Subscribe<ContentTypeChangedEvent>(OnContentTypeChanged);
 		grids = new GridCell[height, width, length];
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
@@ -83,8 +98,9 @@ public class GridMatrix : MonoBehaviour
 				for (int k = 0; k < length; k++)
 				{
 					Debug.Assert(gridPrefab != null);
-					GameObject grid = Instantiate(gridPrefab, transform.position + new Vector3(j, i, k), Quaternion.identity);
+					GameObject grid = Instantiate(gridPrefab, transform.position, Quaternion.identity);
 					grid.transform.parent = transform;
+					grid.transform.localPosition = new Vector3(j, i, k);
 					Debug.Assert(grid != null);
 					GridCell gridComponent = grid.GetComponent<GridCell>();
 					Debug.Assert(gridComponent != null);
@@ -101,6 +117,9 @@ public class GridMatrix : MonoBehaviour
 	{
 		Debug.Log("Grid Matrix disabled");
 		EventBus.Unsubscribe(subscriptionTrash);
+		EventBus.Unsubscribe(subscriptionGameStateChanged);
+		EventBus.Unsubscribe(subscriptionAddContent);
+		EventBus.Unsubscribe(subscriptionContentTypeChanged);
 		Trash();
 		for (int i = 0; i < height; i++)
 		{
@@ -115,9 +134,9 @@ public class GridMatrix : MonoBehaviour
 			}
 		}		
 	}
-	private void Start()
+	void OnContentTypeChanged(ContentTypeChangedEvent e)
 	{
-		
+		currentContentType = e.contentType;
 	}
 	
 	void BuildAndStickCrates(int h_idx, int w_idx, int l_idx)
@@ -364,45 +383,48 @@ public class GridMatrix : MonoBehaviour
 			lastSelectedGrid.Deselect();
 			closestGrid.Select();
 			lastSelectedGrid = closestGrid;
-			GridSelectionChanged?.Invoke(closestGrid);
+			EventBus.Publish(new GridSelectionChangedEvent(closestGrid));
+			// GridSelectionChanged?.Invoke(closestGrid);
 			// fire event
 		}
 		else if (closestGrid != null && lastSelectedGrid == null)
 		{
 			closestGrid.Select();
 			lastSelectedGrid = closestGrid;
-			GridSelectionChanged?.Invoke(closestGrid);
+			EventBus.Publish(new GridSelectionChangedEvent(closestGrid));
+			// GridSelectionChanged?.Invoke(closestGrid);
 		}
 		else if (closestGrid == null && lastSelectedGrid != null)
 		{
 			lastSelectedGrid.Deselect();
 			lastSelectedGrid = null;
-			GridSelectionChanged?.Invoke(null);
+			EventBus.Publish(new GridSelectionChangedEvent(closestGrid));
+			// GridSelectionChanged?.Invoke(null);
 		}
 		else // ==null both
 		{
 			
 		}
 	}
-	public void AddContent(Util.ContentType contentType, ContentPreview content)
+	void AddContent(AddContentEvent e)
 	{
-		Debug.Assert(content != null);
+		Debug.Assert(e.content != null);
 		Debug.Assert(lastSelectedGrid != null);
 		(var h, var w, var l) = (lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx);
-		switch (contentType)
+		switch (e.contentType)
 		{
 			case Util.ContentType.Crate:
-				CratePreview cratePreview = content as CratePreview;
+				CratePreview cratePreview = e.content as CratePreview;
 				Debug.Assert(cratePreview != null);
 				crates[h, w, l] = cratePreview;
 				break;
 			case Util.ContentType.Accessory:
-				AccessoryPreview accessoryPreview = content as AccessoryPreview;
+				AccessoryPreview accessoryPreview = e.content as AccessoryPreview;
 				Debug.Assert(accessoryPreview != null);
 				accessories[h, w, l] = accessoryPreview;
 				break;
 			case Util.ContentType.Load:
-				LoadPreview loadPreview = content as LoadPreview;
+				LoadPreview loadPreview = e.content as LoadPreview;
 				Debug.Assert(loadPreview != null);
 				loads[h, w, l] = loadPreview;
 				PiggyPreview preview = loadPreview as PiggyPreview;

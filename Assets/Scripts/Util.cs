@@ -33,14 +33,20 @@ public class Util
 
 	public static Dictionary<int, List<(Content, int)>> LevelItems = new()
 	{
-		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4) } }
+		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4)} },
+		{2, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4)} },
+		{3, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.TurnWheel, 4)} },
+		{4, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
+		{5, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
 	};
 
 	public static Dictionary<Content, ContentType> ContentInfos = new()
 	{
 		{Content.Pig, ContentType.Load }, // content preview, sprite
 		{Content.WoodenCrate, ContentType.Crate },
-		{Content.Wheel, ContentType.Accessory }
+		{Content.Wheel, ContentType.Accessory },
+		{Content.MotorWheel, ContentType.Accessory },
+		{Content.TurnWheel, ContentType.Accessory },
 	};
 
 	public enum ContentType

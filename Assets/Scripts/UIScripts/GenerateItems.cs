@@ -13,9 +13,13 @@ public class GenerateItems : MonoBehaviour
     public ContentPreview piggyPreview;
     public ContentPreview cratePreview;
     public ContentPreview wheelPreview;
+    public ContentPreview turnWheelPreview;
+    public ContentPreview motorWheelPreview;
     public Sprite piggySprite;
     public Sprite crateSprite;
     public Sprite wheelSprite;
+    public Sprite turnWheelSprite;
+    public Sprite motorWheelSprite;
     Dictionary<Util.Content, (ContentPreview, Sprite)> contentInfos;
     public GameObject imagePrefab;
     // Start is called before the first frame update
@@ -28,6 +32,8 @@ public class GenerateItems : MonoBehaviour
             {Util.Content.Pig, (piggyPreview, piggySprite) },
             {Util.Content.WoodenCrate, (cratePreview, crateSprite) },
             {Util.Content.Wheel, (wheelPreview, wheelSprite) },
+            {Util.Content.TurnWheel, (turnWheelPreview, turnWheelSprite) },
+            {Util.Content.MotorWheel, (motorWheelPreview, motorWheelSprite) },
         };
 
         content = transform.Find("Scroll View").Find("Viewport").Find("Content");
