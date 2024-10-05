@@ -26,7 +26,6 @@ public class GoalReached : MonoBehaviour
 	}
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
-		ToastManager.Toast($"Received game state changed event: {e.state}, {e.level_num}");
 		if (e.state == Util.GameStateType.Build || e.state == Util.GameStateType.Intro)
 		{
 			if (e.level_num == level_num)

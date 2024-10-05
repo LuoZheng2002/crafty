@@ -274,7 +274,7 @@ public class GameState : MonoBehaviour
 		current_level_num = level_num;
 		piggyCameraPivot.EndFollow();
 		piggyCameraPivot.dragEulerAngle = Vector3.zero;
-		ToastManager.Toast($"Intro level {level_num}");
+		ToastManager.Toast($"Level {level_num}");
 
 		StartCoroutine(PlayAnimation());
 		// StartCoroutine(MoveCameraToGrid());
@@ -309,7 +309,7 @@ public class GameState : MonoBehaviour
 	//}
 	void TransitionToBuild()
 	{
-		ToastManager.Toast("Tansition to build called");
+		// ToastManager.Toast("Tansition to build called");
 		piggy_permit_invisible = false;
 		piggyCameraPivot.EndFollow();
 		piggyCameraPivot.dragEulerAngle = Vector3.zero;
@@ -329,6 +329,7 @@ public class GameState : MonoBehaviour
 	void TransitionToOutro()
 	{
 		camera_follow_pig = false;
+		piggyPreview.SetInvisible(false);
 		if (unlocked_levels < current_level_num + 1 && current_level_num < Util.LevelItems.Count)
 		{
 			unlocked_levels = current_level_num + 1;
