@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5785214434775691221}
   - component: {fileID: 6632642695768685149}
   - component: {fileID: 7070219189990033333}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Eye2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6078176193850125369}
   - component: {fileID: 6495108719636568084}
   - component: {fileID: 6588978745419272046}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Piggy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162299faaf818914d910c7ab6b4eca96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scream_velocity: 12
 --- !u!1 &4852154403209245819
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +190,7 @@ GameObject:
   - component: {fileID: 4497991029616651285}
   - component: {fileID: 7067270810776329422}
   - component: {fileID: 7054251333601912091}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Eye1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +273,7 @@ GameObject:
   - component: {fileID: 1918545838800886398}
   - component: {fileID: 3445870769996449416}
   - component: {fileID: 5326225109282155245}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +356,7 @@ GameObject:
   - component: {fileID: 3242546030555483247}
   - component: {fileID: 7508393779631035619}
   - component: {fileID: 9174374832095920042}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

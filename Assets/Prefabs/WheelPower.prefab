@@ -142,7 +142,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a0fbf3b8dbdd2f04e83c68ece5072be0, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1652204546776489305, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
     m_RemovedGameObjects:
     - {fileID: 3931871622778869924, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
     - {fileID: 7486343229879253717, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
@@ -154,6 +155,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6943888758988859901}
+    - targetCorrespondingSourceObject: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 70626792578212898}
   m_SourcePrefab: {fileID: 100100000, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
 --- !u!4 &2387654445466631012 stripped
 Transform:
@@ -178,3 +182,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   torque_factor: 6
+--- !u!114 &70626792578212898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100471390814191696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2975ead030411c544bc1c9727978ce5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

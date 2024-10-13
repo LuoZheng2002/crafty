@@ -130,11 +130,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61d3e37f1099f54ebbe071acde4068b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothSpeed: 0.125
-  rotationSmoothSpeed: 0.125
+  smoothSpeed: 0.01
+  rotationSmoothSpeed: 0.02
   min_dist: 3
-  max_dist: 10
-  zoom_speed: 0.25
+  max_dist: 15
+  zoom_speed: 1
+  default_dist: 7
+  dragEulerAngle: {x: 0, y: 0, z: 0}
 --- !u!33 &1248075848791532735
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -7,6 +7,9 @@ public class CratePreview : ContentPreview
 	public Material transparent;
 	public Material opaque;
 	bool active = true;
+
+	public override Util.Content Content => Util.Content.WoodenCrate;
+
 	private void Start()
 	{
 		

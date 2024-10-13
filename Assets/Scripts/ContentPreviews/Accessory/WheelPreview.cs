@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WheelPreview : AccessoryPreview
 {
+	public override Util.Content Content => Util.Content.Wheel;
 	WheelCollider wheelCollider;
 	Transform cylinderTransform;
 	bool built = false;
@@ -48,5 +49,9 @@ public class WheelPreview : AccessoryPreview
 	public override (int h_delta, int w_delta, int l_delta) AttachDir()
 	{
 		return Util.WheelRotations[current_rotation].Item2;
+	}
+	public override (bool wa, bool sd) GetWASD()
+	{
+		return (false, false);
 	}
 }

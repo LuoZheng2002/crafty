@@ -12,13 +12,24 @@ public class ContentTypeChangedEvent
 		this.contentType = contentType;   
     }
 }
+public class ContentRecycleEvent
+{
+	public Util.Content content;
+    public ContentRecycleEvent(Util.Content content)
+    {
+		this.content = content;
+    }
+}
+
 // to do: add content event
 public class AddContentEvent
 {
 	public Util.ContentType contentType;
 	public ContentPreview content;
-    public AddContentEvent(Util.ContentType contentType, ContentPreview content)
+	public GridCell selectedGrid;
+	public AddContentEvent(GridCell selectedGrid, Util.ContentType contentType, ContentPreview content)
     {
+		this.selectedGrid = selectedGrid;
 		this.contentType = contentType;
 		this.content = content;
     }
@@ -29,6 +40,7 @@ public class ItemCountChangeEvent
 	public int delta;
 	public ItemCountChangeEvent(Util.Content content, int delta)
 	{
+		
 		this.content = content;
 		this.delta = delta;
 	}
@@ -48,6 +60,32 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	public Util.Content content;
 	Text text;
 	GameState gameState;
+
+	Image selectionImage;
+
+
+	public float minScale = 0.8f;
+	public float maxScale = 1.2f;
+	public float scaleSpeed = 5.0f;
+	Image image;
+	private void OnEnable()
+	{
+		image = GetComponent<Image>();
+		StartCoroutine(Scale());
+	}
+	IEnumerator Scale()
+	{
+		while (!GameState.shown_drag_images)
+		{
+			float scale = (Mathf.Sin(Time.time * scaleSpeed) + 1.0f) / 2.0f * (maxScale - minScale) + minScale;
+			// Debug.Log($"Scale: {scale}");
+			image.rectTransform.localScale = new Vector3(scale, scale, scale);
+			yield return null;
+		}
+		image.rectTransform.localScale = Vector3.one;
+	}
+
+
 	public Text Text
 	{
 		get
@@ -72,10 +110,19 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		EventBus.Subscribe<GridSelectionChangedEvent>(OnSelectionChanged);
 		EventBus.Subscribe<ItemCountChangeEvent>(OnItemCountChange);
 		EventBus.Subscribe<TrashEvent>(OnTrash);
+		EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
+		EventBus.Subscribe<ContentRecycleEvent>(OnContentRecycle);
 		count = initial_count;
 		Text.text = count.ToString();
 
 		gameState = GameObject.Find("GameState").GetComponent<GameState>();
+		selectionImage = transform.Find("Selection").GetComponent<Image>();
+		selectionImage.enabled = false;
+		Debug.Assert(selectionImage != null);
+	}
+	void OnContentSelectionChanged(ContentSelectionChangedEvent e)
+	{
+		selectionImage.enabled = false;
 	}
 	void OnTrash(TrashEvent e)
 	{
@@ -90,7 +137,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Text.text = count.ToString();
 		}
 	}
-	void OnSelectionChanged(GridSelectionChangedEvent e)
+	public void OnSelectionChanged(GridSelectionChangedEvent e)
 	{
 		selectedGrid = e.gridCell;
 		if (instantiatedObject != null)
@@ -102,11 +149,8 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	{
 		if (count > 0)
 		{
+			GameState.shown_drag_images = true;
 			EventBus.Publish(new ContentTypeChangedEvent(contentType));
-			// gridMatrix.currentContentType = contentType;
-			// Disable raycast to allow dropping
-			// canvasGroup.blocksRaycasts = false;
-			// Debug.Log("On begin drag");
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			// Get the direction of the ray
 			Vector3 rayDirection = ray.direction;
@@ -114,14 +158,24 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
 			GameObject prefab = contentPreview.gameObject;
 			Transform gridMatrixTransform = gameState.CurrentGridMatrix.transform;
-			instantiatedObject = Instantiate(prefab, instantiatePos, Quaternion.identity);
+			instantiatedObject = Instantiate(prefab, Vector3.zero, Quaternion.identity);
 			instantiatedObject.transform.parent = gridMatrixTransform;
 			instantiatedObject.transform.localRotation = Quaternion.identity;
+			Util.SetLayerRecursively(instantiatedObject, "MaskLayer");
 			EventBus.Publish(new ItemCountChangeEvent(content, -1));
+			// DragHelper();
+
+			EventBus.Publish(new ContentSelectionChangedEvent(this));
+			selectionImage.enabled = true;
+		}
+		else
+		{
+			EventBus.Publish(new ContentSelectionChangedEvent(null));
 		}
 	}
 	void DragHelper()
 	{
+		// Debug.Log("Drag helper called");
 		if (instantiatedObject == null)
 		{
 			return;
@@ -135,11 +189,13 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		if (selectedGrid != null)
 		{
 			instantiatedObject.transform.position = selectedGrid.transform.position;
+			Util.SetLayerRecursively(instantiatedObject, "ContentCrate");
 		}
 		else
 		{
 			Vector3 newPos = ray.origin + rayDirection * rayDistance;
 			instantiatedObject.transform.position = newPos;
+			Util.SetLayerRecursively(instantiatedObject, "MaskLayer");
 		}
 	}
 	public void OnDrag(PointerEventData eventData)
@@ -153,19 +209,42 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		{
 			return;
 		}
-		EventBus.Publish(new ContentTypeChangedEvent(Util.ContentType.None));
 		// Enable raycast again
 		// canvasGroup.blocksRaycasts = true;
 		if (selectedGrid != null)
 		{
-			// gridMatrix.AddContent(contentType, instantiatedObject.GetComponent<ContentPreview>());
-			EventBus.Publish(new AddContentEvent(contentType, instantiatedObject.GetComponent<ContentPreview>()));
+			Util.SetLayerRecursively(instantiatedObject, "ContentCrate");
+			EventBus.Publish(new AddContentEvent(selectedGrid, contentType, instantiatedObject.GetComponent<ContentPreview>()));
 			instantiatedObject = null;
+			selectedGrid = null;
 		}
 		else
 		{
 			EventBus.Publish(new ItemCountChangeEvent(content, 1));
 			Destroy(instantiatedObject);
+		}
+		EventBus.Publish(new ContentTypeChangedEvent(Util.ContentType.None));
+	}
+	public void OnClick()
+	{
+		if (count > 0)
+		{
+			GameState.shown_drag_images = true;
+			ToastManager.Toast("Drag!");
+			EventBus.Publish(new ContentSelectionChangedEvent(this));
+			selectionImage.enabled = true;
+		}
+		else
+		{
+			EventBus.Publish(new ContentSelectionChangedEvent(null));
+		}
+	}
+	void OnContentRecycle(ContentRecycleEvent e)
+	{
+		if (e.content == content)
+		{
+			count++;
+			text.text = count.ToString();
 		}
 	}
 }

@@ -28,11 +28,38 @@ public class Confirm : MonoBehaviour
 		image.color = solidColor;
 		has_piggy = true;
 	}
+
+	public float minScale = 0.8f;
+	public float maxScale = 1.2f;
+	public float scaleSpeed = 5.0f;
+	private void OnEnable()
+	{
+		image = GetComponent<Image>();
+		StartCoroutine(Scale());
+	}
+	IEnumerator Scale()
+	{
+		while (!has_piggy)
+		{
+			yield return null;
+		}
+		while (!GameState.shown_confirm)
+		{
+			float scale = (Mathf.Sin(Time.time * scaleSpeed) + 1.0f) / 2.0f * (maxScale - minScale) + minScale;
+			// Debug.Log($"Scale: {scale}");
+			image.rectTransform.localScale = new Vector3(scale, scale, scale);
+			yield return null;
+		}
+		image.rectTransform.localScale = Vector3.one;
+	}
+
+
 	public void OnConfirmClicked()
     {
 		if (has_piggy)
 		{
 			EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Play, 0));
 		}
+		GameState.shown_confirm = true;
     }
 }

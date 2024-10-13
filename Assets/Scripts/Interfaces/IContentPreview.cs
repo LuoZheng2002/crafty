@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ContentPreview : MonoBehaviour
 {
+    public abstract Util.Content Content { get; }
     void Awake()
     {
         EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
@@ -29,4 +30,5 @@ public abstract class LoadPreview: DirectionalPreview
 public abstract class AccessoryPreview: DirectionalPreview
 {
 	public abstract (int h_delta, int w_delta, int l_delta) AttachDir();
+    public abstract (bool wa, bool sd) GetWASD();
 }

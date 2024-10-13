@@ -6,40 +6,107 @@ public class AudioPlayer : MonoBehaviour
 {
     public AudioClip buildClip;
     public AudioClip playClip;
-    AudioSource audioSource;
+    public AudioClip clearClip;
+    public AudioClip menuClip;
+    public AudioClip snore;
+    public AudioClip scream;
+    AudioSource musicSource;
+    AudioSource soundEffectSource;
+    public float min_snore_interval = 10.0f;
+    public float max_snore_interval = 30.0f;
+    bool can_snore = false;
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        var audioSources = GetComponents<AudioSource>();
+        musicSource = audioSources[0];
+        soundEffectSource = audioSources[1];
         EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+        EventBus.Subscribe<ScreamEvent>(Scream);
+        StartCoroutine(Snore());
+    }
+    void Scream(ScreamEvent e)
+    {
+        if (soundEffectSource.isPlaying)
+        {
+            soundEffectSource.Stop();
+        }
+        soundEffectSource.clip = scream;
+        soundEffectSource.loop = false;
+        soundEffectSource.Play();
+    }
+    IEnumerator Snore()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(Random.Range(min_snore_interval, max_snore_interval));
+            if (!can_snore)
+            {
+                continue;
+            }
+            if (!soundEffectSource.isPlaying)
+            {
+                soundEffectSource.clip = snore;
+                soundEffectSource.loop = false;
+                soundEffectSource.Play();
+            }
+        }
     }
     void OnGameStateChanged(GameStateChangedEvent e)
     {
-        if (e.state == Util.GameStateType.Build)
+        if (e.state == Util.GameStateType.Play)
         {
-            if (audioSource.isPlaying)
+            can_snore = true;
+        }
+        else
+        {
+            can_snore = false;
+        }
+        if (e.state == Util.GameStateType.Intro)
+		{
+			if (musicSource.isPlaying)
+			{
+				musicSource.Stop();
+			}
+			musicSource.clip = menuClip;
+			musicSource.loop = true;
+			musicSource.Play();
+		}
+        else if (e.state == Util.GameStateType.Build)
+        {
+            if (musicSource.isPlaying)
             {
-                audioSource.Stop();
+                musicSource.Stop();
             }
-            audioSource.clip = buildClip;
-            audioSource.loop = true;
-            audioSource.Play();
+            musicSource.clip = buildClip;
+            musicSource.loop = true;
+            musicSource.Play();
         }
         else if (e.state == Util.GameStateType.Play)
         {
-			if (audioSource.isPlaying)
+			if (musicSource.isPlaying)
 			{
-				audioSource.Stop();
+				musicSource.Stop();
 			}
-			audioSource.clip = playClip;
-			audioSource.loop = true;
-			audioSource.Play();
+			musicSource.clip = playClip;
+			musicSource.loop = true;
+			musicSource.Play();
+		}
+        else if (e.state == Util.GameStateType.Outro)
+        {
+			if (musicSource.isPlaying)
+			{
+				musicSource.Stop();
+			}
+			musicSource.clip = clearClip;
+			musicSource.loop = false;
+			musicSource.Play();
 		}
         else
         {
-            if (audioSource.isPlaying)
+            if (musicSource.isPlaying)
             {
-                audioSource.Stop();
+                musicSource.Stop();
             }
         }
     }

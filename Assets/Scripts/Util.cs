@@ -15,6 +15,25 @@ public class Util
 		Outro
 	}
 
+	// Set the layer of the GameObject and all its children
+	public static void SetLayerRecursively(GameObject obj, string newLayerName)
+	{
+		// If the object is null, return
+		if (obj == null)
+		{
+			return;
+		}
+
+		// Set the layer of the current object
+		obj.layer = LayerMask.NameToLayer(newLayerName);
+
+		// Loop through and set the layer for all the children
+		foreach (Transform child in obj.transform)
+		{
+			SetLayerRecursively(child.gameObject, newLayerName);
+		}
+	}
+
 	public static List<(Quaternion, (int, int, int))> WheelRotations = new ()
 	{
 		(Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
@@ -54,7 +73,15 @@ public class Util
 		None,
 		Crate,
 		Accessory,
-		Load
+		Load,
+		Erase
+	}
+	public enum TutorialType
+	{
+		Space,
+		Drag,
+		DragScreen,
+		ThirdPerson
 	}
 	public enum Content
 	{

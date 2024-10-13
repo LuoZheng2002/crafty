@@ -50,6 +50,7 @@ public class PiggyCameraPivot : MonoBehaviour
 		following= false;
 		piggyTransform = null;
 	}
+
 	void LateUpdate()
 	{
 		// Calculate the target position with the offset

@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class InvisibleChangedEvent
+{
+	public bool invisible = false;
+    public InvisibleChangedEvent(bool invisible)
+    {
+        this.invisible = invisible;
+    }
+}
 public class PiggyInstantiatedEvent
 {
 	public PiggyPreview piggyPreview;
@@ -31,11 +39,27 @@ public class FirstPersonChangedEvent
     }
 }
 
+public class ShowTutorialEvent
+{
+	public Util.TutorialType tutorialType;
+    public ShowTutorialEvent(Util.TutorialType tutorialType)
+    {
+        this.tutorialType = tutorialType;
+    }
+}
+
 public class GameState : MonoBehaviour
 {
 	public static int unlocked_levels = 1;
 	public static int start_level = 1;
 	public static GameState instance;
+	public static bool shown_layers = false;
+	public static bool shown_trashcan = false;
+	public static bool shown_drag_images = false;
+	public static bool placed_a_component = false;
+	public static bool shown_third_person = false;
+	public static bool shown_eraser = false;
+	public static bool shown_confirm = false;
 	PiggyPreview piggyPreview;
 	PiggyCameraPivot piggyCameraPivot;
 	public GameObject cameraAnimationPrefab;
@@ -50,6 +74,8 @@ public class GameState : MonoBehaviour
 	bool first_person = true;
 	Transform cameraRefTransform;
 	bool piggy_permit_invisible = false;
+
+	
 
 	public Level CurrentLevel { get
 		{
@@ -118,8 +144,9 @@ public class GameState : MonoBehaviour
 	{
 		if (current_level_num >= Util.LevelItems.Count) // count starting from 1
 		{
-			Debug.Log($"Current level num: {current_level_num}, Util.levelItems.count: {Util.LevelItems.Count}");
-			Debug.LogError("No more level to play");
+			// Debug.Log($"Current level num: {current_level_num}, Util.levelItems.count: {Util.LevelItems.Count}");
+			// Debug.LogError("No more level to play");
+			ToastManager.Toast("More levels coming soon!\nThanks for playing!");
 			return;
 		}
 		current_level_num++;
@@ -147,7 +174,7 @@ public class GameState : MonoBehaviour
 			float progress = (Time.time - startTime) / retry_move_time;
 			Camera.main.transform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
 			Camera.main.transform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
-			Debug.Log($"camera main: {Camera.main.transform.position.x}, {Camera.main.transform.position.y},{Camera.main.transform.position.z}");
+			// Debug.Log($"camera main: {Camera.main.transform.position.x}, {Camera.main.transform.position.y},{Camera.main.transform.position.z}");
 			yield return null;
 		}
 		cameraTransform.position = dummyCameraTransform.position;
@@ -174,7 +201,7 @@ public class GameState : MonoBehaviour
 				piggy_permit_invisible = true;
 				if (first_person)
 				{
-					piggyPreview.SetInvisible(true);
+					EventBus.Publish(new InvisibleChangedEvent(true));
 				}
 			}
 			cameraTransform.LookAt(cameraRefTransform, Vector3.up);
@@ -215,11 +242,11 @@ public class GameState : MonoBehaviour
 		{
 			if (first_person)
 			{
-				piggyPreview.SetInvisible(true);
+				EventBus.Publish(new InvisibleChangedEvent(true));
 			}
 			else if (piggy_permit_invisible)
 			{
-				piggyPreview.SetInvisible(false);
+				EventBus.Publish(new InvisibleChangedEvent(false));
 			}
 		}
 	}
@@ -307,6 +334,11 @@ public class GameState : MonoBehaviour
 	//	ToastManager.Toast("Gone to build");
 	//	EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
 	//}
+	public static IEnumerator ShowTutorial(Util.TutorialType tutorialType, float delay=1.5f)
+	{
+		yield return new WaitForSeconds(delay);
+		EventBus.Publish(new ShowTutorialEvent(tutorialType));
+	}
 	void TransitionToBuild()
 	{
 		// ToastManager.Toast("Tansition to build called");
@@ -317,6 +349,11 @@ public class GameState : MonoBehaviour
 		Debug.Assert(gridMatrix != null, "grid matrix is null");
 		gridMatrix.enabled = true;
 		// Debug.Log("transition to build enabled");
+		//if (!shown_space_tutorial)
+		//{
+		//	shown_space_tutorial = true;
+		//	StartCoroutine(ShowTutorial(Util.TutorialType.Space));
+		//}
 	}
 	void TransitionToPlay()
 	{
@@ -325,11 +362,21 @@ public class GameState : MonoBehaviour
 		// coroutine that moves camera to position
 		StartCoroutine(CameraToPig());
 		// start updating camera position according to piggyCameraPivot
+		//if (!shown_dragscreen_tutorial)
+		//{
+		//	shown_dragscreen_tutorial = true;
+		//	StartCoroutine(ShowTutorial(Util.TutorialType.DragScreen, 4.0f));
+		//}
+		//if (current_level_num == 2 && !shown_third_person_tutorial)
+		//{
+		//	shown_third_person_tutorial = true;
+		//	StartCoroutine(ShowTutorial(Util.TutorialType.ThirdPerson, 4.0f));
+		//}
 	}
 	void TransitionToOutro()
 	{
 		camera_follow_pig = false;
-		piggyPreview.SetInvisible(false);
+		EventBus.Publish(new InvisibleChangedEvent(false));
 		if (unlocked_levels < current_level_num + 1 && current_level_num < Util.LevelItems.Count)
 		{
 			unlocked_levels = current_level_num + 1;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraAnimation : MonoBehaviour
 {
+    public float speedup_speed = 5.0f;
     void Start()
     {
         Transform mainCamera = transform.Find("Main Camera");
@@ -14,7 +15,11 @@ public class CameraAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        {
+            Animator animator = GetComponent<Animator>();
+            animator.speed = speedup_speed;
+        }
     }
     public void Detach()
     {

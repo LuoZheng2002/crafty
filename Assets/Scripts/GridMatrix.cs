@@ -14,6 +14,20 @@ public class GridSelectionChangedEvent
         this.gridCell = gridCell;
     }
 }
+
+public class ContentSelectionChangedEvent
+{
+	public ImageDragHandler imageDragHandler;
+    public ContentSelectionChangedEvent(ImageDragHandler imageDragHandler)
+    {
+		this.imageDragHandler = imageDragHandler;
+    }
+}
+
+public class SwitchLayerEvent
+{
+
+}
 public class GridMatrix : MonoBehaviour
 {
 	public bool first_person = true;
@@ -32,10 +46,12 @@ public class GridMatrix : MonoBehaviour
 	CratePreview[,,] crates;
 	AccessoryPreview[,,] accessories;
 	LoadPreview[,,] loads;
-
+	bool wa;
+	bool sd;
 	// Util.GridContentInfo[,,] infos;
 
 	GridCell lastSelectedGrid = null;
+	ImageDragHandler currentImageDragHandler;
 	public int activeLayerIndex = 0;
 	private RaycastHit[] hits = new RaycastHit[10];
 
@@ -79,6 +95,45 @@ public class GridMatrix : MonoBehaviour
 		Transform cube = transform.Find("Cube");
 		Destroy(cube.gameObject);
 	}
+	void OnEraseChanged(EraseChangedEvent e)
+	{
+		if (e.active)
+		{
+			currentContentType = Util.ContentType.Erase;
+		}
+		else
+		{
+			currentContentType = Util.ContentType.None;
+			if (lastSelectedGrid!= null)
+			{
+				var load = loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+				if (load != null)
+				{
+					EventBus.Publish(new ContentRecycleEvent(load.Content));
+					Destroy(load.gameObject);
+					loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+				}
+				else
+				{
+					var accessory = accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+					if (accessory != null)
+					{
+						EventBus.Publish(new ContentRecycleEvent(accessory.Content));
+						Destroy(accessory.gameObject);
+						accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+					}
+					var crate = crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+					if (crate != null)
+					{
+						EventBus.Publish(new ContentRecycleEvent(crate.Content));
+						Destroy(crate.gameObject);
+						crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+					}
+				}
+				
+			}
+		}
+	}
 	private void OnEnable()
 	{
 		Debug.Log("Grid matrix enabled");
@@ -86,6 +141,9 @@ public class GridMatrix : MonoBehaviour
 		subscriptionGameStateChanged = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
 		subscriptionAddContent = EventBus.Subscribe<AddContentEvent>(AddContent);
 		subscriptionContentTypeChanged = EventBus.Subscribe<ContentTypeChangedEvent>(OnContentTypeChanged);
+		EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
+		EventBus.Subscribe<SwitchLayerEvent>(OnSwitchLayer);
+		EventBus.Subscribe<EraseChangedEvent>(OnEraseChanged);
 		grids = new GridCell[height, width, length];
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
@@ -139,6 +197,11 @@ public class GridMatrix : MonoBehaviour
 		currentContentType = e.contentType;
 	}
 	
+	void OnContentSelectionChanged(ContentSelectionChangedEvent e)
+	{
+		currentImageDragHandler = e.imageDragHandler;
+	}
+
 	void BuildAndStickCrates(int h_idx, int w_idx, int l_idx)
 	{
 		CratePreview crate = crates[h_idx, w_idx, l_idx];
@@ -162,6 +225,10 @@ public class GridMatrix : MonoBehaviour
 		AccessoryPreview accessory = accessories[h_idx, w_idx, l_idx];
 		if (accessory != null)
 		{
+			// if (accessory.)
+			(bool _wa, bool _sd) = accessory.GetWASD();
+			if (_wa) wa = true;
+			if (_sd) sd = true;
 			accessory.Build();
 			// to do
 			(var h, var w, var l) = accessory.AttachDir();
@@ -187,6 +254,8 @@ public class GridMatrix : MonoBehaviour
 	}
 	void Build()
 	{
+		wa = false;
+		sd = false;
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
@@ -221,7 +290,12 @@ public class GridMatrix : MonoBehaviour
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
 		loads = new LoadPreview[height, width, length];
-
+		StartCoroutine(UpdateWASD());
+	}
+	IEnumerator UpdateWASD()
+	{
+		yield return null;
+		EventBus.Publish(new UpdateWASDEvent(wa, sd));
 		enabled = false;
 	}
 	// build -> play -> end
@@ -268,26 +342,39 @@ public class GridMatrix : MonoBehaviour
 			Build();
 		}		
 	}
+	bool switch_layer = false;
+	void OnSwitchLayer(SwitchLayerEvent e)
+	{
+		switch_layer = true;
+	}
+	void TrySwitchLayer()
+	{
+		if (switch_layer)
+		{
+			switch_layer = false;
+			Debug.Log("Switch layer called");
+			SetLayerActive(activeLayerIndex, false);
+			activeLayerIndex = (activeLayerIndex + 1) % height;
+			SetLayerActive(activeLayerIndex, true);
+		}		
+	}
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			SetLayerActive(activeLayerIndex, false);
-			activeLayerIndex = (activeLayerIndex + 1) % height;
-			SetLayerActive(activeLayerIndex, true);
+			OnSwitchLayer(null);
 		}
-		if (Input.GetKeyDown(KeyCode.Delete))
-		{
-			Trash();
-		}
+		TrySwitchLayer();
 		UpdateActiveFromMouse();
 
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			int hitCount = Physics.RaycastNonAlloc(ray, hits);
-			GridCell closestGrid = null;
-			float minDistance = 100000.0f;
+			GridCell closestOccupiedGrid = null;
+			GridCell closestEmptyGrid = null;
+			float minOccupiedDistance = 100000.0f;
+			float minEmptyDistance = 100000.0f;
 			for (int i = 0; i < hitCount; i++)
 			{
 				GameObject hitObject = hits[i].collider.gameObject;
@@ -302,30 +389,47 @@ public class GridMatrix : MonoBehaviour
 				{
 					continue;
 				}
+				float distance = Util.GetDistanceFromRayToPoint(ray, hitObject.transform.position);
 				if (accessories[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null
 					&& loads[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null)
 				{
-					continue;
+					if (distance < minEmptyDistance)
+					{
+						closestEmptyGrid = hitGrid;
+						minEmptyDistance = distance;
+					}
 				}
-
-				float distance = Util.GetDistanceFromRayToPoint(ray, hitObject.transform.position);
-				if (distance < minDistance)
+				else
 				{
-					closestGrid = hitGrid;
-					minDistance = distance;
+					if (distance < minOccupiedDistance)
+					{
+						closestOccupiedGrid = hitGrid;
+						minOccupiedDistance = distance;
+					}
+				}				
+			}
+			if (closestEmptyGrid != null)
+			{
+				Debug.Log("Clicking on empty grid");
+				if (currentImageDragHandler != null)
+				{
+					Debug.Log("current image drage handler is not null");
+					currentImageDragHandler.OnSelectionChanged(new GridSelectionChangedEvent(closestEmptyGrid));
+					currentImageDragHandler.OnBeginDrag(null);
+					currentImageDragHandler?.OnEndDrag(null);
 				}
 			}
-			if (closestGrid!= null)
+			else if (closestOccupiedGrid!= null)
 			{
 				Debug.Log("Capture a component to change direction");
 				DirectionalPreview directionalPreview = null;
-				if (accessories[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx] != null)
+				if (accessories[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx] != null)
 				{
-					directionalPreview = accessories[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx];
+					directionalPreview = accessories[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx];
 				}
-				else if (loads[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx] != null)
+				else if (loads[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx] != null)
 				{
-					directionalPreview = loads[closestGrid.heightIdx, closestGrid.widthIdx, closestGrid.lengthIdx];
+					directionalPreview = loads[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx];
 				}
 				Debug.Assert(directionalPreview != null);
 				directionalPreview.ChangeDirection();
@@ -406,11 +510,23 @@ public class GridMatrix : MonoBehaviour
 			
 		}
 	}
+	// very dirty fix; don't know the cause
+	IEnumerator ChangePosition(ContentPreview content, Vector3 position)
+	{
+		for(int i = 0;i < 10 && content != null && enabled;i++)
+		{
+			content.transform.localPosition = position;
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
 	void AddContent(AddContentEvent e)
 	{
+		GameState.placed_a_component = true;
 		Debug.Assert(e.content != null);
-		Debug.Assert(lastSelectedGrid != null);
-		(var h, var w, var l) = (lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx);
+		GridCell grid = e.selectedGrid;
+		(var h, var w, var l) = (grid.heightIdx, grid.widthIdx, grid.lengthIdx);
+		StartCoroutine(ChangePosition(e.content, new Vector3(w, h, l)));
+		Debug.Log("Add content called");
 		switch (e.contentType)
 		{
 			case Util.ContentType.Crate:
