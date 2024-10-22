@@ -10,17 +10,13 @@ public class GenerateItemsEvent
 
 public class GenerateItems : MonoBehaviour
 {
-    public ContentPreview piggyPreview;
-    public ContentPreview cratePreview;
-    public ContentPreview wheelPreview;
-    public ContentPreview turnWheelPreview;
-    public ContentPreview motorWheelPreview;
+    
     public Sprite piggySprite;
     public Sprite crateSprite;
     public Sprite wheelSprite;
     public Sprite turnWheelSprite;
     public Sprite motorWheelSprite;
-    Dictionary<Util.Content, (ContentPreview, Sprite)> contentInfos;
+    Dictionary<Util.Content, Sprite> contentInfos;
     public GameObject imagePrefab;
     // Start is called before the first frame update
     Transform content;
@@ -29,11 +25,11 @@ public class GenerateItems : MonoBehaviour
     {
         contentInfos = new()
         {
-            {Util.Content.Pig, (piggyPreview, piggySprite) },
-            {Util.Content.WoodenCrate, (cratePreview, crateSprite) },
-            {Util.Content.Wheel, (wheelPreview, wheelSprite) },
-            {Util.Content.TurnWheel, (turnWheelPreview, turnWheelSprite) },
-            {Util.Content.MotorWheel, (motorWheelPreview, motorWheelSprite) },
+            {Util.Content.Pig, piggySprite },
+            {Util.Content.WoodenCrate,  crateSprite },
+            {Util.Content.Wheel, wheelSprite },
+            {Util.Content.TurnWheel, turnWheelSprite },
+            {Util.Content.MotorWheel, motorWheelSprite },
         };
 
         content = transform.Find("Scroll View").Find("Viewport").Find("Content");
@@ -60,10 +56,8 @@ public class GenerateItems : MonoBehaviour
             Debug.Assert(imageDragHandler != null);
             imageDragHandler.content = c;
             imageDragHandler.contentType = contentType;
-            (var contentPreview, var contentSprite) = contentInfos[c];
-            imageDragHandler.contentPreview = contentPreview;
+            var contentSprite = contentInfos[c];
             imageDragHandler.initial_count = count;
-            Debug.Assert(imageDragHandler.contentPreview != null);
             Image img = image.GetComponent<Image>();
             Debug.Assert(img != null);
             img.sprite = contentSprite;

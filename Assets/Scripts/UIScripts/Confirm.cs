@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public class PiggyRemovedEvent
+{
+
+}
 public class Confirm : MonoBehaviour
 {
 	Image image;
@@ -14,11 +19,17 @@ public class Confirm : MonoBehaviour
 		image = GetComponent<Image>();
 		EventBus.Subscribe<TrashEvent>(OnTrash);
 		EventBus.Subscribe<PiggyInstantiatedEvent>(OnPiggyInstantiated);
+		EventBus.Subscribe<PiggyRemovedEvent>(OnPiggyRemoved);
 		transparentColor = new Color(1, 1, 1, 0.2f);
 		solidColor = Color.white;
 		image.color = transparentColor;
 	}
 	void OnTrash(TrashEvent e)
+	{
+		image.color = transparentColor;
+		has_piggy = false;
+	}
+	void OnPiggyRemoved(PiggyRemovedEvent e)
 	{
 		image.color = transparentColor;
 		has_piggy = false;

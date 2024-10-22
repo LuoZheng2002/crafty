@@ -13,6 +13,12 @@ public class ScreamEvent
 
 public class PiggyPreview : LoadPreview
 {
+	int current_direction;
+	public override int Direction
+	{
+		get { return current_direction; }
+		set { current_direction = value; }
+	}
 	GameObject mesh;
 	Rigidbody rb;
 	public float scream_velocity = 5.0f;
@@ -70,7 +76,7 @@ public class PiggyPreview : LoadPreview
 	{
 		EventBus.Publish(new PiggyDestroyEvent());
 	}
-	public override void ChangeDirection()
+	public override void ChangeDirection(bool forward = true)
 	{
 		// throw new System.NotImplementedException();
 	}

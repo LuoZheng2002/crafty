@@ -21,6 +21,15 @@ public class ContentRecycleEvent
     }
 }
 
+public class ContentUsedEvent
+{
+	public Util.Content content;
+    public ContentUsedEvent(Util.Content content)
+    {
+		this.content = content;
+    }
+}
+
 // to do: add content event
 public class AddContentEvent
 {
@@ -50,9 +59,8 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	public int initial_count = 5;
 	int count = 0;
 	public float rayDistance = 5.0f;
-	GameObject instantiatedObject = null;
+	ContentPreview instantiatedPreview = null;
 	GridCell selectedGrid;
-	public ContentPreview contentPreview;
 	private RectTransform rectTransform;
 	private CanvasGroup canvasGroup;
 	// GridMatrix gridMatrix;
@@ -112,6 +120,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		EventBus.Subscribe<TrashEvent>(OnTrash);
 		EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
 		EventBus.Subscribe<ContentRecycleEvent>(OnContentRecycle);
+		EventBus.Subscribe<ContentUsedEvent>(OnContentUsed);
 		count = initial_count;
 		Text.text = count.ToString();
 
@@ -140,7 +149,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	public void OnSelectionChanged(GridSelectionChangedEvent e)
 	{
 		selectedGrid = e.gridCell;
-		if (instantiatedObject != null)
+		if (instantiatedPreview != null)
 		{
 			DragHelper();
 		}
@@ -156,12 +165,12 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Vector3 rayDirection = ray.direction;
 
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
-			GameObject prefab = contentPreview.gameObject;
 			Transform gridMatrixTransform = gameState.CurrentGridMatrix.transform;
-			instantiatedObject = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-			instantiatedObject.transform.parent = gridMatrixTransform;
-			instantiatedObject.transform.localRotation = Quaternion.identity;
-			Util.SetLayerRecursively(instantiatedObject, "MaskLayer");
+
+			instantiatedPreview = ContentInstantiator.Instance.InstantiateContent(content, gridMatrixTransform, instantiatePos, false, 0);
+			// instantiatedObject.transform.parent = gridMatrixTransform;
+			// instantiatedObject.transform.localRotation = Quaternion.identity;
+			Util.SetLayerRecursively(instantiatedPreview.gameObject, "MaskLayer");
 			EventBus.Publish(new ItemCountChangeEvent(content, -1));
 			// DragHelper();
 
@@ -176,26 +185,28 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	void DragHelper()
 	{
 		// Debug.Log("Drag helper called");
-		if (instantiatedObject == null)
+		if (instantiatedPreview == null)
 		{
 			return;
 		}
 		// awkward fix
-		instantiatedObject.transform.localRotation = Quaternion.identity;
+		instantiatedPreview.transform.localRotation = Quaternion.identity;
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		// Get the direction of the ray
 		Vector3 rayDirection = ray.direction;
 		if (selectedGrid != null)
 		{
-			instantiatedObject.transform.position = selectedGrid.transform.position;
-			Util.SetLayerRecursively(instantiatedObject, "ContentCrate");
+			instantiatedPreview.MoveGlobal(selectedGrid.transform.position, "Drag helper clamp grid");
+			// instantiatedPreview.transform.position = selectedGrid.transform.position;
+			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
 		}
 		else
 		{
 			Vector3 newPos = ray.origin + rayDirection * rayDistance;
-			instantiatedObject.transform.position = newPos;
-			Util.SetLayerRecursively(instantiatedObject, "MaskLayer");
+			instantiatedPreview.MoveGlobal(newPos, "Drag helper free move");
+			// instantiatedPreview.transform.position = newPos;
+			Util.SetLayerRecursively(instantiatedPreview.gameObject, "MaskLayer");
 		}
 	}
 	public void OnDrag(PointerEventData eventData)
@@ -205,7 +216,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		if (instantiatedObject == null)
+		if (instantiatedPreview == null)
 		{
 			return;
 		}
@@ -213,15 +224,15 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		// canvasGroup.blocksRaycasts = true;
 		if (selectedGrid != null)
 		{
-			Util.SetLayerRecursively(instantiatedObject, "ContentCrate");
-			EventBus.Publish(new AddContentEvent(selectedGrid, contentType, instantiatedObject.GetComponent<ContentPreview>()));
-			instantiatedObject = null;
+			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
+			EventBus.Publish(new AddContentEvent(selectedGrid, contentType, instantiatedPreview.GetComponent<ContentPreview>()));
+			instantiatedPreview = null;
 			selectedGrid = null;
 		}
 		else
 		{
 			EventBus.Publish(new ItemCountChangeEvent(content, 1));
-			Destroy(instantiatedObject);
+			Destroy(instantiatedPreview.gameObject);
 		}
 		EventBus.Publish(new ContentTypeChangedEvent(Util.ContentType.None));
 	}
@@ -244,6 +255,14 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		if (e.content == content)
 		{
 			count++;
+			text.text = count.ToString();
+		}
+	}
+	void OnContentUsed(ContentUsedEvent e)
+	{
+		if (e.content == content)
+		{
+			count--;
 			text.text = count.ToString();
 		}
 	}

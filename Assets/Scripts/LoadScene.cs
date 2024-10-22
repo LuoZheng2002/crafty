@@ -7,9 +7,9 @@ public class LoadScene : MonoBehaviour
 {
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-		}
+		//if (Input.GetKeyDown(KeyCode.Escape))
+		//{
+		//	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		//}
 	}
 }

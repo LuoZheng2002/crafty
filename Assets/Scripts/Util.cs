@@ -54,7 +54,7 @@ public class Util
 	{
 		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4)} },
 		{2, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4)} },
-		{3, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.TurnWheel, 4)} },
+		{3, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.TurnWheel, 2)} },
 		{4, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
 		{5, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
 	};
@@ -83,8 +83,18 @@ public class Util
 		DragScreen,
 		ThirdPerson
 	}
+
+	public enum NewTutorialType
+	{
+		Build,
+		Wide,
+		Turn,
+		Power,
+		Momentum
+	}
 	public enum Content
 	{
+		None,
 		// crate type
 		WoodenCrate,
 		IronCrate,

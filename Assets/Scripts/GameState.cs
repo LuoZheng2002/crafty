@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class MoveToGridEvent
+{
+	
+}
+
 public class InvisibleChangedEvent
 {
 	public bool invisible = false;
@@ -60,6 +65,12 @@ public class GameState : MonoBehaviour
 	public static bool shown_third_person = false;
 	public static bool shown_eraser = false;
 	public static bool shown_confirm = false;
+	public static bool shown_menu = false;
+	public static bool shown_view = false;
+	public static bool shown_help = false;
+	public static bool shown_retry = false;
+	public static bool shown_drag_screen = false;
+	public static List<bool> shown_tutorials = new() { false, false, false, false, false };
 	PiggyPreview piggyPreview;
 	PiggyCameraPivot piggyCameraPivot;
 	public GameObject cameraAnimationPrefab;
@@ -94,7 +105,10 @@ public class GameState : MonoBehaviour
 			return gridMatrix;
 		}
 	}
-	
+	void OnMoveToGrid(MoveToGridEvent e)
+	{
+		StartCoroutine(MoveCameraToGrid(false));
+	}
 	private void Awake()
 	{
 		//if (instance == null)
@@ -117,6 +131,7 @@ public class GameState : MonoBehaviour
 		EventBus.Subscribe<RetryEvent>(OnRetry);
 		EventBus.Subscribe<NextEvent>(OnNext);
 		EventBus.Subscribe<AnimationExitEvent>(OnAnimationExit);
+		EventBus.Subscribe<MoveToGridEvent>(OnMoveToGrid);
 	}
 	private void OnEnable()
 	{
@@ -159,7 +174,7 @@ public class GameState : MonoBehaviour
 		piggy_permit_invisible = false;
 		StartCoroutine(MoveCameraToGrid());
 	}
-	IEnumerator MoveCameraToGrid()
+	IEnumerator MoveCameraToGrid(bool publishevent=true)
 	{
 		yield return null;
 		float startTime = Time.time;
@@ -182,7 +197,10 @@ public class GameState : MonoBehaviour
 		Debug.Log($"dummy camera transform position: {dummyCameraTransform.position.x}, {dummyCameraTransform.position.y}, {dummyCameraTransform.position.z}");
 		// grid matrix will be enabled at transition to build
 		Debug.Log("Move camera to grid called");
-		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
+		if (publishevent)
+		{
+			EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
+		}
 	}
 	IEnumerator CameraToPig()
 	{
@@ -257,17 +275,17 @@ public class GameState : MonoBehaviour
 			Camera.main.transform.position = cameraRefTransform.position;
 			Camera.main.transform.rotation = cameraRefTransform.rotation;
 		}
-		Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
-			{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 }, 
-			{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
+		//Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
+		//	{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 }, 
+		//	{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
 
-		foreach (var pair in keycodes)
-		{
-			if (Input.GetKeyDown(pair.Value))
-			{
-				EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, pair.Key));
-			}
-		}
+		//foreach (var pair in keycodes)
+		//{
+		//	if (Input.GetKeyDown(pair.Value))
+		//	{
+		//		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, pair.Key));
+		//	}
+		//}
     }
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
@@ -339,8 +357,20 @@ public class GameState : MonoBehaviour
 		yield return new WaitForSeconds(delay);
 		EventBus.Publish(new ShowTutorialEvent(tutorialType));
 	}
+
+	IEnumerator ShowTutorial(int index)
+	{
+		if (shown_tutorials[index])
+		{
+			yield break;
+		}
+		shown_tutorials[index] = true;
+		yield return null;
+		EventBus.Publish(new ShowNewTutorialEvent((Util.NewTutorialType)index));
+	}
 	void TransitionToBuild()
 	{
+		StartCoroutine(ShowTutorial(current_level_num - 1));
 		// ToastManager.Toast("Tansition to build called");
 		piggy_permit_invisible = false;
 		piggyCameraPivot.EndFollow();
@@ -355,12 +385,26 @@ public class GameState : MonoBehaviour
 		//	StartCoroutine(ShowTutorial(Util.TutorialType.Space));
 		//}
 	}
+	public GameObject dragScreenCanvas;
+	IEnumerator ShowDragScreen()
+	{
+		if (shown_drag_screen)
+		{
+			yield break;
+		}
+		shown_drag_screen = true;
+		yield return new WaitForSeconds(1.0f);
+		dragScreenCanvas.SetActive(true);
+		yield return new WaitForSeconds(3.0f);
+		dragScreenCanvas.SetActive(false);
+	}
 	void TransitionToPlay()
 	{
 		// Debug.Log("Transitioning to play");
 		piggyCameraPivot.StartFollow(piggyPreview);
 		// coroutine that moves camera to position
 		StartCoroutine(CameraToPig());
+		StartCoroutine(ShowDragScreen());
 		// start updating camera position according to piggyCameraPivot
 		//if (!shown_dragscreen_tutorial)
 		//{

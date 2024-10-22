@@ -65,10 +65,12 @@
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelTurner.cs" />
     <Compile Include="Assets\Scripts\ContentPreviews\Accessory\TurnWheelPreview.cs" />
     <Compile Include="Assets\Scripts\AudioPlayer.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\View.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
+    <Compile Include="Assets\Scripts\ContentInstantiator.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToastManager.cs" />
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
@@ -81,6 +83,8 @@
     <Compile Include="Assets\Scripts\UIScripts\PlayButtonsDisplayer.cs" />
     <Compile Include="Assets\Scripts\CameraAnimation.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Replay.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\MenuConfirm.cs" />
+    <Compile Include="Assets\Scripts\NewTutorialPlayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
@@ -90,6 +94,7 @@
     <Compile Include="Assets\Scripts\StateMachineBehavior\CameraAnimExit.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IContentPreview.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ViewCanvasDrag.cs" />
     <Compile Include="Assets\Scripts\EventBus.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelButton.cs" />
     <Compile Include="Assets\Scripts\GoalReached.cs" />

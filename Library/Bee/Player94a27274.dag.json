@@ -431,8 +431,7 @@
         423,
         424,
         425,
-        426,
-        427
+        426
       ],
       "OverwriteOutputs": false,
       "DebugActionIndex": 0
@@ -12489,57 +12488,6 @@
       "ScannerIndex": 3
     },
     {
-      "Annotation": "C_WebGL_wasm Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/c1exaqc6isq3.o",
-      "DisplayName": "Compiling Cpp for GameAssembly (wasm)",
-      "Action": "\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/Emscripten/emscripten/emcc.bat\" -D__webgl__ -Wno-warn-absolute-paths -Wno-c++11-extensions -Wno-nonportable-include-path -ffunction-sections -fno-unwind-tables -fomit-frame-pointer -fno-threadsafe-statics -std=c++11 -Wno-#warnings -Wswitch -Wno-trigraphs -Wno-tautological-compare -Wno-invalid-offsetof -Wno-implicitly-unsigned-literal -Wno-integer-overflow -Wno-shift-negative-value -Wno-unknown-attributes -Wno-implicit-function-declaration -Wno-null-conversion -Wno-missing-declarations -Wno-unused-value -Wno-pragma-once-outside-header -fvisibility=hidden -fexceptions -fno-rtti -O3 -fno-strict-overflow -ffunction-sections -fdata-sections -fmessage-length=0 -pipe -D_GLIBCXX_USE_CXX11_ABI=0 -DBASELIB_INLINE_NAMESPACE=il2cpp_baselib -DIL2CPP_MONO_DEBUGGER_DISABLED -DRUNTIME_IL2CPP -DHAVE_BDWGC_GC -DNDEBUG -I\".\" -I\"C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/cpp\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp/pch\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/external/baselib/Include\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp/os/ClassLibraryPAL/brotli/include\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/external/baselib/Platforms/WebGL/Include\" -o \"Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/c1exaqc6isq3.o\" -fcolor-diagnostics -fdiagnostics-absolute-paths -c -xc++ \"C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/cpp/Generics__49.cpp\"",
-      "Inputs": [
-        "C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/cpp/Generics__49.cpp",
-        "C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/Emscripten/emscripten/emcc.bat",
-        "C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/Emscripten/emscripten/emar.bat",
-        "C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/Emscripten/emscripten/emcc.bat"
-      ],
-      "Outputs": [
-        "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/c1exaqc6isq3.o"
-      ],
-      "ToBuildDependencies": [
-        5
-      ],
-      "OverwriteOutputs": false,
-      "AllowUnexpectedOutput": true,
-      "Env": [
-        {
-          "Key": "EM_CONFIG",
-          "Value": "C:\\Program Files\\Unity\\Hub\\Editor\\2022.3.43f1\\Editor\\Data\\PlaybackEngines\\WebGLSupport\\BuildTools\\Emscripten\\.emscripten"
-        },
-        {
-          "Key": "EMSDK_PYTHON",
-          "Value": "C:\\Program Files\\Unity\\Hub\\Editor\\2022.3.43f1\\Editor\\Data\\PlaybackEngines\\WebGLSupport\\BuildTools\\Emscripten\\python\\python.exe"
-        },
-        {
-          "Key": "EMCC_SKIP_SANITY_CHECK",
-          "Value": "1"
-        },
-        {
-          "Key": "EM_FROZEN_CACHE",
-          "Value": "1"
-        },
-        {
-          "Key": "EM_WORKAROUND_PYTHON_BUG_34780",
-          "Value": "1"
-        },
-        {
-          "Key": "EM_WORKAROUND_WIN7_BAD_ERRORLEVEL_BUG",
-          "Value": "1"
-        },
-        {
-          "Key": "PYTHONUTF8",
-          "Value": "1"
-        }
-      ],
-      "DebugActionIndex": 257,
-      "ScannerIndex": 3
-    },
-    {
       "Annotation": "C_WebGL_wasm Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/gq7udtr2v6ir.o",
       "DisplayName": "Compiling Cpp for GameAssembly (wasm)",
       "Action": "\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/Emscripten/emscripten/emcc.bat\" -D__webgl__ -Wno-warn-absolute-paths -Wno-c++11-extensions -Wno-nonportable-include-path -ffunction-sections -fno-unwind-tables -fomit-frame-pointer -fno-threadsafe-statics -std=c++11 -Wno-#warnings -Wswitch -Wno-trigraphs -Wno-tautological-compare -Wno-invalid-offsetof -Wno-implicitly-unsigned-literal -Wno-integer-overflow -Wno-shift-negative-value -Wno-unknown-attributes -Wno-implicit-function-declaration -Wno-null-conversion -Wno-missing-declarations -Wno-unused-value -Wno-pragma-once-outside-header -fvisibility=hidden -fexceptions -fno-rtti -O3 -fno-strict-overflow -ffunction-sections -fdata-sections -fmessage-length=0 -pipe -D_GLIBCXX_USE_CXX11_ABI=0 -DBASELIB_INLINE_NAMESPACE=il2cpp_baselib -DIL2CPP_MONO_DEBUGGER_DISABLED -DRUNTIME_IL2CPP -DHAVE_BDWGC_GC -DNDEBUG -I\".\" -I\"C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/cpp\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp/pch\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/external/baselib/Include\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/libil2cpp/os/ClassLibraryPAL/brotli/include\" -I\"C:/Program Files/Unity/Hub/Editor/2022.3.43f1/Editor/Data/il2cpp/external/baselib/Platforms/WebGL/Include\" -o \"Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/gq7udtr2v6ir.o\" -fcolor-diagnostics -fdiagnostics-absolute-paths -c -xc++ \"C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/cpp/Generics__5.cpp\"",
@@ -12587,7 +12535,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 258,
+      "DebugActionIndex": 257,
       "ScannerIndex": 3
     },
     {
@@ -12638,7 +12586,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 259,
+      "DebugActionIndex": 258,
       "ScannerIndex": 3
     },
     {
@@ -12689,7 +12637,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 260,
+      "DebugActionIndex": 259,
       "ScannerIndex": 3
     },
     {
@@ -12740,7 +12688,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 261,
+      "DebugActionIndex": 260,
       "ScannerIndex": 3
     },
     {
@@ -12791,7 +12739,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 262,
+      "DebugActionIndex": 261,
       "ScannerIndex": 3
     },
     {
@@ -12842,7 +12790,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 263,
+      "DebugActionIndex": 262,
       "ScannerIndex": 3
     },
     {
@@ -12893,7 +12841,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 264,
+      "DebugActionIndex": 263,
       "ScannerIndex": 3
     },
     {
@@ -12944,7 +12892,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 265,
+      "DebugActionIndex": 264,
       "ScannerIndex": 3
     },
     {
@@ -12995,7 +12943,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 266,
+      "DebugActionIndex": 265,
       "ScannerIndex": 3
     },
     {
@@ -13046,7 +12994,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 267,
+      "DebugActionIndex": 266,
       "ScannerIndex": 3
     },
     {
@@ -13097,7 +13045,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 268,
+      "DebugActionIndex": 267,
       "ScannerIndex": 3
     },
     {
@@ -13148,7 +13096,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 269,
+      "DebugActionIndex": 268,
       "ScannerIndex": 3
     },
     {
@@ -13199,7 +13147,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 270,
+      "DebugActionIndex": 269,
       "ScannerIndex": 3
     },
     {
@@ -13250,7 +13198,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 271,
+      "DebugActionIndex": 270,
       "ScannerIndex": 3
     },
     {
@@ -13301,7 +13249,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 272,
+      "DebugActionIndex": 271,
       "ScannerIndex": 3
     },
     {
@@ -13352,7 +13300,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 273,
+      "DebugActionIndex": 272,
       "ScannerIndex": 3
     },
     {
@@ -13403,7 +13351,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 274,
+      "DebugActionIndex": 273,
       "ScannerIndex": 3
     },
     {
@@ -13454,7 +13402,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 275,
+      "DebugActionIndex": 274,
       "ScannerIndex": 3
     },
     {
@@ -13505,7 +13453,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 276,
+      "DebugActionIndex": 275,
       "ScannerIndex": 3
     },
     {
@@ -13556,7 +13504,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 277,
+      "DebugActionIndex": 276,
       "ScannerIndex": 3
     },
     {
@@ -13607,7 +13555,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 278,
+      "DebugActionIndex": 277,
       "ScannerIndex": 3
     },
     {
@@ -13658,7 +13606,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 279,
+      "DebugActionIndex": 278,
       "ScannerIndex": 3
     },
     {
@@ -13709,7 +13657,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 280,
+      "DebugActionIndex": 279,
       "ScannerIndex": 3
     },
     {
@@ -13760,7 +13708,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 281,
+      "DebugActionIndex": 280,
       "ScannerIndex": 3
     },
     {
@@ -13811,7 +13759,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 282,
+      "DebugActionIndex": 281,
       "ScannerIndex": 3
     },
     {
@@ -13862,7 +13810,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 283,
+      "DebugActionIndex": 282,
       "ScannerIndex": 3
     },
     {
@@ -13913,7 +13861,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 284,
+      "DebugActionIndex": 283,
       "ScannerIndex": 3
     },
     {
@@ -13964,7 +13912,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 285,
+      "DebugActionIndex": 284,
       "ScannerIndex": 3
     },
     {
@@ -14015,7 +13963,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 286,
+      "DebugActionIndex": 285,
       "ScannerIndex": 3
     },
     {
@@ -14066,7 +14014,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 287,
+      "DebugActionIndex": 286,
       "ScannerIndex": 3
     },
     {
@@ -14117,7 +14065,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 288,
+      "DebugActionIndex": 287,
       "ScannerIndex": 3
     },
     {
@@ -14168,7 +14116,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 289,
+      "DebugActionIndex": 288,
       "ScannerIndex": 3
     },
     {
@@ -14219,7 +14167,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 290,
+      "DebugActionIndex": 289,
       "ScannerIndex": 3
     },
     {
@@ -14270,7 +14218,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 291,
+      "DebugActionIndex": 290,
       "ScannerIndex": 3
     },
     {
@@ -14321,7 +14269,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 292,
+      "DebugActionIndex": 291,
       "ScannerIndex": 3
     },
     {
@@ -14372,7 +14320,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 293,
+      "DebugActionIndex": 292,
       "ScannerIndex": 3
     },
     {
@@ -14423,7 +14371,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 294,
+      "DebugActionIndex": 293,
       "ScannerIndex": 3
     },
     {
@@ -14474,7 +14422,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 295,
+      "DebugActionIndex": 294,
       "ScannerIndex": 3
     },
     {
@@ -14525,7 +14473,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 296,
+      "DebugActionIndex": 295,
       "ScannerIndex": 3
     },
     {
@@ -14576,7 +14524,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 297,
+      "DebugActionIndex": 296,
       "ScannerIndex": 3
     },
     {
@@ -14627,7 +14575,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 298,
+      "DebugActionIndex": 297,
       "ScannerIndex": 3
     },
     {
@@ -14678,7 +14626,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 299,
+      "DebugActionIndex": 298,
       "ScannerIndex": 3
     },
     {
@@ -14729,7 +14677,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 300,
+      "DebugActionIndex": 299,
       "ScannerIndex": 3
     },
     {
@@ -14780,7 +14728,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 301,
+      "DebugActionIndex": 300,
       "ScannerIndex": 3
     },
     {
@@ -14831,7 +14779,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 302,
+      "DebugActionIndex": 301,
       "ScannerIndex": 3
     },
     {
@@ -14882,7 +14830,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 303,
+      "DebugActionIndex": 302,
       "ScannerIndex": 3
     },
     {
@@ -14933,7 +14881,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 304,
+      "DebugActionIndex": 303,
       "ScannerIndex": 3
     },
     {
@@ -14984,7 +14932,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 305,
+      "DebugActionIndex": 304,
       "ScannerIndex": 3
     },
     {
@@ -15035,7 +14983,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 306,
+      "DebugActionIndex": 305,
       "ScannerIndex": 3
     },
     {
@@ -15086,7 +15034,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 307,
+      "DebugActionIndex": 306,
       "ScannerIndex": 3
     },
     {
@@ -15137,7 +15085,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 308,
+      "DebugActionIndex": 307,
       "ScannerIndex": 3
     },
     {
@@ -15188,7 +15136,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 309,
+      "DebugActionIndex": 308,
       "ScannerIndex": 3
     },
     {
@@ -15239,7 +15187,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 310,
+      "DebugActionIndex": 309,
       "ScannerIndex": 3
     },
     {
@@ -15290,7 +15238,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 311,
+      "DebugActionIndex": 310,
       "ScannerIndex": 3
     },
     {
@@ -15341,7 +15289,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 312,
+      "DebugActionIndex": 311,
       "ScannerIndex": 3
     },
     {
@@ -15392,7 +15340,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 313,
+      "DebugActionIndex": 312,
       "ScannerIndex": 3
     },
     {
@@ -15443,7 +15391,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 314,
+      "DebugActionIndex": 313,
       "ScannerIndex": 3
     },
     {
@@ -15494,7 +15442,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 315,
+      "DebugActionIndex": 314,
       "ScannerIndex": 3
     },
     {
@@ -15545,7 +15493,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 316,
+      "DebugActionIndex": 315,
       "ScannerIndex": 3
     },
     {
@@ -15596,7 +15544,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 317,
+      "DebugActionIndex": 316,
       "ScannerIndex": 3
     },
     {
@@ -15647,7 +15595,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 318,
+      "DebugActionIndex": 317,
       "ScannerIndex": 3
     },
     {
@@ -15698,7 +15646,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 319,
+      "DebugActionIndex": 318,
       "ScannerIndex": 3
     },
     {
@@ -15749,7 +15697,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 320,
+      "DebugActionIndex": 319,
       "ScannerIndex": 3
     },
     {
@@ -15800,7 +15748,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 321,
+      "DebugActionIndex": 320,
       "ScannerIndex": 3
     },
     {
@@ -15851,7 +15799,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 322,
+      "DebugActionIndex": 321,
       "ScannerIndex": 3
     },
     {
@@ -15902,7 +15850,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 323,
+      "DebugActionIndex": 322,
       "ScannerIndex": 3
     },
     {
@@ -15953,7 +15901,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 324,
+      "DebugActionIndex": 323,
       "ScannerIndex": 3
     },
     {
@@ -16004,7 +15952,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 325,
+      "DebugActionIndex": 324,
       "ScannerIndex": 3
     },
     {
@@ -16055,7 +16003,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 326,
+      "DebugActionIndex": 325,
       "ScannerIndex": 3
     },
     {
@@ -16106,7 +16054,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 327,
+      "DebugActionIndex": 326,
       "ScannerIndex": 3
     },
     {
@@ -16157,7 +16105,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 328,
+      "DebugActionIndex": 327,
       "ScannerIndex": 3
     },
     {
@@ -16208,7 +16156,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 329,
+      "DebugActionIndex": 328,
       "ScannerIndex": 3
     },
     {
@@ -16259,7 +16207,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 330,
+      "DebugActionIndex": 329,
       "ScannerIndex": 3
     },
     {
@@ -16310,7 +16258,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 331,
+      "DebugActionIndex": 330,
       "ScannerIndex": 3
     },
     {
@@ -16361,7 +16309,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 332,
+      "DebugActionIndex": 331,
       "ScannerIndex": 3
     },
     {
@@ -16412,7 +16360,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 333,
+      "DebugActionIndex": 332,
       "ScannerIndex": 3
     },
     {
@@ -16463,7 +16411,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 334,
+      "DebugActionIndex": 333,
       "ScannerIndex": 3
     },
     {
@@ -16514,7 +16462,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 335,
+      "DebugActionIndex": 334,
       "ScannerIndex": 3
     },
     {
@@ -16565,7 +16513,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 336,
+      "DebugActionIndex": 335,
       "ScannerIndex": 3
     },
     {
@@ -16616,7 +16564,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 337,
+      "DebugActionIndex": 336,
       "ScannerIndex": 3
     },
     {
@@ -16667,7 +16615,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 338,
+      "DebugActionIndex": 337,
       "ScannerIndex": 3
     },
     {
@@ -16718,7 +16666,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 339,
+      "DebugActionIndex": 338,
       "ScannerIndex": 3
     },
     {
@@ -16769,7 +16717,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 340,
+      "DebugActionIndex": 339,
       "ScannerIndex": 3
     },
     {
@@ -16820,7 +16768,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 341,
+      "DebugActionIndex": 340,
       "ScannerIndex": 3
     },
     {
@@ -16871,7 +16819,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 342,
+      "DebugActionIndex": 341,
       "ScannerIndex": 3
     },
     {
@@ -16922,7 +16870,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 343,
+      "DebugActionIndex": 342,
       "ScannerIndex": 3
     },
     {
@@ -16973,7 +16921,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 344,
+      "DebugActionIndex": 343,
       "ScannerIndex": 3
     },
     {
@@ -17024,7 +16972,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 345,
+      "DebugActionIndex": 344,
       "ScannerIndex": 3
     },
     {
@@ -17075,7 +17023,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 346,
+      "DebugActionIndex": 345,
       "ScannerIndex": 3
     },
     {
@@ -17126,7 +17074,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 347,
+      "DebugActionIndex": 346,
       "ScannerIndex": 3
     },
     {
@@ -17177,7 +17125,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 348,
+      "DebugActionIndex": 347,
       "ScannerIndex": 3
     },
     {
@@ -17228,7 +17176,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 349,
+      "DebugActionIndex": 348,
       "ScannerIndex": 3
     },
     {
@@ -17279,7 +17227,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 350,
+      "DebugActionIndex": 349,
       "ScannerIndex": 3
     },
     {
@@ -17330,7 +17278,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 351,
+      "DebugActionIndex": 350,
       "ScannerIndex": 3
     },
     {
@@ -17381,7 +17329,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 352,
+      "DebugActionIndex": 351,
       "ScannerIndex": 3
     },
     {
@@ -17432,7 +17380,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 353,
+      "DebugActionIndex": 352,
       "ScannerIndex": 3
     },
     {
@@ -17483,7 +17431,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 354,
+      "DebugActionIndex": 353,
       "ScannerIndex": 3
     },
     {
@@ -17534,7 +17482,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 355,
+      "DebugActionIndex": 354,
       "ScannerIndex": 3
     },
     {
@@ -17585,7 +17533,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 356,
+      "DebugActionIndex": 355,
       "ScannerIndex": 3
     },
     {
@@ -17636,7 +17584,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 357,
+      "DebugActionIndex": 356,
       "ScannerIndex": 3
     },
     {
@@ -17687,7 +17635,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 358,
+      "DebugActionIndex": 357,
       "ScannerIndex": 3
     },
     {
@@ -17738,7 +17686,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 359,
+      "DebugActionIndex": 358,
       "ScannerIndex": 3
     },
     {
@@ -17789,7 +17737,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 360,
+      "DebugActionIndex": 359,
       "ScannerIndex": 3
     },
     {
@@ -17840,7 +17788,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 361,
+      "DebugActionIndex": 360,
       "ScannerIndex": 3
     },
     {
@@ -17891,7 +17839,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 362,
+      "DebugActionIndex": 361,
       "ScannerIndex": 3
     },
     {
@@ -17942,7 +17890,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 363,
+      "DebugActionIndex": 362,
       "ScannerIndex": 3
     },
     {
@@ -17993,7 +17941,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 364,
+      "DebugActionIndex": 363,
       "ScannerIndex": 3
     },
     {
@@ -18044,7 +17992,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 365,
+      "DebugActionIndex": 364,
       "ScannerIndex": 3
     },
     {
@@ -18095,7 +18043,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 366,
+      "DebugActionIndex": 365,
       "ScannerIndex": 3
     },
     {
@@ -18146,7 +18094,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 367,
+      "DebugActionIndex": 366,
       "ScannerIndex": 3
     },
     {
@@ -18197,7 +18145,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 368,
+      "DebugActionIndex": 367,
       "ScannerIndex": 3
     },
     {
@@ -18248,7 +18196,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 369,
+      "DebugActionIndex": 368,
       "ScannerIndex": 3
     },
     {
@@ -18299,7 +18247,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 370,
+      "DebugActionIndex": 369,
       "ScannerIndex": 3
     },
     {
@@ -18350,7 +18298,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 371,
+      "DebugActionIndex": 370,
       "ScannerIndex": 3
     },
     {
@@ -18401,7 +18349,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 372,
+      "DebugActionIndex": 371,
       "ScannerIndex": 3
     },
     {
@@ -18452,7 +18400,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 373,
+      "DebugActionIndex": 372,
       "ScannerIndex": 3
     },
     {
@@ -18503,7 +18451,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 374,
+      "DebugActionIndex": 373,
       "ScannerIndex": 3
     },
     {
@@ -18554,7 +18502,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 375,
+      "DebugActionIndex": 374,
       "ScannerIndex": 3
     },
     {
@@ -18605,7 +18553,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 376,
+      "DebugActionIndex": 375,
       "ScannerIndex": 3
     },
     {
@@ -18656,7 +18604,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 377,
+      "DebugActionIndex": 376,
       "ScannerIndex": 3
     },
     {
@@ -18707,7 +18655,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 378,
+      "DebugActionIndex": 377,
       "ScannerIndex": 3
     },
     {
@@ -18758,7 +18706,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 379,
+      "DebugActionIndex": 378,
       "ScannerIndex": 3
     },
     {
@@ -18809,7 +18757,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 380,
+      "DebugActionIndex": 379,
       "ScannerIndex": 3
     },
     {
@@ -18860,7 +18808,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 381,
+      "DebugActionIndex": 380,
       "ScannerIndex": 3
     },
     {
@@ -18911,7 +18859,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 382,
+      "DebugActionIndex": 381,
       "ScannerIndex": 3
     },
     {
@@ -18962,7 +18910,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 383,
+      "DebugActionIndex": 382,
       "ScannerIndex": 3
     },
     {
@@ -19013,7 +18961,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 384,
+      "DebugActionIndex": 383,
       "ScannerIndex": 3
     },
     {
@@ -19064,7 +19012,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 385,
+      "DebugActionIndex": 384,
       "ScannerIndex": 3
     },
     {
@@ -19115,7 +19063,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 386,
+      "DebugActionIndex": 385,
       "ScannerIndex": 3
     },
     {
@@ -19166,7 +19114,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 387,
+      "DebugActionIndex": 386,
       "ScannerIndex": 3
     },
     {
@@ -19217,7 +19165,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 388,
+      "DebugActionIndex": 387,
       "ScannerIndex": 3
     },
     {
@@ -19268,7 +19216,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 389,
+      "DebugActionIndex": 388,
       "ScannerIndex": 3
     },
     {
@@ -19276,13 +19224,13 @@
       "DisplayName": "Writing 6070537824006410562.rsp",
       "ActionType": "WriteFile",
       "PayloadOffset": 137449,
-      "PayloadLength": 23887,
+      "PayloadLength": 23810,
       "PayloadDebugContentSnippet": "qcL \"Library/Bee/artifacts/Web",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/rsp/6070537824006410562.rsp"
       ],
-      "DebugActionIndex": 390
+      "DebugActionIndex": 389
     },
     {
       "Annotation": "Lib_WebGL_wasm Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/GameAssembly.a",
@@ -19345,7 +19293,6 @@
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/5xn4ur3c9dml.o",
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/657kf7jbdg30.o",
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/rlb9ugy8f4ek.o",
-        "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/c1exaqc6isq3.o",
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/gq7udtr2v6ir.o",
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/15ajt25zyuua.o",
         "Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/2dvzdimy2wbq.o",
@@ -19932,8 +19879,7 @@
         386,
         387,
         388,
-        389,
-        390
+        389
       ],
       "OverwriteOutputs": false,
       "FrontendResponseFiles": [
@@ -19970,7 +19916,7 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 391
+      "DebugActionIndex": 390
     },
     {
       "Annotation": "CopyFiles C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/build/GameAssembly.a",
@@ -19983,13 +19929,13 @@
         "C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/build/GameAssembly.a"
       ],
       "ToBuildDependencies": [
-        391
+        390
       ],
       "ToUseDependencies": [
-        393,
-        394
+        392,
+        393
       ],
-      "DebugActionIndex": 392
+      "DebugActionIndex": 391
     },
     {
       "Annotation": "CopyFiles C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/build/Data/Metadata/global-metadata.dat",
@@ -20003,12 +19949,12 @@
       ],
       "ToBuildDependencies": [
         5,
-        394
+        393
       ],
       "ToUseDependencies": [
-        394
+        393
       ],
-      "DebugActionIndex": 393
+      "DebugActionIndex": 392
     },
     {
       "Annotation": "CopyFiles C:/Users/luo20/Desktop/UnityProjects/crafty/Library/Bee/artifacts/WebGL/il2cppOutput/build/Data/Resources/mscorlib.dll-resources.dat",
@@ -20023,20 +19969,20 @@
       "ToBuildDependencies": [
         5
       ],
-      "DebugActionIndex": 394
+      "DebugActionIndex": 393
     },
     {
       "Annotation": "WriteResponseFile Library/Bee/artifacts/rsp/8995565923215908413.rsp",
       "DisplayName": "Writing 8995565923215908413.rsp",
       "ActionType": "WriteFile",
-      "PayloadOffset": 161425,
+      "PayloadOffset": 161348,
       "PayloadLength": 14544,
       "PayloadDebugContentSnippet": "-s \"EXPORTED_RUNTIME_METHODS=[",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/rsp/8995565923215908413.rsp"
       ],
-      "DebugActionIndex": 395
+      "DebugActionIndex": 394
     },
     {
       "Annotation": "Link_WebGL_wasm Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.js (+wasm)",
@@ -20146,8 +20092,8 @@
         "Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.wasm"
       ],
       "ToBuildDependencies": [
-        392,
-        395
+        391,
+        394
       ],
       "FrontendResponseFiles": [
         "Library/Bee/artifacts/rsp/8995565923215908413.rsp"
@@ -20183,20 +20129,20 @@
           "Value": "1"
         }
       ],
-      "DebugActionIndex": 396
+      "DebugActionIndex": 395
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/csharpactions/build.framework.js_mumr.info",
       "DisplayName": "Writing build.framework.js_mumr.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 176065,
+      "PayloadOffset": 175988,
       "PayloadLength": 626,
       "PayloadDebugContentSnippet": "{\"WebGLPlayerBuildProgram.Fram",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/csharpactions/build.framework.js_mumr.info"
       ],
-      "DebugActionIndex": 397
+      "DebugActionIndex": 396
     },
     {
       "Annotation": "FrameworkAssembler Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.framework.js",
@@ -20214,13 +20160,13 @@
         "Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.framework.js"
       ],
       "ToBuildDependencies": [
-        396,
-        397
+        395,
+        396
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 398
+      "DebugActionIndex": 397
     },
     {
       "Annotation": "7z Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.framework.js.unmarked",
@@ -20234,25 +20180,25 @@
         "Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.framework.js.unmarked"
       ],
       "ToBuildDependencies": [
-        398
+        397
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 399
+      "DebugActionIndex": 398
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/csharpactions/WebBuild.framework.js.gz_wjeq.info",
       "DisplayName": "Writing WebBuild.framework.js.gz_wjeq.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 176793,
+      "PayloadOffset": 176716,
       "PayloadLength": 464,
       "PayloadDebugContentSnippet": "{\"System.Object\":null,\"Bee.Tun",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/csharpactions/WebBuild.framework.js.gz_wjeq.info"
       ],
-      "DebugActionIndex": 400
+      "DebugActionIndex": 399
     },
     {
       "Annotation": "GzipMarker WebBuild/Build/WebBuild.framework.js.gz",
@@ -20270,13 +20216,13 @@
         "WebBuild/Build/WebBuild.framework.js.gz"
       ],
       "ToBuildDependencies": [
-        399,
-        400
+        398,
+        399
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 401
+      "DebugActionIndex": 400
     },
     {
       "Annotation": "7z Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.wasm.unmarked",
@@ -20290,25 +20236,25 @@
         "Library/Bee/artifacts/WebGL/build/debug_WebGL_wasm/build.wasm.unmarked"
       ],
       "ToBuildDependencies": [
-        396
+        395
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 402
+      "DebugActionIndex": 401
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/csharpactions/WebBuild.wasm.gz_xsgw.info",
       "DisplayName": "Writing WebBuild.wasm.gz_xsgw.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 177351,
+      "PayloadOffset": 177274,
       "PayloadLength": 448,
       "PayloadDebugContentSnippet": "{\"System.Object\":null,\"Bee.Tun",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/csharpactions/WebBuild.wasm.gz_xsgw.info"
       ],
-      "DebugActionIndex": 403
+      "DebugActionIndex": 402
     },
     {
       "Annotation": "GzipMarker WebBuild/Build/WebBuild.wasm.gz",
@@ -20326,13 +20272,13 @@
         "WebBuild/Build/WebBuild.wasm.gz"
       ],
       "ToBuildDependencies": [
-        402,
-        403
+        401,
+        402
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 404
+      "DebugActionIndex": 403
     },
     {
       "Annotation": "CopyFiles Temp/EditorBuildOutput/UnityLinkerToEditorData.json",
@@ -20347,7 +20293,7 @@
       "ToBuildDependencies": [
         4
       ],
-      "DebugActionIndex": 405
+      "DebugActionIndex": 404
     },
     {
       "Annotation": "CopyFiles Temp/EditorBuildOutput/MethodMap.tsv",
@@ -20362,20 +20308,20 @@
       "ToBuildDependencies": [
         5
       ],
-      "DebugActionIndex": 406
+      "DebugActionIndex": 405
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/csharpactions/webgl.data_qnm2.info",
       "DisplayName": "Writing webgl.data_qnm2.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 177887,
+      "PayloadOffset": 177810,
       "PayloadLength": 2166,
       "PayloadDebugContentSnippet": "{\"System.Collections.Generic.D",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/csharpactions/webgl.data_qnm2.info"
       ],
-      "DebugActionIndex": 407
+      "DebugActionIndex": 406
     },
     {
       "Annotation": "Assemble WebGL Data Library/Bee/artifacts/WebGL/webgl.data",
@@ -20403,12 +20349,12 @@
       "ToBuildDependencies": [
         2,
         5,
-        407
+        406
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 408
+      "DebugActionIndex": 407
     },
     {
       "Annotation": "7z Library/Bee/artifacts/WebGL/webgl.data.unmarked",
@@ -20422,25 +20368,25 @@
         "Library/Bee/artifacts/WebGL/webgl.data.unmarked"
       ],
       "ToBuildDependencies": [
-        408
+        407
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 409
+      "DebugActionIndex": 408
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/csharpactions/WebBuild.data.gz_vfj1.info",
       "DisplayName": "Writing WebBuild.data.gz_vfj1.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 180147,
+      "PayloadOffset": 180070,
       "PayloadLength": 425,
       "PayloadDebugContentSnippet": "{\"System.Object\":null,\"Bee.Tun",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/csharpactions/WebBuild.data.gz_vfj1.info"
       ],
-      "DebugActionIndex": 410
+      "DebugActionIndex": 409
     },
     {
       "Annotation": "GzipMarker WebBuild/Build/WebBuild.data.gz",
@@ -20458,13 +20404,13 @@
         "WebBuild/Build/WebBuild.data.gz"
       ],
       "ToBuildDependencies": [
-        409,
-        410
+        408,
+        409
       ],
       "OverwriteOutputs": false,
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 411
+      "DebugActionIndex": 410
     },
     {
       "Annotation": "PreprocessJS Library/Bee/artifacts/WebGLWebBuild.loader.js",
@@ -20478,7 +20424,7 @@
       ],
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 412
+      "DebugActionIndex": 411
     },
     {
       "Annotation": "CopyFiles WebBuild/Build/WebBuild.loader.js",
@@ -20491,9 +20437,9 @@
         "WebBuild/Build/WebBuild.loader.js"
       ],
       "ToBuildDependencies": [
-        412
+        411
       ],
-      "DebugActionIndex": 413
+      "DebugActionIndex": 412
     },
     {
       "Annotation": "PreprocessJS WebBuild/index.html",
@@ -20507,7 +20453,7 @@
       ],
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 414
+      "DebugActionIndex": 413
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/favicon.ico",
@@ -20519,7 +20465,7 @@
       "Outputs": [
         "WebBuild/TemplateData/favicon.ico"
       ],
-      "DebugActionIndex": 415
+      "DebugActionIndex": 414
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/fullscreen-button.png",
@@ -20531,7 +20477,7 @@
       "Outputs": [
         "WebBuild/TemplateData/fullscreen-button.png"
       ],
-      "DebugActionIndex": 416
+      "DebugActionIndex": 415
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/MemoryProfiler.png",
@@ -20543,7 +20489,7 @@
       "Outputs": [
         "WebBuild/TemplateData/MemoryProfiler.png"
       ],
-      "DebugActionIndex": 417
+      "DebugActionIndex": 416
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/progress-bar-empty-dark.png",
@@ -20555,7 +20501,7 @@
       "Outputs": [
         "WebBuild/TemplateData/progress-bar-empty-dark.png"
       ],
-      "DebugActionIndex": 418
+      "DebugActionIndex": 417
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/progress-bar-empty-light.png",
@@ -20567,7 +20513,7 @@
       "Outputs": [
         "WebBuild/TemplateData/progress-bar-empty-light.png"
       ],
-      "DebugActionIndex": 419
+      "DebugActionIndex": 418
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/progress-bar-full-dark.png",
@@ -20579,7 +20525,7 @@
       "Outputs": [
         "WebBuild/TemplateData/progress-bar-full-dark.png"
       ],
-      "DebugActionIndex": 420
+      "DebugActionIndex": 419
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/progress-bar-full-light.png",
@@ -20591,7 +20537,7 @@
       "Outputs": [
         "WebBuild/TemplateData/progress-bar-full-light.png"
       ],
-      "DebugActionIndex": 421
+      "DebugActionIndex": 420
     },
     {
       "Annotation": "PreprocessJS WebBuild/TemplateData/style.css",
@@ -20605,7 +20551,7 @@
       ],
       "AllowUnexpectedOutput": true,
       "Env": [],
-      "DebugActionIndex": 422
+      "DebugActionIndex": 421
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/unity-logo-dark.png",
@@ -20617,7 +20563,7 @@
       "Outputs": [
         "WebBuild/TemplateData/unity-logo-dark.png"
       ],
-      "DebugActionIndex": 423
+      "DebugActionIndex": 422
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/unity-logo-light.png",
@@ -20629,7 +20575,7 @@
       "Outputs": [
         "WebBuild/TemplateData/unity-logo-light.png"
       ],
-      "DebugActionIndex": 424
+      "DebugActionIndex": 423
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/webgl-logo.png",
@@ -20641,7 +20587,7 @@
       "Outputs": [
         "WebBuild/TemplateData/webgl-logo.png"
       ],
-      "DebugActionIndex": 425
+      "DebugActionIndex": 424
     },
     {
       "Annotation": "CopyFiles WebBuild/TemplateData/webmemd-icon.png",
@@ -20653,7 +20599,7 @@
       "Outputs": [
         "WebBuild/TemplateData/webmemd-icon.png"
       ],
-      "DebugActionIndex": 426
+      "DebugActionIndex": 425
     },
     {
       "Annotation": "Player",
@@ -20662,12 +20608,13 @@
       "Outputs": [],
       "ToBuildDependencies": [
         4,
-        392,
-        401,
+        391,
+        400,
+        403,
         404,
         405,
-        406,
-        411,
+        410,
+        412,
         413,
         414,
         415,
@@ -20680,11 +20627,10 @@
         422,
         423,
         424,
-        425,
-        426
+        425
       ],
       "OverwriteOutputs": false,
-      "DebugActionIndex": 427
+      "DebugActionIndex": 426
     }
   ],
   "FileSignatures": [
@@ -21052,7 +20998,7 @@
   ],
         "NamedNodes": {
           "all_tundra_nodes": 0,
-          "Player": 427
+          "Player": 426
         }
 ,  "DefaultNodes": [
     0

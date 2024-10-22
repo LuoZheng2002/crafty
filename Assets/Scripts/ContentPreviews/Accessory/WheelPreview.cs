@@ -9,6 +9,18 @@ public class WheelPreview : AccessoryPreview
 	Transform cylinderTransform;
 	bool built = false;
 	int current_rotation = 0;
+	public override int Direction
+	{
+		get
+		{
+			return current_rotation;
+		}
+		set
+		{
+			current_rotation = value;
+			transform.localRotation = Util.WheelRotations[current_rotation].Item1;
+		}
+	}
 	public override void Build()
 	{
 		Rigidbody rb = GetComponent<Rigidbody>();
@@ -23,13 +35,17 @@ public class WheelPreview : AccessoryPreview
 		built = true;
 	}
 
-	public override void ChangeDirection()
+	public override void ChangeDirection(bool forward)
 	{
 		Debug.Log("Direction Changed");
-		current_rotation = ++current_rotation % Util.WheelRotations.Count;
-		transform.localRotation = Util.WheelRotations[current_rotation].Item1;
-		(var h, var w, var l) =AttachDir();
-		Debug.Log($"Attach dir: (h{h}, w{w}, l{l})");
+		if (forward)
+		{
+			Direction = (Direction + 1) % Util.WheelRotations.Count;
+		}
+		else
+		{
+			Direction = (Direction + Util.WheelRotations.Count - 1) % Util.WheelRotations.Count;
+		}		
 	}
 
 	public override void SetActive(bool active)

@@ -7,7 +7,9 @@ ScriptsOnlyBuild:
     - CanvasDrag
     - CanvasSwitch
     - Confirm
+    - ContentInstantiator
     - CratePreview
+    - Eraser
     - FirstPerson
     - GameState
     - GenerateItems
@@ -16,15 +18,17 @@ ScriptsOnlyBuild:
     - GridMatrix
     - Help
     - ImageDragHandler
+    - Layers
     - Level
     - LevelButton
     - LevelCanvas
     - LoadScene
     - Menu
     - MenuCanvasSwitch
+    - MenuConfirm
     - MenuGoalReached
     - MotorWheelPreview
-    - MouseRaycast
+    - NewTutorialPlayer
     - Next
     - PiggyCameraPivot
     - PiggyNose
@@ -36,22 +40,29 @@ ScriptsOnlyBuild:
     - ToastManager
     - Trash
     - TurnWheelPreview
-    - TutorialPlayer
     - VehicleSpawner
+    - View
+    - ViewCanvasDrag
     - WheelMotor
     - WheelPreview
     - WheelTurner
     Unity.2D.Sprite.Editor.dll:
     - UnityEditor.U2D.Sprites.SpriteEditorWindow
     Unity.ProBuilder.Editor.dll:
+    - UnityEditor.ProBuilder.PositionToolContext
     - UnityEditor.ProBuilder.ProBuilderEditor
+    - UnityEditor.ProBuilder.ProbuilderMoveTool
+    - UnityEditor.ProBuilder.ProbuilderRotateTool
+    - UnityEditor.ProBuilder.ProbuilderScaleTool
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -106,17 +117,26 @@ ScriptsOnlyBuild:
     fullTypeName: LevelButton
     methodName: OnLevelClicked
   - assembly: Assembly-CSharp
-    fullTypeName: TutorialPlayer
+    fullTypeName: NewTutorialPlayer
     methodName: OnOKClicked
   - assembly: Assembly-CSharp
-    fullTypeName: TutorialPlayer
+    fullTypeName: NewTutorialPlayer
     methodName: OnCrossClicked
   - assembly: Assembly-CSharp
-    fullTypeName: TutorialPlayer
+    fullTypeName: NewTutorialPlayer
     methodName: RightClicked
   - assembly: Assembly-CSharp
-    fullTypeName: TutorialPlayer
+    fullTypeName: NewTutorialPlayer
     methodName: LeftClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Next
+    methodName: OnNext
+  - assembly: Assembly-CSharp
+    fullTypeName: Menu
+    methodName: OnMenuClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Retry
+    methodName: OnRetry
   - assembly: Assembly-CSharp
     fullTypeName: Menu
     methodName: OnMenuClicked
@@ -127,11 +147,26 @@ ScriptsOnlyBuild:
     fullTypeName: FirstPerson
     methodName: ToggleFirstPerson
   - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnCancelClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnYesClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Eraser
+    methodName: OnClick
+  - assembly: Assembly-CSharp
+    fullTypeName: Layers
+    methodName: OnSwitchLayer
+  - assembly: Assembly-CSharp
     fullTypeName: Menu
     methodName: OnMenuClicked
   - assembly: Assembly-CSharp
     fullTypeName: Confirm
     methodName: OnConfirmClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: View
+    methodName: OnViewClicked
   - assembly: Assembly-CSharp
     fullTypeName: Help
     methodName: OpenTutorial
@@ -139,14 +174,23 @@ ScriptsOnlyBuild:
     fullTypeName: Trash
     methodName: OnImageClick
   - assembly: Assembly-CSharp
-    fullTypeName: Next
-    methodName: OnNext
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
   - assembly: Assembly-CSharp
-    fullTypeName: Menu
-    methodName: OnMenuClicked
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
   - assembly: Assembly-CSharp
-    fullTypeName: Retry
-    methodName: OnRetry
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
+  - assembly: Assembly-CSharp
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
+  - assembly: Assembly-CSharp
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
+  - assembly: Assembly-CSharp
+    fullTypeName: ImageDragHandler
+    methodName: OnClick
   sceneClasses:
     Assets/Scenes/Main.unity:
     - Class: 1
@@ -192,8 +236,6 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1578}
-    - Class: 114
       Script: {instanceID: 1580}
     - Class: 114
       Script: {instanceID: 1582}
@@ -202,83 +244,95 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1994}
     - Class: 114
-      Script: {instanceID: 2268}
+      Script: {instanceID: 2002}
     - Class: 114
-      Script: {instanceID: 2330}
+      Script: {instanceID: 2084}
     - Class: 114
-      Script: {instanceID: 2530}
+      Script: {instanceID: 2272}
     - Class: 114
-      Script: {instanceID: 2668}
+      Script: {instanceID: 2334}
     - Class: 114
-      Script: {instanceID: 2730}
+      Script: {instanceID: 2534}
     - Class: 114
-      Script: {instanceID: 2732}
+      Script: {instanceID: 2672}
     - Class: 114
-      Script: {instanceID: 2742}
+      Script: {instanceID: 2734}
     - Class: 114
-      Script: {instanceID: 2952}
+      Script: {instanceID: 2736}
     - Class: 114
-      Script: {instanceID: 2968}
+      Script: {instanceID: 2746}
     - Class: 114
-      Script: {instanceID: 3428}
+      Script: {instanceID: 2956}
     - Class: 114
-      Script: {instanceID: 3462}
+      Script: {instanceID: 2972}
     - Class: 114
-      Script: {instanceID: 4106}
+      Script: {instanceID: 3432}
     - Class: 114
-      Script: {instanceID: 4112}
+      Script: {instanceID: 3466}
     - Class: 114
-      Script: {instanceID: 4126}
+      Script: {instanceID: 4110}
     - Class: 114
-      Script: {instanceID: 4134}
+      Script: {instanceID: 4116}
     - Class: 114
-      Script: {instanceID: 4140}
+      Script: {instanceID: 4130}
+    - Class: 114
+      Script: {instanceID: 4138}
     - Class: 114
       Script: {instanceID: 4144}
     - Class: 114
-      Script: {instanceID: 4196}
+      Script: {instanceID: 4148}
     - Class: 114
-      Script: {instanceID: 4256}
+      Script: {instanceID: 4200}
     - Class: 114
-      Script: {instanceID: 4416}
+      Script: {instanceID: 4260}
     - Class: 114
-      Script: {instanceID: 4486}
+      Script: {instanceID: 4420}
     - Class: 114
-      Script: {instanceID: 4530}
+      Script: {instanceID: 4984}
     - Class: 114
-      Script: {instanceID: 4982}
+      Script: {instanceID: 5060}
     - Class: 114
-      Script: {instanceID: 5058}
+      Script: {instanceID: 5410}
     - Class: 114
-      Script: {instanceID: 5408}
+      Script: {instanceID: 5748}
     - Class: 114
-      Script: {instanceID: 5784}
+      Script: {instanceID: 5786}
     - Class: 114
-      Script: {instanceID: 5878}
+      Script: {instanceID: 5880}
     - Class: 114
-      Script: {instanceID: 6632}
+      Script: {instanceID: 5890}
     - Class: 114
-      Script: {instanceID: 6640}
+      Script: {instanceID: 6636}
     - Class: 114
-      Script: {instanceID: 6736}
+      Script: {instanceID: 6644}
     - Class: 114
-      Script: {instanceID: 6828}
+      Script: {instanceID: 6666}
     - Class: 114
-      Script: {instanceID: 7124}
+      Script: {instanceID: 6742}
     - Class: 114
-      Script: {instanceID: 7782}
+      Script: {instanceID: 6834}
     - Class: 114
-      Script: {instanceID: 7818}
+      Script: {instanceID: 7130}
     - Class: 114
-      Script: {instanceID: 7870}
+      Script: {instanceID: 7788}
     - Class: 114
-      Script: {instanceID: 7882}
+      Script: {instanceID: 7824}
     - Class: 114
-      Script: {instanceID: 8118}
+      Script: {instanceID: 7876}
     - Class: 114
-      Script: {instanceID: 8228}
+      Script: {instanceID: 7888}
     - Class: 114
-      Script: {instanceID: 8338}
+      Script: {instanceID: 8124}
+    - Class: 114
+      Script: {instanceID: 8232}
+    - Class: 114
+      Script: {instanceID: 8342}
+    - Class: 114
+      Script: {instanceID: 26354}
+    - Class: 114
+      Script: {instanceID: 26582}
+    - Class: 114
+      Script: {instanceID: 85206}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -351,41 +405,41 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1578}
-    - Class: 114
       Script: {instanceID: 1580}
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
       Script: {instanceID: 1628}
     - Class: 114
-      Script: {instanceID: 2742}
+      Script: {instanceID: 2746}
     - Class: 114
-      Script: {instanceID: 2914}
+      Script: {instanceID: 2918}
     - Class: 114
-      Script: {instanceID: 2968}
+      Script: {instanceID: 2972}
     - Class: 114
-      Script: {instanceID: 3428}
+      Script: {instanceID: 3432}
     - Class: 114
-      Script: {instanceID: 3986}
+      Script: {instanceID: 3990}
     - Class: 114
-      Script: {instanceID: 4888}
+      Script: {instanceID: 4890}
     - Class: 114
-      Script: {instanceID: 5058}
+      Script: {instanceID: 5060}
     - Class: 114
-      Script: {instanceID: 5120}
+      Script: {instanceID: 5122}
     - Class: 114
-      Script: {instanceID: 5784}
+      Script: {instanceID: 5748}
     - Class: 114
-      Script: {instanceID: 6024}
+      Script: {instanceID: 5786}
     - Class: 114
-      Script: {instanceID: 6632}
+      Script: {instanceID: 6028}
     - Class: 114
-      Script: {instanceID: 7262}
+      Script: {instanceID: 6636}
     - Class: 114
-      Script: {instanceID: 7314}
+      Script: {instanceID: 7268}
     - Class: 114
-      Script: {instanceID: 7756}
+      Script: {instanceID: 7320}
+    - Class: 114
+      Script: {instanceID: 7762}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -413,22 +467,16 @@ ScriptsOnlyBuild:
   scriptHashData:
   - hash:
       serializedVersion: 2
-      Hash: b5007673bbbdb9d12597a1d8201370f5
+      Hash: 915204dac8acad99f076d6e72ada0a0f
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
-    className: Text
+    className: Button
   - hash:
       serializedVersion: 2
       Hash: 540882762544409cc4530e60db00e951
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: CanvasScaler
-  - hash:
-      serializedVersion: 2
-      Hash: 915204dac8acad99f076d6e72ada0a0f
-    assemblyName: UnityEngine.UI
-    namespaceName: UnityEngine.UI
-    className: Button
   - hash:
       serializedVersion: 2
       Hash: 55060a7bf226ac385ce19ebd450f199f
@@ -491,13 +539,25 @@ ScriptsOnlyBuild:
     className: CameraAnimExit
   - hash:
       serializedVersion: 2
+      Hash: 095b929d1bdb48744a078d780d81be4a
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: Layers
+  - hash:
+      serializedVersion: 2
+      Hash: 765bd8a76ec3a6320502c1e43056cb98
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: ContentInstantiator
+  - hash:
+      serializedVersion: 2
       Hash: b12640dfdb5966813e9dd838893e6c4a
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnTriggerEnterMessageListener
   - hash:
       serializedVersion: 2
-      Hash: ebc7628145ac707746360158abb135c3
+      Hash: e65135a363b55b20a0be1677a9ed56de
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Trash
@@ -545,7 +605,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: 0f9941faddcf721bf4a3a436eb6f6d8b
+      Hash: f66a34ef5ccfd96b7f5159f35263feef
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameState
@@ -557,7 +617,7 @@ ScriptsOnlyBuild:
     className: UnityOnBecameVisibleMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 6b498ab5a7ce2e7563e49554da0d728d
+      Hash: 40c90bb06bfd24a798304622cf158118
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CameraAnimation
@@ -845,19 +905,19 @@ ScriptsOnlyBuild:
     className: WheelMotor
   - hash:
       serializedVersion: 2
-      Hash: 51bde37d7d5937be4ba7e02e0188bc20
+      Hash: c15d57d0fd3a072e1d76dc654e2dd9c0
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CanvasSwitch
   - hash:
       serializedVersion: 2
-      Hash: 471b82966af43016ec8a16fa5008e2d9
+      Hash: a930b6b23920d378b9c4eeba899fcce6
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Help
   - hash:
       serializedVersion: 2
-      Hash: fd98d3b8a9970ac4861ac73d0ca4fdc5
+      Hash: 15c3e06dc68dcf42623569d1e300a9c8
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: ImageDragHandler
@@ -875,7 +935,7 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
-      Hash: a2f2a4a52508d338777b9efd98ebe18d
+      Hash: f9631615a6d4aced8aadec4df8a2a50e
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: FirstPerson
@@ -941,7 +1001,7 @@ ScriptsOnlyBuild:
     className: UnityOnJointBreak2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: f255b7e7bbdb1065cc86b7bdc65e1fdc
+      Hash: 6430a4b2ba7d0cd25c4bb10203a44b66
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Menu
@@ -951,12 +1011,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: DictionaryAsset
-  - hash:
-      serializedVersion: 2
-      Hash: 4c18aa34152f12b3c4041aaaf2ce6a93
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: MouseRaycast
   - hash:
       serializedVersion: 2
       Hash: 4f813dc625dec741add62033fb7c5804
@@ -995,7 +1049,7 @@ ScriptsOnlyBuild:
     className: MenuGoalReached
   - hash:
       serializedVersion: 2
-      Hash: 1d4875d3463a730762467815a3339469
+      Hash: 18d880be3949058d331673d0748a289b
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Confirm
@@ -1151,7 +1205,13 @@ ScriptsOnlyBuild:
     className: UnityOnDeselectMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 17ff82fbe439511a8cd8b684c1b53f69
+      Hash: b5007673bbbdb9d12597a1d8201370f5
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Text
+  - hash:
+      serializedVersion: 2
+      Hash: 0c99b286ffc32e009d5d10da046ac3ce
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CratePreview
@@ -1161,6 +1221,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: ToastManager
+  - hash:
+      serializedVersion: 2
+      Hash: 14d88b33ca89a952103a6dc4943be0ad
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: MenuConfirm
   - hash:
       serializedVersion: 2
       Hash: 1ce63d97d1ca25cba2d91d5f32fd5f79
@@ -1235,6 +1301,12 @@ ScriptsOnlyBuild:
     className: TMP_SubMesh
   - hash:
       serializedVersion: 2
+      Hash: 4535464bf19efde1a52a3b94c18710f0
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: Eraser
+  - hash:
+      serializedVersion: 2
       Hash: febcfbf0a0d85e37808a3740e3c2c6fa
     assemblyName: Unity.Timeline
     namespaceName: UnityEngine.Timeline
@@ -1301,7 +1373,7 @@ ScriptsOnlyBuild:
     className: VerticalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 767a92877f93f256ec1aa5b28c84fe43
+      Hash: 8330958ab1dc8c06b79bf454f7735a97
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Retry
@@ -1457,12 +1529,6 @@ ScriptsOnlyBuild:
     className: GridCell
   - hash:
       serializedVersion: 2
-      Hash: 6e30832622903fd2678a0c0716918b3f
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: GridLayer
-  - hash:
-      serializedVersion: 2
       Hash: 0f5a086d4d028363983ba6ca30a01397
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
@@ -1505,7 +1571,7 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: fa1c5aeabceaad186dd8d1b1bc860b77
+      Hash: e9664ab35c74d4d95e2429d4557d8c05
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GenerateItems
@@ -1545,8 +1611,26 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: ebe31e1f0f20cddcc8dc97433703ab37
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: View
+  - hash:
+      serializedVersion: 2
+      Hash: 99922cbd82f5f9f74ab3b5888c0c4417
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: ViewCanvasDrag
+  - hash:
+      serializedVersion: 2
+      Hash: 6bfa0ef8d1fb64a0040ec61831a9f946
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: NewTutorialPlayer
   platform: 2
   scenePathNames:
   - Assets/Scenes/Menu.unity
   - Assets/Scenes/Main.unity
-  playerPath: C:/Users/luo20/Desktop/UnityProjects/crafty/Build/Mac Build.app
+  playerPath: C:/Users/luo20/Desktop/UnityProjects/crafty/Build/MacBuild.app

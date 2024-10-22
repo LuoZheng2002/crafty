@@ -16,6 +16,7 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 		piggyCameraPivot = GameObject.Find("PiggyCameraPivot").GetComponent<PiggyCameraPivot>();
 		Debug.Assert(piggyCameraPivot != null);
 	}
+	
 	void OnFirstPersonChanged(FirstPersonChangedEvent e)
 	{
 		first_person = e.first_person;
@@ -25,6 +26,7 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 	{
 		Debug.Log("Drag begin");
 	}
+
 
 	public void OnDrag(PointerEventData eventData)
 	{

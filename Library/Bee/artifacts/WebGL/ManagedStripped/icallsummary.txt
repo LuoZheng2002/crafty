@@ -32,6 +32,7 @@ UnityEngine.Animator::get_hasBoundPlayables
 UnityEngine.Animator::Rebind
 UnityEngine.Animator::ResetTriggerString
 UnityEngine.Animator::SetTriggerString
+UnityEngine.Animator::set_speed
 UnityEngine.Application::get_isBatchMode
 UnityEngine.Application::get_isFocused
 UnityEngine.Application::get_isPlaying
@@ -133,6 +134,7 @@ UnityEngine.Cubemap::get_isReadable
 UnityEngine.CubemapArray::Internal_CreateImpl
 UnityEngine.CubemapArray::get_isReadable
 UnityEngine.Cursor::SetCursor_Injected
+UnityEngine.Cursor::set_lockState
 UnityEngine.Cursor::get_lockState
 UnityEngine.Debug::get_isDebugBuild
 UnityEngine.Debug::ExtractStackTraceNoAlloc
@@ -293,6 +295,7 @@ UnityEngine.Hash128::Hash128ToStringImpl_Injected
 UnityEngine.Hash128::Parse_Injected
 UnityEngine.Input::CheckDisabled
 UnityEngine.Input::GetKeyDownInt
+UnityEngine.Input::GetKeyInt
 UnityEngine.Input::GetMouseButton
 UnityEngine.Input::GetMouseButtonDown
 UnityEngine.Input::GetMouseButtonUp
@@ -322,6 +325,7 @@ UnityEngine.Internal.InputUnsafeUtility::GetAxisRaw
 UnityEngine.Internal.InputUnsafeUtility::GetAxisRaw__Unmanaged
 UnityEngine.Internal.InputUnsafeUtility::GetAxis__Unmanaged
 UnityEngine.Joint::set_connectedBody
+UnityEngine.LayerMask::NameToLayer
 UnityEngine.Light::get_useColorTemperature
 UnityEngine.Light::get_bounceIntensity
 UnityEngine.Light::get_colorTemperature
@@ -447,6 +451,7 @@ UnityEngine.Quaternion::Inverse_Injected
 UnityEngine.Quaternion::Slerp_Injected
 UnityEngine.Random::RandomRangeInt
 UnityEngine.Random::Range
+UnityEngine.Random::get_onUnitSphere_Injected
 UnityEngine.RectOffset::get_bottom
 UnityEngine.RectOffset::get_horizontal
 UnityEngine.RectOffset::get_left
@@ -501,11 +506,10 @@ UnityEngine.RenderTexture::GetTemporary_Internal_Injected
 UnityEngine.Resources::GetBuiltinResource
 UnityEngine.ResourcesAPIInternal::Load
 UnityEngine.ResourcesAPIInternal::FindShaderByName
+UnityEngine.Rigidbody::AddForce_Injected
 UnityEngine.Rigidbody::get_velocity_Injected
 UnityEngine.Rigidbody::set_useGravity
-UnityEngine.SceneManagement.Scene::GetNameInternal
 UnityEngine.SceneManagement.SceneManager::get_sceneCount
-UnityEngine.SceneManagement.SceneManager::GetActiveScene_Injected
 UnityEngine.SceneManagement.SceneManager::GetSceneAt_Injected
 UnityEngine.SceneManagement.SceneManagerAPIInternal::LoadSceneAsyncNameIndexInternal_Injected
 UnityEngine.Screen::get_fullScreen

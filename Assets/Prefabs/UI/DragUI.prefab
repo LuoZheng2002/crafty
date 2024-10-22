@@ -259,10 +259,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initial_count: 5
-  rayDistance: 5
-  contentPreview: {fileID: 3068422560484008727, guid: f805c0bdb71d701498be7723dc54da1a, type: 3}
+  rayDistance: 3
   contentType: 1
   content: 0
+  minScale: 0.8
+  maxScale: 1.2
+  scaleSpeed: 5
 --- !u!114 &4643233811053401684
 MonoBehaviour:
   m_ObjectHideFlags: 0

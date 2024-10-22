@@ -440,6 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transparent: {fileID: 0}
   opaque: {fileID: 0}
+  random_force: 1
 --- !u!1 &4935850619160470610
 GameObject:
   m_ObjectHideFlags: 0

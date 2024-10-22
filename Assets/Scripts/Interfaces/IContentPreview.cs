@@ -4,7 +4,17 @@ using UnityEngine;
 
 public abstract class ContentPreview : MonoBehaviour
 {
-    public abstract Util.Content Content { get; }
+    public void MoveLocal(Vector3 position, string caller)
+    {
+        transform.localPosition = position;
+        // Debug.Log($"{caller} changed {Content}'s local position");
+    }
+	public void MoveGlobal(Vector3 position, string caller)
+	{
+		transform.position = position;
+		// Debug.Log($"{caller} changed {Content}'s global position");
+	}
+	public abstract Util.Content Content { get; }
     void Awake()
     {
         EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
@@ -21,7 +31,8 @@ public abstract class ContentPreview : MonoBehaviour
 }
 public abstract class DirectionalPreview: ContentPreview
 {
-	public abstract void ChangeDirection();
+    public abstract int Direction { get; set; }
+	public abstract void ChangeDirection(bool forward = true);
 }
 public abstract class LoadPreview: DirectionalPreview
 {

@@ -19,9 +19,11 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 	public float maxScale = 1.2f;
 	public float scaleSpeed = 5.0f;
 	Image image;
+	RectTransform rectTransform;
 	private void OnEnable()
 	{
 		image = GetComponent<Image>();
+		rectTransform = image.rectTransform;
 		StartCoroutine(Scale());
 	}
 	IEnumerator Scale()
@@ -49,7 +51,15 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 	}
 	public void OnDrag(PointerEventData eventData)
 	{
-		transform.position = eventData.position;
+		RectTransformUtility.ScreenPointToWorldPointInRectangle(
+			rectTransform,
+			eventData.position,
+			Camera.main,
+			out Vector3 worldPoint
+		);
+
+		// Update the position of the image to follow the mouse
+		rectTransform.position = worldPoint;
 	}
 	public void OnEndDrag(PointerEventData eventData)
 	{

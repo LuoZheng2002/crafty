@@ -26450,6 +26450,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR int32_t Cursor_get_lockState_m9AD145AFB215DFE
 	int32_t icallRetVal = _il2cpp_icall_func();
 	return icallRetVal;
 }
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Cursor_set_lockState_mD81F6E5F3D86506FFB88567689A3A00A7AD242E9 (int32_t ___0_value, const RuntimeMethod* method) 
+{
+	typedef void (*Cursor_set_lockState_mD81F6E5F3D86506FFB88567689A3A00A7AD242E9_ftn) (int32_t);
+	static Cursor_set_lockState_mD81F6E5F3D86506FFB88567689A3A00A7AD242E9_ftn _il2cpp_icall_func;
+	if (!_il2cpp_icall_func)
+	_il2cpp_icall_func = (Cursor_set_lockState_mD81F6E5F3D86506FFB88567689A3A00A7AD242E9_ftn)il2cpp_codegen_resolve_icall ("UnityEngine.Cursor::set_lockState(UnityEngine.CursorLockMode)");
+	_il2cpp_icall_func(___0_value);
+}
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Cursor_SetCursor_Injected_mCAFC0AE81FA6AE6C9575CA82E64AC48A94883CC8 (Texture2D_tE6505BC111DD8A424A9DBE8E05D7D09E11FFFCF4* ___0_texture, Vector2_t1FD6F485C871E832B347AB2DC8CBA08B739D8DF7* ___1_hotspot, int32_t ___2_cursorMode, const RuntimeMethod* method) 
 {
 	typedef void (*Cursor_SetCursor_Injected_mCAFC0AE81FA6AE6C9575CA82E64AC48A94883CC8_ftn) (Texture2D_tE6505BC111DD8A424A9DBE8E05D7D09E11FFFCF4*, Vector2_t1FD6F485C871E832B347AB2DC8CBA08B739D8DF7*, int32_t);

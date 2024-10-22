@@ -15,6 +15,7 @@ public class GridSelectionChangedEvent
     }
 }
 
+
 public class ContentSelectionChangedEvent
 {
 	public ImageDragHandler imageDragHandler;
@@ -46,6 +47,13 @@ public class GridMatrix : MonoBehaviour
 	CratePreview[,,] crates;
 	AccessoryPreview[,,] accessories;
 	LoadPreview[,,] loads;
+
+	// 
+	Util.Content[,,] mem_crates;
+	Util.Content[,,] mem_accessories;
+	Util.Content[,,] mem_loads;
+	int[,,] accessory_directions;
+	int[,,] load_directions;
 	bool wa;
 	bool sd;
 	// Util.GridContentInfo[,,] infos;
@@ -86,14 +94,20 @@ public class GridMatrix : MonoBehaviour
 		return loads[height, width, length] == null && accessories[height, width, length] == null;
 	}
 
-	Subscription<TrashEvent> subscriptionTrash;
-	Subscription<GameStateChangedEvent> subscriptionGameStateChanged;
-	Subscription<AddContentEvent> subscriptionAddContent;
-	Subscription<ContentTypeChangedEvent> subscriptionContentTypeChanged;
+	// instantiator
+	Subscription<TrashEvent> s0;
+	Subscription<GameStateChangedEvent> s1;
+	Subscription<AddContentEvent> s2;
+	Subscription<ContentTypeChangedEvent> s3;
+	Subscription<ContentSelectionChangedEvent> s4;
+	Subscription<SwitchLayerEvent> s5;
+	Subscription<EraseChangedEvent> s6;
+
 	private void Start()
 	{
 		Transform cube = transform.Find("Cube");
 		Destroy(cube.gameObject);
+		
 	}
 	void OnEraseChanged(EraseChangedEvent e)
 	{
@@ -106,11 +120,16 @@ public class GridMatrix : MonoBehaviour
 			currentContentType = Util.ContentType.None;
 			if (lastSelectedGrid!= null)
 			{
+				Debug.Log("Erase called");
 				var load = loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
 				if (load != null)
 				{
 					EventBus.Publish(new ContentRecycleEvent(load.Content));
 					Destroy(load.gameObject);
+					if (load.Content == Util.Content.Pig)
+					{
+						EventBus.Publish(new PiggyRemovedEvent());
+					}
 					loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
 				}
 				else
@@ -134,20 +153,77 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 	}
+
+	IEnumerator RebuildVehicle()
+	{
+		yield return new WaitForSeconds(0.2f);
+		if (mem_accessories != null)
+		{
+			Debug.Log("Rebuilding vehicle");
+			for (int i = 0; i < height; i++)
+			{
+				for (int j = 0; j < width; j++)
+				{
+					for (int k = 0; k < length; k++)
+					{
+						if (mem_accessories[i, j, k] != Util.Content.None)
+						{
+							Debug.Log("Rebuit an accessory");
+							Util.Content content = mem_accessories[i, j, k];
+							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, accessory_directions[i, j, k]) as AccessoryPreview;
+							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							accessories[i, j, k] = inst;
+							Debug.Assert(inst != null);
+							EventBus.Publish(new ContentUsedEvent(content));
+						}
+						if (mem_loads[i, j, k] != Util.Content.None)
+						{
+							Debug.Log("Rebuit a load");
+							Util.Content content = mem_loads[i, j, k];
+							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, load_directions[i, j, k]) as LoadPreview;
+							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							loads[i, j, k] = inst;
+							Debug.Assert(inst != null);
+							if (content == Util.Content.Pig)
+							{
+								EventBus.Publish(new PiggyInstantiatedEvent(inst as PiggyPreview));
+							}
+							EventBus.Publish(new ContentUsedEvent(content));
+						}
+						if (mem_crates[i, j, k] != Util.Content.None)
+						{
+							Debug.Log("Rebuit a crate");
+							Util.Content content = mem_crates[i, j, k];
+							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, 0) as CratePreview;
+							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							crates[i, j, k] = inst;
+							Debug.Assert(inst != null);
+							EventBus.Publish(new ContentUsedEvent(content));
+						}
+					}
+				}
+			}
+		}
+	}
 	private void OnEnable()
 	{
 		Debug.Log("Grid matrix enabled");
-		subscriptionTrash = EventBus.Subscribe<TrashEvent>(OnTrash);
-		subscriptionGameStateChanged = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
-		subscriptionAddContent = EventBus.Subscribe<AddContentEvent>(AddContent);
-		subscriptionContentTypeChanged = EventBus.Subscribe<ContentTypeChangedEvent>(OnContentTypeChanged);
-		EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
-		EventBus.Subscribe<SwitchLayerEvent>(OnSwitchLayer);
-		EventBus.Subscribe<EraseChangedEvent>(OnEraseChanged);
+
+		s0 = EventBus.Subscribe<TrashEvent>(OnTrash);
+		s1 = EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+		s2 = EventBus.Subscribe<AddContentEvent>(AddContent);
+		s3 = EventBus.Subscribe<ContentTypeChangedEvent>(OnContentTypeChanged);
+		s4 = EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
+		s5 = EventBus.Subscribe<SwitchLayerEvent>(OnSwitchLayer);
+		s6 = EventBus.Subscribe<EraseChangedEvent>(OnEraseChanged);
+
+
 		grids = new GridCell[height, width, length];
 		crates = new CratePreview[height, width, length];
 		accessories = new AccessoryPreview[height, width, length];
 		loads = new LoadPreview[height, width, length];
+
+		
 		// infos = new Util.GridContentInfo[height, width, length];
 		for (int i = 0; i < height; i++)
 		{
@@ -170,14 +246,21 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 		SetLayerActive(activeLayerIndex, true);
+		StartCoroutine(RebuildVehicle());
 	}
 	private void OnDisable()
 	{
 		Debug.Log("Grid Matrix disabled");
-		EventBus.Unsubscribe(subscriptionTrash);
-		EventBus.Unsubscribe(subscriptionGameStateChanged);
-		EventBus.Unsubscribe(subscriptionAddContent);
-		EventBus.Unsubscribe(subscriptionContentTypeChanged);
+
+		EventBus.Unsubscribe(s0);
+		EventBus.Unsubscribe(s1);
+		EventBus.Unsubscribe(s2);
+		EventBus.Unsubscribe(s3);
+		EventBus.Unsubscribe(s4);
+		EventBus.Unsubscribe(s5);
+		EventBus.Unsubscribe(s6);
+
+
 		Trash();
 		for (int i = 0; i < height; i++)
 		{
@@ -207,6 +290,7 @@ public class GridMatrix : MonoBehaviour
 		CratePreview crate = crates[h_idx, w_idx, l_idx];
 		if (crate != null)
 		{
+			mem_crates[h_idx, w_idx, l_idx] = crate.Content;
 			crate.Build();
 			List<(int, int, int)> deltas = new(){ (1, 0, 0), (0, 1, 0), (0, 0, 1) };
 			foreach (var delta in deltas)
@@ -225,6 +309,8 @@ public class GridMatrix : MonoBehaviour
 		AccessoryPreview accessory = accessories[h_idx, w_idx, l_idx];
 		if (accessory != null)
 		{
+			mem_accessories[h_idx, w_idx, l_idx] = accessory.Content;
+			accessory_directions[h_idx, w_idx, l_idx] = accessory.Direction;
 			// if (accessory.)
 			(bool _wa, bool _sd) = accessory.GetWASD();
 			if (_wa) wa = true;
@@ -244,6 +330,8 @@ public class GridMatrix : MonoBehaviour
 		LoadPreview load = loads[h_idx, w_idx, l_idx];
 		if (load != null)
 		{
+			mem_loads[h_idx, w_idx, l_idx] = load.Content;
+			load_directions[h_idx, w_idx, l_idx] = load.Direction;
 			load.Build();
 			// to do
 			if (crates[h_idx, w_idx, l_idx] != null)
@@ -256,6 +344,13 @@ public class GridMatrix : MonoBehaviour
 	{
 		wa = false;
 		sd = false;
+
+		mem_crates = new Util.Content[height, width, length];
+		mem_accessories = new Util.Content[height, width, length];
+		mem_loads = new Util.Content[height, width, length];
+		accessory_directions = new int[height, width, length];
+		load_directions = new int[height, width, length];
+
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
@@ -337,6 +432,7 @@ public class GridMatrix : MonoBehaviour
 	}
 	void OnGameStateChanged(GameStateChangedEvent e)
 	{
+		currentImageDragHandler = null;
 		if (e.state == Util.GameStateType.Play)
 		{
 			Build();
@@ -516,6 +612,7 @@ public class GridMatrix : MonoBehaviour
 		for(int i = 0;i < 10 && content != null && enabled;i++)
 		{
 			content.transform.localPosition = position;
+			content.transform.localRotation = Quaternion.identity;
 			yield return new WaitForSeconds(0.1f);
 		}
 	}
@@ -525,6 +622,8 @@ public class GridMatrix : MonoBehaviour
 		Debug.Assert(e.content != null);
 		GridCell grid = e.selectedGrid;
 		(var h, var w, var l) = (grid.heightIdx, grid.widthIdx, grid.lengthIdx);
+		Debug.Log($"h:{h}, w:{w}, l:{l}");
+		Debug.Log($"{crates.GetLength(0)}, {crates.GetLength(1)}, {crates.GetLength(2)}");
 		StartCoroutine(ChangePosition(e.content, new Vector3(w, h, l)));
 		Debug.Log("Add content called");
 		switch (e.contentType)
