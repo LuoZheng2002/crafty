@@ -16,12 +16,18 @@ public class AudioPlayer : MonoBehaviour
     public float max_snore_interval = 30.0f;
     bool can_snore = false;
     // Start is called before the first frame update
+    static AudioPlayer inst;
+    public static AudioPlayer Inst
+    {
+        get { Debug.Assert(inst != null, "Audio player not set");return inst; }
+    }
     void Start()
     {
+        Debug.Assert(inst == null, "Audio Player already instantiated");
+        inst = this;
         var audioSources = GetComponents<AudioSource>();
         musicSource = audioSources[0];
         soundEffectSource = audioSources[1];
-        EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
         EventBus.Subscribe<ScreamEvent>(Scream);
         StartCoroutine(Snore());
     }
@@ -52,62 +58,45 @@ public class AudioPlayer : MonoBehaviour
             }
         }
     }
-    void OnGameStateChanged(GameStateChangedEvent e)
+    public void TransitionToIntro()
     {
-        if (e.state == Util.GameStateType.Play)
-        {
-            can_snore = true;
-        }
-        else
-        {
-            can_snore = false;
-        }
-        if (e.state == Util.GameStateType.Intro)
+		can_snore = false;
+		if (musicSource.isPlaying)
 		{
-			if (musicSource.isPlaying)
-			{
-				musicSource.Stop();
-			}
-			musicSource.clip = menuClip;
-			musicSource.loop = true;
-			musicSource.Play();
+			musicSource.Stop();
 		}
-        else if (e.state == Util.GameStateType.Build)
-        {
-            if (musicSource.isPlaying)
-            {
-                musicSource.Stop();
-            }
-            musicSource.clip = buildClip;
-            musicSource.loop = true;
-            musicSource.Play();
-        }
-        else if (e.state == Util.GameStateType.Play)
-        {
-			if (musicSource.isPlaying)
-			{
-				musicSource.Stop();
-			}
-			musicSource.clip = playClip;
-			musicSource.loop = true;
-			musicSource.Play();
+		musicSource.clip = menuClip;
+		musicSource.loop = true;
+		musicSource.Play();
+	}
+    public void TransitionToBuild()
+    {
+		if (musicSource.isPlaying)
+		{
+			musicSource.Stop();
 		}
-        else if (e.state == Util.GameStateType.Outro)
-        {
-			if (musicSource.isPlaying)
-			{
-				musicSource.Stop();
-			}
-			musicSource.clip = clearClip;
-			musicSource.loop = false;
-			musicSource.Play();
+		musicSource.clip = buildClip;
+		musicSource.loop = true;
+		musicSource.Play();
+	}
+    public void TransitionToPlay()
+    {
+		if (musicSource.isPlaying)
+		{
+			musicSource.Stop();
 		}
-        else
-        {
-            if (musicSource.isPlaying)
-            {
-                musicSource.Stop();
-            }
-        }
-    }
+		musicSource.clip = playClip;
+		musicSource.loop = true;
+		musicSource.Play();
+	}
+    public void TransitionToOutro()
+    {
+		if (musicSource.isPlaying)
+		{
+			musicSource.Stop();
+		}
+		musicSource.clip = clearClip;
+		musicSource.loop = false;
+		musicSource.Play();
+	}
 }

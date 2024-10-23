@@ -352,7 +352,7 @@
 "Assets/Scripts/ContentPreviews/Crate/CratePreview.cs"
 "Assets/Scripts/EventBus.cs"
 "Assets/Scripts/GameState.cs"
-"Assets/Scripts/GoalReached.cs"
+"Assets/Scripts/Goal.cs"
 "Assets/Scripts/GridCell.cs"
 "Assets/Scripts/GridMatrix.cs"
 "Assets/Scripts/Interfaces/IContentPreview.cs"

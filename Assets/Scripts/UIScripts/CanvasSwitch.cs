@@ -8,50 +8,48 @@ public class CanvasSwitch : MonoBehaviour
     public GameObject buildCanvas;
     public GameObject playCanvas;
     public GameObject outroCanvas;
+	static CanvasSwitch inst;
+	public static CanvasSwitch Inst
+	{
+		get { Debug.Assert(inst != null, "Canvas Switch not set"); return inst; }
+	}
 	private void Start()
 	{
-        EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+		Debug.Assert(inst == null, "Canvas Switch already instantiated");
+		inst = this;
         introCanvas.SetActive(false);
 		buildCanvas.SetActive(false);
 		playCanvas.SetActive(false);
 		outroCanvas.SetActive(false);
 	}
-	void OnGameStateChanged(GameStateChangedEvent e)
-    {
-        switch (e.state)
-        {
-            case Util.GameStateType.Intro:
-                introCanvas.SetActive(true);
-				buildCanvas.SetActive(false);
-				playCanvas.SetActive(false);
-				outroCanvas.SetActive(false);
-                break;
-			case Util.GameStateType.Build:
-				introCanvas.SetActive(false);
-				buildCanvas.SetActive(true);
-                playCanvas.SetActive(false);
-                outroCanvas.SetActive(false);
-                EventBus.Publish(new GenerateItemsEvent());
-                EventBus.Publish(new TrashEvent());
-                break;
-            case Util.GameStateType.Play:
-				introCanvas.SetActive(false);
-				playCanvas.SetActive(true);
-                buildCanvas.SetActive(false);
-				outroCanvas.SetActive(false);
-				break;
-            case Util.GameStateType.Outro:
-				introCanvas.SetActive(false);
-				playCanvas.SetActive(false);
-				buildCanvas.SetActive(false);
-				outroCanvas.SetActive(true);
-                break;
-			default:
-				introCanvas.SetActive(false);
-				playCanvas.SetActive(false );
-                buildCanvas.SetActive(false );
-				outroCanvas.SetActive(false);
-				break;
-        }
-    }
+
+	public void TransitionToIntro()
+	{
+		introCanvas.SetActive(true);
+		buildCanvas.SetActive(false);
+		playCanvas.SetActive(false);
+		outroCanvas.SetActive(false);
+	}
+	public void TransitionToBuild()
+	{
+		introCanvas.SetActive(false);
+		buildCanvas.SetActive(true);
+		playCanvas.SetActive(false);
+		outroCanvas.SetActive(false);
+		EventBus.Publish(new GenerateItemsEvent());
+	}
+	public void TransitionToPlay()
+	{
+		introCanvas.SetActive(false);
+		playCanvas.SetActive(true);
+		buildCanvas.SetActive(false);
+		outroCanvas.SetActive(false);
+	}
+	public void TransitionToOutro()
+	{
+		introCanvas.SetActive(false);
+		playCanvas.SetActive(false);
+		buildCanvas.SetActive(false);
+		outroCanvas.SetActive(true);
+	}
 }

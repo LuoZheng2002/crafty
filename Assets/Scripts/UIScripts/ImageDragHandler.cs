@@ -30,19 +30,6 @@ public class ContentUsedEvent
     }
 }
 
-// to do: add content event
-public class AddContentEvent
-{
-	public Util.ContentType contentType;
-	public ContentPreview content;
-	public GridCell selectedGrid;
-	public AddContentEvent(GridCell selectedGrid, Util.ContentType contentType, ContentPreview content)
-    {
-		this.selectedGrid = selectedGrid;
-		this.contentType = contentType;
-		this.content = content;
-    }
-}
 public class ItemCountChangeEvent
 {
 	public Util.Content content;
@@ -54,13 +41,17 @@ public class ItemCountChangeEvent
 		this.delta = delta;
 	}
 }
+
+public class ResetCountEvent
+{
+
+}
 public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public int initial_count = 5;
 	int count = 0;
 	public float rayDistance = 5.0f;
 	ContentPreview instantiatedPreview = null;
-	GridCell selectedGrid;
 	private RectTransform rectTransform;
 	private CanvasGroup canvasGroup;
 	// GridMatrix gridMatrix;
@@ -76,6 +67,26 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	public float maxScale = 1.2f;
 	public float scaleSpeed = 5.0f;
 	Image image;
+	static ImageDragHandler current;
+	public static ImageDragHandler Current
+	{
+		get
+		{
+			return current;
+		}
+		set
+		{
+			if (current != null)
+			{
+				current.selectionImage.enabled = false;
+			}
+			current = value;
+			if (current != null)
+			{
+				current.selectionImage.enabled = true;
+			}
+		}
+	}
 	private void OnEnable()
 	{
 		image = GetComponent<Image>();
@@ -113,12 +124,8 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 	}
 	private void Start()
 	{
-		// gridMatrix = GameObject.Find("GridMatrix").GetComponent<GridMatrix>();
-		// gridMatrix.GridSelectionChanged += OnSelectionChanged;
-		EventBus.Subscribe<GridSelectionChangedEvent>(OnSelectionChanged);
 		EventBus.Subscribe<ItemCountChangeEvent>(OnItemCountChange);
-		EventBus.Subscribe<TrashEvent>(OnTrash);
-		EventBus.Subscribe<ContentSelectionChangedEvent>(OnContentSelectionChanged);
+		EventBus.Subscribe<ResetCountEvent>(ResetCount);
 		EventBus.Subscribe<ContentRecycleEvent>(OnContentRecycle);
 		EventBus.Subscribe<ContentUsedEvent>(OnContentUsed);
 		count = initial_count;
@@ -129,11 +136,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		selectionImage.enabled = false;
 		Debug.Assert(selectionImage != null);
 	}
-	void OnContentSelectionChanged(ContentSelectionChangedEvent e)
-	{
-		selectionImage.enabled = false;
-	}
-	void OnTrash(TrashEvent e)
+	public void ResetCount(ResetCountEvent e)
 	{
 		count = initial_count;
 		Text.text = count.ToString();
@@ -144,14 +147,6 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		{
 			count += e.delta;
 			Text.text = count.ToString();
-		}
-	}
-	public void OnSelectionChanged(GridSelectionChangedEvent e)
-	{
-		selectedGrid = e.gridCell;
-		if (instantiatedPreview != null)
-		{
-			DragHelper();
 		}
 	}
 	public void OnBeginDrag(PointerEventData eventData)
@@ -165,7 +160,7 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Vector3 rayDirection = ray.direction;
 
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
-			Transform gridMatrixTransform = gameState.CurrentGridMatrix.transform;
+			Transform gridMatrixTransform = GridMatrix.Current.transform;
 
 			instantiatedPreview = ContentInstantiator.Instance.InstantiateContent(content, gridMatrixTransform, instantiatePos, false, 0);
 			// instantiatedObject.transform.parent = gridMatrixTransform;
@@ -173,13 +168,11 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 			Util.SetLayerRecursively(instantiatedPreview.gameObject, "MaskLayer");
 			EventBus.Publish(new ItemCountChangeEvent(content, -1));
 			// DragHelper();
-
-			EventBus.Publish(new ContentSelectionChangedEvent(this));
-			selectionImage.enabled = true;
+			Current = this;
 		}
 		else
 		{
-			EventBus.Publish(new ContentSelectionChangedEvent(null));
+			Current = null;
 		}
 	}
 	void DragHelper()
@@ -195,9 +188,9 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		// Get the direction of the ray
 		Vector3 rayDirection = ray.direction;
-		if (selectedGrid != null)
+		if (GridMatrix.SelectedGrid != null)
 		{
-			instantiatedPreview.MoveGlobal(selectedGrid.transform.position, "Drag helper clamp grid");
+			instantiatedPreview.MoveGlobal(GridMatrix.SelectedGrid.transform.position, "Drag helper clamp grid");
 			// instantiatedPreview.transform.position = selectedGrid.transform.position;
 			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
 		}
@@ -222,12 +215,11 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		}
 		// Enable raycast again
 		// canvasGroup.blocksRaycasts = true;
-		if (selectedGrid != null)
+		if (GridMatrix.SelectedGrid != null)
 		{
 			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
-			EventBus.Publish(new AddContentEvent(selectedGrid, contentType, instantiatedPreview.GetComponent<ContentPreview>()));
+			GridMatrix.Current.AddContent(GridMatrix.SelectedGrid, contentType, instantiatedPreview);
 			instantiatedPreview = null;
-			selectedGrid = null;
 		}
 		else
 		{
@@ -242,12 +234,11 @@ public class ImageDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 		{
 			GameState.shown_drag_images = true;
 			ToastManager.Toast("Drag!");
-			EventBus.Publish(new ContentSelectionChangedEvent(this));
-			selectionImage.enabled = true;
+			Current = this;
 		}
 		else
 		{
-			EventBus.Publish(new ContentSelectionChangedEvent(null));
+			Current = null;
 		}
 	}
 	void OnContentRecycle(ContentRecycleEvent e)

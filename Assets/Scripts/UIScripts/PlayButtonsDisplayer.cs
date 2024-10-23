@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpdateWASDEvent
-{
-    public bool wa;
-    public bool sd;
-    public UpdateWASDEvent(bool wa, bool sd)
-    {
-        this.wa = wa;
-        this.sd = sd;
-    }
-}
+//public class UpdateWASDEvent
+//{
+//    public bool wa;
+//    public bool sd;
+//    public UpdateWASDEvent(bool wa, bool sd)
+//    {
+//        this.wa = wa;
+//        this.sd = sd;
+//    }
+//}
 
 public class PlayButtonsDisplayer : MonoBehaviour
 {
@@ -28,16 +28,15 @@ public class PlayButtonsDisplayer : MonoBehaviour
         a_img = transform.Find("A").GetComponent<Image>();
 		s_img = transform.Find("S").GetComponent<Image>();
 		d_img = transform.Find("D").GetComponent<Image>();
-        EventBus.Subscribe<UpdateWASDEvent>(OnUpdateWASD);
 	}
-    bool wa = false;
-    bool sd = false;
-    void OnUpdateWASD(UpdateWASDEvent e)
+    bool ws = false;
+    bool ad = false;
+    public void UpdateWASD(bool ws, bool ad)
     {
-        wa = e.wa;
-        sd = e.sd;
+        this.ws = ws;
+        this.ad = ad;
         // ToastManager.Toast($"WASD: {e.wa}, {e.sd}");
-        if (e.wa)
+        if (ws)
         {
             w_img.color = Color.white;
             a_img.color = Color.white;
@@ -47,7 +46,7 @@ public class PlayButtonsDisplayer : MonoBehaviour
             w_img.color = transparent;
             a_img.color = transparent;
         }
-		if (e.sd)
+		if (ad)
 		{
 			s_img.color = Color.white;
 			d_img.color = Color.white;
@@ -62,14 +61,14 @@ public class PlayButtonsDisplayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!wa)
+        if (!ws)
         {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
             {
                 ToastManager.Toast("No components controlled by W/S");
             }
         }
-        if (!sd)
+        if (!ad)
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
             {

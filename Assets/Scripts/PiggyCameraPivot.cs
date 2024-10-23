@@ -13,6 +13,8 @@ public class PiggyCameraPivot : MonoBehaviour
 	public float default_dist = 7.0f;
 	float current_dist = 0.0f;
 	public Vector3 dragEulerAngle;
+
+	
 	public float CurrentDist {
 		get
 		{
@@ -33,9 +35,19 @@ public class PiggyCameraPivot : MonoBehaviour
 	private Vector3 velocity = Vector3.zero;  // Velocity reference for SmoothDamp
 	private Quaternion rotationVelocity = Quaternion.identity;
 	bool following = false;
-	
+	static PiggyCameraPivot inst = null;
+	public static PiggyCameraPivot Inst
+	{
+		get
+		{
+			Debug.Assert(inst != null, "Piggy Camera Pivot instance not set");
+			return inst;
+		}
+	}
 	private void Start()
 	{
+		Debug.Assert(inst == null, "Piggy Camera Pivot instance already set");
+		inst = this;
 		cameraEndTransform = transform.GetChild(0);
 		dragEulerAngle = new Vector3 (0, 0, 0);
 		CurrentDist = default_dist;
@@ -49,6 +61,7 @@ public class PiggyCameraPivot : MonoBehaviour
 	{
 		following= false;
 		piggyTransform = null;
+		dragEulerAngle = Vector3.zero;
 	}
 
 	void LateUpdate()

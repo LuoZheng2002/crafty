@@ -17,14 +17,14 @@ public class Confirm : MonoBehaviour
 	private void Start()
 	{
 		image = GetComponent<Image>();
-		EventBus.Subscribe<TrashEvent>(OnTrash);
+		EventBus.Subscribe<ResetCountEvent>(OnTrash);
 		EventBus.Subscribe<PiggyInstantiatedEvent>(OnPiggyInstantiated);
 		EventBus.Subscribe<PiggyRemovedEvent>(OnPiggyRemoved);
 		transparentColor = new Color(1, 1, 1, 0.2f);
 		solidColor = Color.white;
 		image.color = transparentColor;
 	}
-	void OnTrash(TrashEvent e)
+	void OnTrash(ResetCountEvent e)
 	{
 		image.color = transparentColor;
 		has_piggy = false;
@@ -69,7 +69,7 @@ public class Confirm : MonoBehaviour
     {
 		if (has_piggy)
 		{
-			EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Play, 0));
+			GameState.Inst.TransitionToPlay();
 		}
 		GameState.shown_confirm = true;
     }

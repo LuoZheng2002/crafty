@@ -27,7 +27,7 @@ public class Layers : MonoBehaviour
 	}
 	public void OnSwitchLayer()
     {
-        EventBus.Publish(new SwitchLayerEvent());
+		GridMatrix.Current.SwitchLayer();
         ToastManager.Toast("Hotkey: Space");
 		GameState.shown_layers = true;
     }

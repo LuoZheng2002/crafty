@@ -9,12 +9,9 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 	float sign = 1;
 	public bool active = false;
 	public float rotationSpeed = 0.05f;  // Speed of rotation
-	PiggyCameraPivot piggyCameraPivot;
 	private void Start()
 	{
 		EventBus.Subscribe<FirstPersonChangedEvent>(OnFirstPersonChanged);
-		piggyCameraPivot = GameObject.Find("PiggyCameraPivot").GetComponent<PiggyCameraPivot>();
-		Debug.Assert(piggyCameraPivot != null);
 	}
 	
 	void OnFirstPersonChanged(FirstPersonChangedEvent e)
@@ -37,7 +34,7 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 		float rotationX = eventData.delta.y * rotationSpeed * sign;  // Vertical rotation
 		float rotationY = -eventData.delta.x * rotationSpeed * sign;  // Horizontal rotation
 		// Rotate the camera accordingly
-		piggyCameraPivot.dragEulerAngle += new Vector3(rotationX, rotationY, 0);
+		PiggyCameraPivot.Inst.dragEulerAngle += new Vector3(rotationX, rotationY, 0);
 	}
 
 	public void OnEndDrag(PointerEventData eventData)

@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class TrashEvent
-{
-
-}
 public class Trash : MonoBehaviour
 {
 	public float minScale = 0.8f;
@@ -34,7 +30,8 @@ public class Trash : MonoBehaviour
 	}
 	public void OnImageClick()
     {
-        EventBus.Publish(new TrashEvent());
+		GridMatrix.Current.Trash();
+		EventBus.Publish(new ResetCountEvent());
 		GameState.shown_trashcan = true;
     }
 }

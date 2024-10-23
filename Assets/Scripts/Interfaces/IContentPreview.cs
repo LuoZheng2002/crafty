@@ -15,17 +15,17 @@ public abstract class ContentPreview : MonoBehaviour
 		// Debug.Log($"{caller} changed {Content}'s global position");
 	}
 	public abstract Util.Content Content { get; }
-    void Awake()
-    {
-        EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
-    }
-    void OnGameStateChanged(GameStateChangedEvent e)
-    {
-        if (e.state == Util.GameStateType.Intro || e.state == Util.GameStateType.Build)
-        {
-            Destroy(gameObject);
-        }
-    }
+    //void Awake()
+    //{
+    //    EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);
+    //}
+    //void OnGameStateChanged(GameStateChangedEvent e)
+    //{
+    //    if (e.state == Util.GameStateType.Intro || e.state == Util.GameStateType.Build)
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
     public abstract void Build();
 	public abstract void SetActive(bool active);
 }
