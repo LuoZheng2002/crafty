@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -50,7 +51,7 @@ public class Util
 		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
 	};
 
-	public static Dictionary<int, List<(Content, int)>> LevelItems = new()
+	public static Dictionary<int, List<(Content,int)>> LevelItems = new()
 	{
 		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4)} },
 		{2, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4)} },
@@ -67,7 +68,25 @@ public class Util
 		{Content.MotorWheel, ContentType.Accessory },
 		{Content.TurnWheel, ContentType.Accessory },
 	};
-
+	/// <summary>
+	/// Delay 1 frame to execute the function
+	/// </summary>
+	static IEnumerator DelayHelper(Action func, int length)
+	{
+		for(int i =0; i < length;i++)
+		{
+			yield return null;
+		}
+		func();
+	}
+	public static void Delay(MonoBehaviour m, int length, Action func)
+	{
+		m.StartCoroutine(DelayHelper(func, length));
+	}
+	public static void Delay(MonoBehaviour m, Action func)
+	{
+		Delay(m, 1, func);
+	}
 	public enum ContentType
 	{
 		None,
@@ -97,7 +116,7 @@ public class Util
 		None,
 		// crate type
 		WoodenCrate,
-		IronCrate,
+		SteelCrate,
 
 		// accessory
 		Wheel,
@@ -117,9 +136,9 @@ public class Util
 	// 
 	public struct GridContentInfo
 	{
-		public CratePreview crate;
-		public AccessoryPreview accessory;
-		public LoadPreview load;
+		public CrateBase crate;
+		public AccessoryComponent accessory;
+		public LoadComponent load;
 		public bool Occupied { get { return crate != null || load != null || accessory != null; } }
 		public bool AllowAccessory { get { return crate == null && load == null && accessory == null; } }
 		public bool AllowCrate { get { return crate == null && accessory == null; } }

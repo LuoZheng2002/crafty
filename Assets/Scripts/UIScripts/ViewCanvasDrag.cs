@@ -12,7 +12,6 @@ public class ViewCanvasDrag : MonoBehaviour
 	public float mouseSensitivity = 100f;
 	private void Start()
 	{
-		gameObject.SetActive(false);
 		Cursor.lockState = CursorLockMode.None;
 	}
 	IEnumerator MoveBack()

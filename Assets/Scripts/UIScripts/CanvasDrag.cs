@@ -5,19 +5,26 @@ using UnityEngine.EventSystems;
 
 public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	bool first_person = true;
 	float sign = 1;
 	public bool active = false;
 	public float rotationSpeed = 0.05f;  // Speed of rotation
+	public static CanvasDrag Inst
+	{
+		get { Debug.Assert(inst != null); return inst; }
+	}
+	static CanvasDrag inst;
 	private void Start()
 	{
-		EventBus.Subscribe<FirstPersonChangedEvent>(OnFirstPersonChanged);
+		Debug.Assert(inst == null, "Canvas Drag already set");
+		inst = this;
 	}
-	
-	void OnFirstPersonChanged(FirstPersonChangedEvent e)
+	private void OnDestroy()
 	{
-		first_person = e.first_person;
-		sign = first_person ? 1 : -1;
+		inst = null;
+	}
+	public void OnFirstPersonChanged()
+	{
+		sign = GameState.Inst.FirstPerson ? 1 : -1;
 	}
 	public void OnBeginDrag(PointerEventData eventData)
 	{

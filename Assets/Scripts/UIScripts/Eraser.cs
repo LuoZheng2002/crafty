@@ -4,49 +4,51 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EraseChangedEvent
-{
-	public bool active = false;
-    public EraseChangedEvent(bool active)
-    {
-        this.active = active;
-    }
-}
-
 public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	public float minScale = 0.8f;
-	public float maxScale = 1.2f;
-	public float scaleSpeed = 5.0f;
 	Image image;
 	RectTransform rectTransform;
+	ButtonScale buttonScale;
+	public static Eraser Inst
+	{
+		get { Debug.Assert(inst != null, "Eraser not set");return inst; }
+	}
+	static Eraser inst;
+	private void Start()
+	{
+		Debug.Assert(inst == null, "Eraser already set");
+		inst = this;
+	}
 	private void OnEnable()
 	{
 		image = GetComponent<Image>();
 		rectTransform = image.rectTransform;
-		StartCoroutine(Scale());
+		buttonScale = GetComponent<ButtonScale>();
+		Util.Delay(this, () =>
+		{
+			if (!GameState.shown_eraser && GameState.Inst.Components.Count > 0)
+			{
+				buttonScale.ScaleStart();
+			}
+		});
 	}
-	IEnumerator Scale()
+	private void OnDestroy()
 	{
-		while (!GameState.placed_a_component)
-		{
-			yield return null;
-		}
-		while (!GameState.shown_eraser)
-		{
-			float scale = (Mathf.Sin(Time.time * scaleSpeed) + 1.0f) / 2.0f * (maxScale - minScale) + minScale;
-			// Debug.Log($"Scale: {scale}");
-			image.rectTransform.localScale = new Vector3(scale, scale, scale);
-			yield return null;
-		}
-		image.rectTransform.localScale = Vector3.one;
+		inst = null;
 	}
-
+	public void OnPlacedAComponent()
+	{
+		if (!GameState.shown_eraser)
+		{
+			buttonScale.ScaleStart();
+		}
+	}
 	bool dragging = false;
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		GameState.shown_eraser = true;
-		EventBus.Publish(new EraseChangedEvent(true));
+		buttonScale.ScaleStop();
+		DragImage.OnEraseStart();
 		dragging = true;
 	}
 	public void OnDrag(PointerEventData eventData)
@@ -64,7 +66,8 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 	public void OnEndDrag(PointerEventData eventData)
 	{
 		transform.localPosition = Vector3.zero;
-		EventBus.Publish(new EraseChangedEvent(false));
+		DragImage.OnEraseEnd();
+		GridMatrix.Current.OnEraseEnd();
 		dragging = false;
 	}
 	public void OnClick()
@@ -73,6 +76,7 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 		{
 			ToastManager.Toast("Drag!");
 			GameState.shown_eraser = true;
+			buttonScale.ScaleStop();
 		}		
 	}
 }

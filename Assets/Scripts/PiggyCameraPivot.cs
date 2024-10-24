@@ -52,6 +52,10 @@ public class PiggyCameraPivot : MonoBehaviour
 		dragEulerAngle = new Vector3 (0, 0, 0);
 		CurrentDist = default_dist;
 	}
+	private void OnDestroy()
+	{
+		inst = null;
+	}
 	public void StartFollow(PiggyPreview piggyPreview)
 	{
 		following = true;

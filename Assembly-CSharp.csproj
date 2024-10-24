@@ -62,12 +62,17 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\VehicleSpawner.cs" />
     <Compile Include="Assets\Scripts\QuitGame.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelTurner.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\TurnWheelPreview.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Crate\WoodenCrate.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ConfirmButton.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelTurner.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Crate\CrateBase.cs" />
     <Compile Include="Assets\Scripts\AudioPlayer.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\DragImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Accessory\MotorWheelPreview.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
     <Compile Include="Assets\Scripts\ContentInstantiator.cs" />
@@ -76,10 +81,8 @@
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
     <Compile Include="Assets\Scripts\TutorialPlayer.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
-    <Compile Include="Assets\Scripts\Retry.cs" />
     <Compile Include="Assets\Scripts\Goal.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\MotorWheelPreview.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelPreview.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ImageContainer.cs" />
     <Compile Include="Assets\Scripts\Level.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayButtonsDisplayer.cs" />
     <Compile Include="Assets\Scripts\CameraAnimation.cs" />
@@ -89,26 +92,26 @@
     <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Accessory\WheelMotor.cs" />
-    <Compile Include="Assets\Scripts\UIScripts\GenerateItems.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Help.cs" />
     <Compile Include="Assets\Scripts\StateMachineBehavior\CameraAnimExit.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Accessory\TurnWheelPreview.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ButtonScale.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IContentPreview.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ViewCanvasDrag.cs" />
     <Compile Include="Assets\Scripts\EventBus.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelButton.cs" />
-    <Compile Include="Assets\Scripts\UIScripts\ImageDragHandler.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelPreview.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelMotor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Layers.cs" />
     <Compile Include="Assets\Scripts\UIScripts\FirstPerson.cs" />
     <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\TimedDestroy.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Crate\CratePreview.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Next.cs" />
-    <Compile Include="Assets\Scripts\ContentPreviews\Content\PiggyPreview.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Content\PiggyPreview.cs" />
     <Compile Include="Assets\Scripts\GameState.cs" />
-    <Compile Include="Assets\Scripts\UIScripts\Confirm.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Crate\SteelCrate.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Menu.cs" />
   </ItemGroup>
   <ItemGroup>

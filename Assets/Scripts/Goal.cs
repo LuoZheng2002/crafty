@@ -39,6 +39,10 @@ public class Goal : MonoBehaviour
 		meshRenderer.enabled = false;
 		c.enabled = false;
 	}
+	private void OnDestroy()
+	{
+		goals.Clear();
+	}
 	private void OnTriggerEnter(Collider other)
 	{
 		Debug.Log("You win!");

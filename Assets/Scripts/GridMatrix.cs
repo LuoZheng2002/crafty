@@ -33,7 +33,7 @@ public class GridMatrix : MonoBehaviour
 	public float position_spring = 1000.0f;
 	public float position_damper = 1000.0f;
 
-	public static GridCell SelectedGrid{get; private set;}
+	public static GridCell SelectedGrid{get; set;}
 
 	static Dictionary<int, GridMatrix> grid_matrices = new();
 
@@ -67,11 +67,10 @@ public class GridMatrix : MonoBehaviour
 		current.Active = false;
 		current = null;
 	}
-	PiggyPreview piggyPreview;
 
-	CratePreview[,,] crates;
-	AccessoryPreview[,,] accessories;
-	LoadPreview[,,] loads;
+	CrateBase[,,] crates;
+	AccessoryComponent[,,] accessories;
+	LoadComponent[,,] loads;
 
 	// 
 	Util.Content[,,] mem_crates;
@@ -85,11 +84,13 @@ public class GridMatrix : MonoBehaviour
 	public int activeLayerIndex = 0;
 	private RaycastHit[] hits = new RaycastHit[10];
 
-	// public event Action<GridCell> GridSelectionChanged;
 
-	public Util.ContentType currentContentType;
 
-	
+	private void OnDisable()
+	{
+		grid_matrices.Clear();
+	}
+
 	void SetLayerActive(int index, bool active)
 	{		
 		if (index >= height)
@@ -118,58 +119,46 @@ public class GridMatrix : MonoBehaviour
 		return loads[height, width, length] == null && accessories[height, width, length] == null;
 	}
 
-	// instantiator
-	Subscription<ContentTypeChangedEvent> s3;
-	Subscription<EraseChangedEvent> s6;
-
-	void OnEraseChanged(EraseChangedEvent e)
+	public void OnEraseEnd()
 	{
-		if (e.active)
+		if (lastSelectedGrid != null)
 		{
-			currentContentType = Util.ContentType.Erase;
-		}
-		else
-		{
-			currentContentType = Util.ContentType.None;
-			if (lastSelectedGrid!= null)
+			Debug.Log("Erase called");
+			var load = loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+			if (load != null)
 			{
-				Debug.Log("Erase called");
-				var load = loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-				if (load != null)
+				DragImage.DragImages[load.Content].Count++;
+				Destroy(load.gameObject);
+				if (load.Content == Util.Content.Pig)
 				{
-					EventBus.Publish(new ContentRecycleEvent(load.Content));
-					Destroy(load.gameObject);
-					if (load.Content == Util.Content.Pig)
-					{
-						EventBus.Publish(new PiggyRemovedEvent());
-					}
-					loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+					GameState.Inst.Piggy = null;
+					ConfirmButton.Inst.OnPiggyRemoved();
 				}
-				else
-				{
-					var accessory = accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-					if (accessory != null)
-					{
-						EventBus.Publish(new ContentRecycleEvent(accessory.Content));
-						Destroy(accessory.gameObject);
-						accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
-					}
-					var crate = crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-					if (crate != null)
-					{
-						EventBus.Publish(new ContentRecycleEvent(crate.Content));
-						Destroy(crate.gameObject);
-						crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
-					}
-				}
-				
+				loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
 			}
+			else
+			{
+				var accessory = accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+				if (accessory != null)
+				{
+					DragImage.DragImages[accessory.Content].Count++;
+					Destroy(accessory.gameObject);
+					accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+				}
+				var crate = crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
+				if (crate != null)
+				{
+					DragImage.DragImages[crate.Content].Count++;
+					Destroy(crate.gameObject);
+					crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
+				}
+			}
+
 		}
 	}
 
-	IEnumerator RebuildVehicle()
+	void RebuildVehicle()
 	{
-		yield return new WaitForSeconds(0.2f);
 		if (mem_accessories != null)
 		{
 			Debug.Log("Rebuilding vehicle");
@@ -183,35 +172,39 @@ public class GridMatrix : MonoBehaviour
 						{
 							Debug.Log("Rebuit an accessory");
 							Util.Content content = mem_accessories[i, j, k];
-							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, accessory_directions[i, j, k]) as AccessoryPreview;
-							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							var inst = ContentInstantiator.Inst.InstantiateContent(content, transform, new Vector3(j, i, k), true, accessory_directions[i, j, k]) as AccessoryComponent;
+							// StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							AdjustPosition(inst, new Vector3(j, i, k));
 							accessories[i, j, k] = inst;
 							Debug.Assert(inst != null);
-							EventBus.Publish(new ContentUsedEvent(content));
+							DragImage.DragImages[content].Count--;
 						}
 						if (mem_loads[i, j, k] != Util.Content.None)
 						{
 							Debug.Log("Rebuit a load");
 							Util.Content content = mem_loads[i, j, k];
-							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, load_directions[i, j, k]) as LoadPreview;
-							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							var inst = ContentInstantiator.Inst.InstantiateContent(content, transform, new Vector3(j, i, k), true, load_directions[i, j, k]) as LoadComponent;
+							// StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							AdjustPosition(inst, new Vector3(j, i, k));
 							loads[i, j, k] = inst;
 							Debug.Assert(inst != null);
 							if (content == Util.Content.Pig)
 							{
-								EventBus.Publish(new PiggyInstantiatedEvent(inst as PiggyPreview));
+								GameState.Inst.Piggy = inst as PiggyPreview;
+								ConfirmButton.Inst.OnPiggyInstantiated();
 							}
-							EventBus.Publish(new ContentUsedEvent(content));
+							DragImage.DragImages[content].Count--;
 						}
 						if (mem_crates[i, j, k] != Util.Content.None)
 						{
 							Debug.Log("Rebuit a crate");
 							Util.Content content = mem_crates[i, j, k];
-							var inst = ContentInstantiator.Instance.InstantiateContent(content, transform, new Vector3(j, i, k), true, 0) as CratePreview;
-							StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							var inst = ContentInstantiator.Inst.InstantiateContent(content, transform, new Vector3(j, i, k), true, 0) as CrateBase;
+							// StartCoroutine(ChangePosition(inst, new Vector3(j, i, k)));
+							AdjustPosition(inst, new Vector3(j, i, k));
 							crates[i, j, k] = inst;
 							Debug.Assert(inst != null);
-							EventBus.Publish(new ContentUsedEvent(content));
+							DragImage.DragImages[content].Count--;
 						}
 					}
 				}
@@ -222,8 +215,6 @@ public class GridMatrix : MonoBehaviour
 	{
 		Transform cube = transform.Find("Cube");
 		Destroy(cube.gameObject);
-		s3 = EventBus.Subscribe<ContentTypeChangedEvent>(OnContentTypeChanged);
-		s6 = EventBus.Subscribe<EraseChangedEvent>(OnEraseChanged);
 
 		Debug.Assert(!grid_matrices.ContainsKey(level_num));
 		grid_matrices.Add(level_num, this);
@@ -234,9 +225,9 @@ public class GridMatrix : MonoBehaviour
 		if (active)
 		{
 			grids = new GridCell[height, width, length];
-			crates = new CratePreview[height, width, length];
-			accessories = new AccessoryPreview[height, width, length];
-			loads = new LoadPreview[height, width, length];
+			crates = new CrateBase[height, width, length];
+			accessories = new AccessoryComponent[height, width, length];
+			loads = new LoadComponent[height, width, length];
 
 
 			// infos = new Util.GridContentInfo[height, width, length];
@@ -261,7 +252,7 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 			SetLayerActive(activeLayerIndex, true);
-			StartCoroutine(RebuildVehicle());
+			Util.Delay(this, 10, RebuildVehicle);
 		}
 		else
 		{
@@ -281,32 +272,12 @@ public class GridMatrix : MonoBehaviour
 		}
 	}
 
-	//private void OnDisable()
-	//{
-	//	Debug.Log("Grid Matrix disabled");
-
-	//	EventBus.Unsubscribe(s0);
-	//	EventBus.Unsubscribe(s1);
-	//	EventBus.Unsubscribe(s2);
-	//	EventBus.Unsubscribe(s3);
-	//	EventBus.Unsubscribe(s4);
-	//	EventBus.Unsubscribe(s5);
-	//	EventBus.Unsubscribe(s6);
-
-
-	//	Trash();
-
-	//}
-	void OnContentTypeChanged(ContentTypeChangedEvent e)
-	{
-		currentContentType = e.contentType;
-	}
-	
 	void BuildAndStickCrates(int h_idx, int w_idx, int l_idx)
 	{
-		CratePreview crate = crates[h_idx, w_idx, l_idx];
+		CrateBase crate = crates[h_idx, w_idx, l_idx];
 		if (crate != null)
 		{
+			GameState.Inst.Components.Add(crate);
 			mem_crates[h_idx, w_idx, l_idx] = crate.Content;
 			crate.Build();
 			List<(int, int, int)> deltas = new(){ (1, 0, 0), (0, 1, 0), (0, 0, 1) };
@@ -325,9 +296,10 @@ public class GridMatrix : MonoBehaviour
 	bool sd = false;
 	void BuildAndStickAccessories(int h_idx, int w_idx, int l_idx)
 	{
-		AccessoryPreview accessory = accessories[h_idx, w_idx, l_idx];
+		AccessoryComponent accessory = accessories[h_idx, w_idx, l_idx];
 		if (accessory != null)
 		{
+			GameState.Inst.Components.Add(accessory);
 			mem_accessories[h_idx, w_idx, l_idx] = accessory.Content;
 			accessory_directions[h_idx, w_idx, l_idx] = accessory.Direction;
 			// if (accessory.)
@@ -346,9 +318,10 @@ public class GridMatrix : MonoBehaviour
 	}
 	void BuildAndStickLoads(int h_idx, int w_idx, int l_idx)
 	{
-		LoadPreview load = loads[h_idx, w_idx, l_idx];
+		LoadComponent load = loads[h_idx, w_idx, l_idx];
 		if (load != null)
 		{
+			GameState.Inst.Components.Add(load);
 			mem_loads[h_idx, w_idx, l_idx] = load.Content;
 			load_directions[h_idx, w_idx, l_idx] = load.Direction;
 			load.Build();
@@ -361,6 +334,7 @@ public class GridMatrix : MonoBehaviour
 	}
 	public void BuildAndDeactivate()
 	{
+		GameState.Inst.Components.Clear();
 		wa = false;
 		sd = false;
 
@@ -400,13 +374,13 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
-		crates = new CratePreview[height, width, length];
-		accessories = new AccessoryPreview[height, width, length];
-		loads = new LoadPreview[height, width, length];
+		crates = new CrateBase[height, width, length];
+		accessories = new AccessoryComponent[height, width, length];
+		loads = new LoadComponent[height, width, length];
 		Active = false;
 	}
 
-	public void Trash()
+	public void Dump()
 	{
 		for (int i = 0; i < height; i++)
 		{
@@ -480,7 +454,8 @@ public class GridMatrix : MonoBehaviour
 				}
 				float distance = Util.GetDistanceFromRayToPoint(ray, hitObject.transform.position);
 				if (accessories[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null
-					&& loads[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null)
+					&& loads[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null
+					&& crates[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] == null)
 				{
 					if (distance < minEmptyDistance)
 					{
@@ -488,30 +463,31 @@ public class GridMatrix : MonoBehaviour
 						minEmptyDistance = distance;
 					}
 				}
-				else
+				else if (accessories[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] != null
+					|| loads[hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx] != null)
 				{
 					if (distance < minOccupiedDistance)
 					{
 						closestOccupiedGrid = hitGrid;
 						minOccupiedDistance = distance;
 					}
-				}				
+				}
 			}
 			if (closestEmptyGrid != null)
 			{
 				Debug.Log("Clicking on empty grid");
-				if (ImageDragHandler.Current != null)
+				if (DragImage.Current != null && DragImage.Current.Count > 0)
 				{
 					Debug.Log("current image drage handler is not null");
 					SelectedGrid = closestEmptyGrid;
-					ImageDragHandler.Current.OnBeginDrag(null);
-					ImageDragHandler.Current?.OnEndDrag(null);
+					DragImage.Current.OnBeginDrag(null);
+					DragImage.Current.OnEndDrag(null);
 				}
 			}
 			else if (closestOccupiedGrid!= null)
 			{
 				Debug.Log("Capture a component to change direction");
-				DirectionalPreview directionalPreview = null;
+				DirectionalComponent directionalPreview = null;
 				if (accessories[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx] != null)
 				{
 					directionalPreview = accessories[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx];
@@ -546,15 +522,15 @@ public class GridMatrix : MonoBehaviour
 			{
 				continue;
 			}
-			if ((currentContentType == Util.ContentType.None || currentContentType == Util.ContentType.Accessory) && Occupied(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
+			if ((DragImage.CurrentContentType == Util.ContentType.None || DragImage.CurrentContentType == Util.ContentType.Accessory) && Occupied(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
 			{
 				continue;
 			}
-			if (currentContentType == Util.ContentType.Crate && !AllowCrate(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
+			if (DragImage.CurrentContentType == Util.ContentType.Crate && !AllowCrate(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
 			{
 				continue;
 			}
-			if (currentContentType == Util.ContentType.Load && !AllowLoad(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
+			if (DragImage.CurrentContentType == Util.ContentType.Load && !AllowLoad(hitGrid.heightIdx, hitGrid.widthIdx, hitGrid.lengthIdx))
 			{
 				continue;
 			}
@@ -600,46 +576,56 @@ public class GridMatrix : MonoBehaviour
 		}
 	}
 	// very dirty fix; don't know the cause
-	IEnumerator ChangePosition(ContentPreview content, Vector3 position)
+	//IEnumerator ChangePosition(VehicleComponent content, Vector3 position)
+	//{
+	//	for(int i = 0;i < 10 && content != null && enabled;i++)
+	//	{
+	//		content.transform.localPosition = position;
+	//		content.transform.localRotation = Quaternion.identity;
+	//		yield return new WaitForSeconds(0.1f);
+	//	}
+	//}
+
+	void AdjustPosition(VehicleComponent component, Vector3 position)
 	{
-		for(int i = 0;i < 10 && content != null && enabled;i++)
+		Util.Delay(this, 0, () =>
 		{
-			content.transform.localPosition = position;
-			content.transform.localRotation = Quaternion.identity;
-			yield return new WaitForSeconds(0.1f);
-		}
+			component.MoveLocal(position);
+		});
 	}
-	public void AddContent(GridCell selectedGrid, Util.ContentType contentType, ContentPreview content)
+	public void AddContent(GridCell selectedGrid, Util.ContentType contentType, VehicleComponent content)
 	{
-		GameState.placed_a_component = true;
+		Eraser.Inst.OnPlacedAComponent();
+		Trash.Inst.OnPlacedAComponent();
 		Debug.Assert(content != null);
 		GridCell grid = selectedGrid;
 		(var h, var w, var l) = (grid.heightIdx, grid.widthIdx, grid.lengthIdx);
 		Debug.Log($"h:{h}, w:{w}, l:{l}");
 		Debug.Log($"{crates.GetLength(0)}, {crates.GetLength(1)}, {crates.GetLength(2)}");
-		StartCoroutine(ChangePosition(content, new Vector3(w, h, l)));
+		// StartCoroutine(ChangePosition(content, new Vector3(w, h, l)));
+		AdjustPosition(content, new Vector3(w, h, l));
 		Debug.Log("Add content called");
 		switch (contentType)
 		{
 			case Util.ContentType.Crate:
-				CratePreview cratePreview = content as CratePreview;
+				CrateBase cratePreview = content as CrateBase;
 				Debug.Assert(cratePreview != null);
 				crates[h, w, l] = cratePreview;
 				break;
 			case Util.ContentType.Accessory:
-				AccessoryPreview accessoryPreview = content as AccessoryPreview;
+				AccessoryComponent accessoryPreview = content as AccessoryComponent;
 				Debug.Assert(accessoryPreview != null);
 				accessories[h, w, l] = accessoryPreview;
 				break;
 			case Util.ContentType.Load:
-				LoadPreview loadPreview = content as LoadPreview;
+				LoadComponent loadPreview = content as LoadComponent;
 				Debug.Assert(loadPreview != null);
 				loads[h, w, l] = loadPreview;
 				PiggyPreview preview = loadPreview as PiggyPreview;
 				if (preview != null)
 				{
-					piggyPreview = preview;
-					EventBus.Publish(new PiggyInstantiatedEvent(piggyPreview));
+					GameState.Inst.Piggy = preview;
+					ConfirmButton.Inst.OnPiggyInstantiated();
 				}
 				break;
 		}

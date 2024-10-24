@@ -4,29 +4,27 @@ using UnityEngine;
 
 public class ContentInstantiator : MonoBehaviour
 {
-	public ContentPreview piggyPreview;
-	public ContentPreview cratePreview;
-	public ContentPreview wheelPreview;
-	public ContentPreview turnWheelPreview;
-	public ContentPreview motorWheelPreview;
-	public Dictionary<Util.Content, ContentPreview> contentToPreview;
+	public VehicleComponent piggyPreview;
+	public VehicleComponent cratePreview;
+	public VehicleComponent wheelPreview;
+	public VehicleComponent turnWheelPreview;
+	public VehicleComponent motorWheelPreview;
+	public Dictionary<Util.Content, VehicleComponent> contentToPreview;
 
-	static ContentInstantiator instance;
+	static ContentInstantiator inst;
 
-	public static ContentInstantiator Instance
+	public static ContentInstantiator Inst
 	{
 		get
 		{
-			if (instance == null)
-			{
-				instance = GameObject.Find("ContentInstantiator").GetComponent<ContentInstantiator>();
-			}
-			return instance;
+			Debug.Assert(inst != null, "Content Instantiator not set"); return inst;
 		}
 	}
 
 	private void Start()
 	{
+		Debug.Assert(inst == null, "Content Instantiator is already created");
+		inst = this;
 		contentToPreview = new()
 		{
 			{ Util.Content.Pig, piggyPreview },
@@ -36,27 +34,37 @@ public class ContentInstantiator : MonoBehaviour
 			{ Util.Content.MotorWheel, motorWheelPreview },
 		};
 	}
+	private void OnDestroy()
+	{
+		inst = null;
+	}
 	// set parent later
 	// if has parent, then position is local
-	public ContentPreview InstantiateContent(Util.Content content, Transform parent, Vector3 position, bool local, int direction)
+	public VehicleComponent InstantiateContent(Util.Content content, Transform parent, Vector3 position, bool local, int direction)
     {
 		GameObject prefab = contentToPreview[content].gameObject;
 		Debug.Assert(prefab != null);
-		GameObject inst = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-		Debug.Assert(inst != null);
+		GameObject inst;
+		if (parent != null)
+		{
+			inst = Instantiate(prefab, parent);
+		}
+        else
+        {
+			inst = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+		}
+        Debug.Assert(inst != null);
 		Debug.Log("Instantiated an object");
-		inst.transform.parent = parent;
-		inst.transform.localRotation = Quaternion.identity;
-		ContentPreview contentPreview = inst.GetComponent<ContentPreview>();
+		VehicleComponent contentPreview = inst.GetComponent<VehicleComponent>();
 		if (local)
 		{
-			contentPreview.MoveLocal(position, "InstantiateContent");
+			contentPreview.MoveLocal(position);
 		}
 		else
 		{
 			contentPreview.MoveGlobal(position, "InstantiateContent");
 		}
-		DirectionalPreview directionalPreview = contentPreview as DirectionalPreview;
+		DirectionalComponent directionalPreview = contentPreview as DirectionalComponent;
 		if (directionalPreview != null)
 		{
 			directionalPreview.Direction = direction;

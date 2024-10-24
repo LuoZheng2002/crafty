@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.000013351, y: 252}
-  m_SizeDelta: {x: 1663.272, y: 379.4196}
+  m_AnchoredPosition: {x: -0.000013351, y: 255.46393}
+  m_SizeDelta: {x: 1663.272, y: 386.3474}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1056632660448978039
 CanvasRenderer:
@@ -78,9 +78,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Move: WASD, Shift, Space
+  m_Text: 'Viewing Map
 
-    Look Around: Drag Screen
+    Move: WASD, Shift, Space
 
     Exit: ESC'
 --- !u!1 &7866712878034734720
@@ -202,8 +202,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildCanvas: {fileID: 0}
   rotationSpeed: 0.05
-  vertical_speed: 1
-  horizontal_speed: 1
+  vertical_speed: 30
+  horizontal_speed: 30
+  mouseSensitivity: 500
 --- !u!222 &5768006581650362584
 CanvasRenderer:
   m_ObjectHideFlags: 0

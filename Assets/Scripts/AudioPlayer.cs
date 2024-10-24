@@ -31,7 +31,11 @@ public class AudioPlayer : MonoBehaviour
         EventBus.Subscribe<ScreamEvent>(Scream);
         StartCoroutine(Snore());
     }
-    void Scream(ScreamEvent e)
+	private void OnDestroy()
+	{
+        inst = null;
+	}
+	void Scream(ScreamEvent e)
     {
         if (soundEffectSource.isPlaying)
         {

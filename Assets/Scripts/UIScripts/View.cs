@@ -5,31 +5,19 @@ using UnityEngine.UI;
 
 public class View : MonoBehaviour
 {
-	public float minScale = 0.8f;
-	public float maxScale = 1.2f;
-	public float scaleSpeed = 5.0f;
-	public GameObject viewCanvas;
-	Image image;
+	ButtonScale buttonScale;
 	private void OnEnable()
 	{
-		image = GetComponent<Image>();
-		StartCoroutine(Scale());
-	}
-	IEnumerator Scale()
-	{
-		while (!GameState.shown_view)
+		buttonScale = GetComponent<ButtonScale>();
+		if (!GameState.shown_view)
 		{
-			float scale = (Mathf.Sin(Time.time * scaleSpeed) + 1.0f) / 2.0f * (maxScale - minScale) + minScale;
-			// Debug.Log($"Scale: {scale}");
-			image.rectTransform.localScale = new Vector3(scale, scale, scale);
-			yield return null;
+			buttonScale.ScaleStart();
 		}
-		image.rectTransform.localScale = Vector3.one;
 	}
-	
 	public void OnViewClicked()
 	{
-		viewCanvas.SetActive(true);
+		CanvasSwitch.Inst.ShowViewCanvas();
 		GameState.shown_view = true;
+		buttonScale.ScaleStop();
 	}
 }

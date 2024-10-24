@@ -8,6 +8,11 @@ public class CanvasSwitch : MonoBehaviour
     public GameObject buildCanvas;
     public GameObject playCanvas;
     public GameObject outroCanvas;
+	
+	public GameObject dragScreenCanvas;
+	public GameObject menuConfirmCanvas;
+	public GameObject viewCanvas;
+
 	static CanvasSwitch inst;
 	public static CanvasSwitch Inst
 	{
@@ -21,8 +26,14 @@ public class CanvasSwitch : MonoBehaviour
 		buildCanvas.SetActive(false);
 		playCanvas.SetActive(false);
 		outroCanvas.SetActive(false);
+		dragScreenCanvas.SetActive(false);
+		menuConfirmCanvas.SetActive(false);
+		viewCanvas.SetActive(false);
 	}
-
+	private void OnDestroy()
+	{
+		inst = null;
+	}
 	public void TransitionToIntro()
 	{
 		introCanvas.SetActive(true);
@@ -36,7 +47,6 @@ public class CanvasSwitch : MonoBehaviour
 		buildCanvas.SetActive(true);
 		playCanvas.SetActive(false);
 		outroCanvas.SetActive(false);
-		EventBus.Publish(new GenerateItemsEvent());
 	}
 	public void TransitionToPlay()
 	{
@@ -51,5 +61,24 @@ public class CanvasSwitch : MonoBehaviour
 		playCanvas.SetActive(false);
 		buildCanvas.SetActive(false);
 		outroCanvas.SetActive(true);
+	}
+	IEnumerator ShowDragScreenHelper()
+	{
+		yield return new WaitForSeconds(1.0f);
+		dragScreenCanvas.SetActive(true);
+		yield return new WaitForSeconds(3.0f);
+		dragScreenCanvas.SetActive(false);
+	}
+	public void ShowDragScreen()
+	{
+		StartCoroutine(ShowDragScreenHelper());
+	}
+	public void ShowMenuConfirm()
+	{
+		menuConfirmCanvas.SetActive(true);
+	}
+	public void ShowViewCanvas()
+	{
+		viewCanvas.SetActive(true);
 	}
 }
