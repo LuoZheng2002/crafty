@@ -52,10 +52,11 @@ public class ViewCanvasDrag : MonoBehaviour
 		Camera.main.transform.position += deltaPosition;
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			EventBus.Publish(new MoveToGridEvent());
+			GameState.Inst.GoBackToBuild();
 			buildCanvas.SetActive(true);
 			gameObject.SetActive(false);
 			Cursor.lockState = CursorLockMode.None;
+			CustomCursor.Inst.SetIdleCursor();
 		}
     }
 }

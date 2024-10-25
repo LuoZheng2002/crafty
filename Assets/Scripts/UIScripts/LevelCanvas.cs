@@ -18,7 +18,7 @@ public class LevelCanvas : MonoBehaviour
 		for (int i = 1;i <= Util.LevelItems.Count;i++)
         {
             GameObject button = Instantiate(levelButtonPrefab);
-            button.transform.parent = panel;
+            button.transform.SetParent(panel);
             Text text = button.transform.Find("Text").GetComponent<Text>();
             text.text = $"Level {i}";
             Debug.Assert(text != null);

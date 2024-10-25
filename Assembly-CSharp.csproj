@@ -75,11 +75,9 @@
     <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
-    <Compile Include="Assets\Scripts\ContentInstantiator.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToastManager.cs" />
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
-    <Compile Include="Assets\Scripts\TutorialPlayer.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
     <Compile Include="Assets\Scripts\Goal.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ImageContainer.cs" />
@@ -91,6 +89,7 @@
     <Compile Include="Assets\Scripts\NewTutorialPlayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
+    <Compile Include="Assets\Scripts\CustomCursor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Help.cs" />

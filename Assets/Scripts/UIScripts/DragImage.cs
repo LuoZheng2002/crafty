@@ -14,16 +14,15 @@ public class ResetCountEvent
 public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public int initial_count = 5;
-	
 	public float rayDistance = 5.0f;
-	VehicleComponent instantiatedPreview = null;
-	private RectTransform rectTransform;
-	private CanvasGroup canvasGroup;
-	// GridMatrix gridMatrix;
 	public Util.ContentType contentType;
 	public Util.Content content;
+	public VehicleComponent componentPrefab;
+	VehicleComponent componentInstance = null;
+	private RectTransform rectTransform;
+	// GridMatrix gridMatrix;
 	Text text;
-	GameState gameState;
+	ButtonScale buttonScale;
 
 	int count = 0;
 	public int Count
@@ -37,12 +36,12 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 
 	Image selectionImage;
+	Image image;
 
 
 	public float minScale = 0.8f;
 	public float maxScale = 1.2f;
 	public float scaleSpeed = 5.0f;
-	Image image;
 	static DragImage current;
 
 	public static Dictionary<Util.Content, DragImage> DragImages = new();
@@ -56,7 +55,10 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		{
 			Debug.Assert(DragImages.ContainsKey(component.Key));
 			var dragImage = DragImages[component.Key];
-			dragImage.transform.SetParent(ImageContainer.Inst.transform);
+			dragImage.transform.SetParent(ImageContainer.Inst.transform, false);
+			dragImage.transform.localPosition = Vector3.zero;
+			dragImage.transform.localScale = Vector3.one;
+			dragImage.transform.localRotation = Quaternion.identity;
 			dragImage.initial_count = component.Value;
 			dragImage.count = component.Value;
 			dragImage.ResetCount(null);
@@ -78,6 +80,13 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			if (current != null)
 			{
 				current.selectionImage.enabled = true;
+				CurrentContentType = current.contentType;
+				Debug.Log($"CurrentContentType set to {CurrentContentType}");
+			}
+			else
+			{
+				CurrentContentType = Util.ContentType.None;
+				Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
@@ -93,26 +102,38 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 	private void OnEnable()
 	{
+		buttonScale = GetComponent<ButtonScale>();
 		image = GetComponent<Image>();
-		StartCoroutine(Scale());
+		if (!GameState.shown_drag_images)
+		{
+			buttonScale.ScaleStart();
+		}
 	}
 	private void OnDestroy()
 	{
 		DragImages.Clear();
 	}
-	IEnumerator Scale()
+	public VehicleComponent InstantiateContent(Vector3 position, bool local, int direction)
 	{
-		while (!GameState.shown_drag_images)
+		Debug.Assert(componentPrefab != null);
+		GameObject inst= Instantiate(componentPrefab.gameObject, GridMatrix.Current.transform);
+		Debug.Assert(inst != null);
+		VehicleComponent component = inst.GetComponent<VehicleComponent>();
+		if (local)
 		{
-			float scale = (Mathf.Sin(Time.time * scaleSpeed) + 1.0f) / 2.0f * (maxScale - minScale) + minScale;
-			// Debug.Log($"Scale: {scale}");
-			image.rectTransform.localScale = new Vector3(scale, scale, scale);
-			yield return null;
+			component.MoveLocal(position);
 		}
-		image.rectTransform.localScale = Vector3.one;
+		else
+		{
+			component.MoveGlobal(position);
+		}
+		DirectionalComponent directionalPreview = component as DirectionalComponent;
+		if (directionalPreview != null)
+		{
+			directionalPreview.Direction = direction;
+		}
+		return component;
 	}
-
-
 	public Text Text
 	{
 		get
@@ -129,7 +150,6 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();
-		canvasGroup = GetComponent<CanvasGroup>();
 	}
 	private void Start()
 	{
@@ -137,7 +157,6 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		DragImages[content] = this;
 		EventBus.Subscribe<ResetCountEvent>(ResetCount);
 		Count=initial_count;
-		gameState = GameObject.Find("GameState").GetComponent<GameState>();
 		selectionImage = transform.Find("Selection").GetComponent<Image>();
 		selectionImage.enabled = false;
 		Debug.Assert(selectionImage != null);
@@ -146,12 +165,29 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		Count = initial_count;
 	}
-	public void OnBeginDrag(PointerEventData eventData)
+	public void ClickPlace()
 	{
 		if (count > 0)
 		{
-			GameState.shown_drag_images = true;
-			CurrentContentType = contentType;
+			VehicleComponent componentInst = InstantiateContent(GridMatrix.SelectedGrid.transform.localPosition, true, 0);
+			Count--;
+			GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInst);
+			if (Count <=0)
+			{
+				Current = null;
+			}
+		}
+		else
+		{
+			Current = null;
+		}
+	}
+	public void OnBeginDrag(PointerEventData eventData)
+	{
+		GameState.shown_drag_images = true;
+		buttonScale.ScaleStop();
+		if (count > 0)
+		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			// Get the direction of the ray
 			Vector3 rayDirection = ray.direction;
@@ -159,10 +195,9 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
 			Transform gridMatrixTransform = GridMatrix.Current.transform;
 
-			instantiatedPreview = ContentInstantiator.Inst.InstantiateContent(content, gridMatrixTransform, instantiatePos, false, 0);
-			Util.SetLayerRecursively(instantiatedPreview.gameObject, "MaskLayer");
+			componentInstance = InstantiateContent(instantiatePos, false, 0);
+			Util.SetLayerRecursively(componentInstance.gameObject, "MaskLayer");
 			Count--;
-			// DragHelper();
 			Current = this;
 		}
 		else
@@ -172,29 +207,26 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 	void DragHelper()
 	{
-		// Debug.Log("Drag helper called");
-		if (instantiatedPreview == null)
+		if (componentInstance == null)
 		{
 			return;
 		}
 		// awkward fix
-		instantiatedPreview.transform.localRotation = Quaternion.identity;
+		// componentInstance.transform.localRotation = Quaternion.identity;
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		// Get the direction of the ray
 		Vector3 rayDirection = ray.direction;
 		if (GridMatrix.SelectedGrid != null)
 		{
-			instantiatedPreview.MoveGlobal(GridMatrix.SelectedGrid.transform.position, "Drag helper clamp grid");
-			// instantiatedPreview.transform.position = selectedGrid.transform.position;
-			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
+			componentInstance.MoveGlobal(GridMatrix.SelectedGrid.transform.position);
+			Util.SetLayerRecursively(componentInstance.gameObject, "ContentCrate");
 		}
 		else
 		{
 			Vector3 newPos = ray.origin + rayDirection * rayDistance;
-			instantiatedPreview.MoveGlobal(newPos, "Drag helper free move");
-			// instantiatedPreview.transform.position = newPos;
-			Util.SetLayerRecursively(instantiatedPreview.gameObject, "MaskLayer");
+			componentInstance.MoveGlobal(newPos);
+			Util.SetLayerRecursively(componentInstance.gameObject, "MaskLayer");
 		}
 	}
 	public void OnDrag(PointerEventData eventData)
@@ -204,31 +236,36 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		if (instantiatedPreview == null)
+		Debug.Assert(componentInstance != null);
+		if (componentInstance == null)
 		{
 			return;
 		}
-		// Enable raycast again
-		// canvasGroup.blocksRaycasts = true;
 		if (GridMatrix.SelectedGrid != null)
 		{
-			Util.SetLayerRecursively(instantiatedPreview.gameObject, "ContentCrate");
-			GridMatrix.Current.AddContent(GridMatrix.SelectedGrid, contentType, instantiatedPreview);
-			instantiatedPreview = null;
+			Util.SetLayerRecursively(componentInstance.gameObject, "ContentCrate");
+			GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInstance);
+			componentInstance = null;
+			if (Count == 0)
+			{
+				Current = null;
+			}
 		}
 		else
 		{
 			Count++;
-			Destroy(instantiatedPreview.gameObject);
+			Destroy(componentInstance.gameObject);
+			componentInstance = null;
 		}
 		GridMatrix.SelectedGrid = null;
-		CurrentContentType = Util.ContentType.None;
+		// CurrentContentType = Util.ContentType.None;
 	}
 	public void OnClick()
 	{
 		if (count > 0)
 		{
 			GameState.shown_drag_images = true;
+			buttonScale.ScaleStop();
 			ToastManager.Toast("Drag!");
 			Current = this;
 		}

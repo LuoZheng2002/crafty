@@ -11,7 +11,7 @@ public abstract class VehicleComponent : MonoBehaviour
 		rb.MovePosition(worldPosition);
         // Debug.Log($"{caller} changed {Content}'s local position");
     }
-	public void MoveGlobal(Vector3 position, string caller)
+	public void MoveGlobal(Vector3 position)
 	{
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.MovePosition(position);

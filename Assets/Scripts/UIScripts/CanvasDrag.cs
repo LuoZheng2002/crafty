@@ -28,7 +28,7 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 	}
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		Debug.Log("Drag begin");
+		// Debug.Log("Drag begin");
 	}
 
 
@@ -46,6 +46,6 @@ public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		Debug.Log("Drag end");
+		// Debug.Log("Drag end");
 	}
 }

@@ -201,7 +201,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00011373737, y: 0.000088318135}
+  m_AnchoredPosition: {x: 0.000016052969, y: -0.000020792713}
   m_SizeDelta: {x: -104.4252, y: 206.83}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5515156927973649871
@@ -2090,6 +2090,10 @@ PrefabInstance:
       propertyPath: contentPreview
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
+      propertyPath: componentPrefab
+      value: 
+      objectReference: {fileID: 8239606889629058600, guid: 7b381fd812bd2274493fcb08174a4241, type: 3}
     - target: {fileID: 1166488110993531897, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2208,6 +2212,10 @@ PrefabInstance:
       propertyPath: contentPreview
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
+      propertyPath: componentPrefab
+      value: 
+      objectReference: {fileID: 70626792578212898, guid: f753ce2a36a133340a3854001d62af8a, type: 3}
     - target: {fileID: 1166488110993531897, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2324,6 +2332,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
       propertyPath: contentPreview
+      value: 
+      objectReference: {fileID: 1652204546776489305, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+    - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
+      propertyPath: componentPrefab
       value: 
       objectReference: {fileID: 1652204546776489305, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
     - target: {fileID: 1166488110993531897, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
@@ -2444,6 +2456,10 @@ PrefabInstance:
       propertyPath: contentPreview
       value: 
       objectReference: {fileID: 6588978745419272046, guid: 9e7fe0958c863594984ff87607418022, type: 3}
+    - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
+      propertyPath: componentPrefab
+      value: 
+      objectReference: {fileID: 6588978745419272046, guid: 9e7fe0958c863594984ff87607418022, type: 3}
     - target: {fileID: 1166488110993531897, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2558,6 +2574,10 @@ PrefabInstance:
       propertyPath: initial_count
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 147827264621959710, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
+      propertyPath: componentPrefab
+      value: 
+      objectReference: {fileID: 3054616285210715954, guid: f805c0bdb71d701498be7723dc54da1a, type: 3}
     - target: {fileID: 1166488110993531897, guid: 703b04958dff6a04fb220de4a5afa863, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

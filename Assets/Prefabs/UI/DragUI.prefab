@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 3414247009972893455}
   - component: {fileID: 147827264621959710}
   - component: {fileID: 4643233811053401684}
+  - component: {fileID: 9158183973980630673}
   m_Layer: 5
   m_Name: DragUI
   m_TagString: Untagged
@@ -262,6 +263,7 @@ MonoBehaviour:
   rayDistance: 3
   contentType: 1
   content: 0
+  componentPrefab: {fileID: 0}
   minScale: 0.8
   maxScale: 1.2
   scaleSpeed: 5
@@ -321,3 +323,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9158183973980630673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4553518548845140052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406f69cc5a944384aae2b4721329221a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minScale: 0.8
+  maxScale: 1.2
+  scaleSpeed: 5

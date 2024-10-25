@@ -5,26 +5,12 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class MoveToGridEvent
-{
-	
-}
-
 public class InvisibleChangedEvent
 {
 	public bool invisible = false;
     public InvisibleChangedEvent(bool invisible)
     {
         this.invisible = invisible;
-    }
-}
-public class PiggyInstantiatedEvent
-{
-	public PiggyPreview piggyPreview;
-	
-    public PiggyInstantiatedEvent(PiggyPreview piggyPreview)
-    {
-        this.piggyPreview = piggyPreview;
     }
 }
 //public class GameStateChangedEvent
@@ -37,14 +23,6 @@ public class PiggyInstantiatedEvent
 //		this.level_num = level_num;
 //    }
 //}
-public class ShowTutorialEvent
-{
-	public Util.TutorialType tutorialType;
-    public ShowTutorialEvent(Util.TutorialType tutorialType)
-    {
-        this.tutorialType = tutorialType;
-    }
-}
 
 public class GameState : MonoBehaviour
 {
@@ -135,7 +113,7 @@ public class GameState : MonoBehaviour
 			return level;
 		} }
 
-	void OnMoveToGrid(MoveToGridEvent e)
+	public void GoBackToBuild()
 	{
 		StartCoroutine(MoveCameraToGrid(false));
 	}
@@ -145,7 +123,7 @@ public class GameState : MonoBehaviour
 		inst = this;
 		EventBus.Subscribe<NextEvent>(OnNext);
 		EventBus.Subscribe<AnimationExitEvent>(OnAnimationExit);
-		EventBus.Subscribe<MoveToGridEvent>(OnMoveToGrid);
+		current_level_num = start_level;
 		// work?
 		Util.Delay(this, () =>
 		{
@@ -162,8 +140,6 @@ public class GameState : MonoBehaviour
 	{
 		if (current_level_num >= Util.LevelItems.Count) // count starting from 1
 		{
-			// Debug.Log($"Current level num: {current_level_num}, Util.levelItems.count: {Util.LevelItems.Count}");
-			// Debug.LogError("No more level to play");
 			ToastManager.Toast("More levels coming soon!\nThanks for playing!");
 			return;
 		}
@@ -192,14 +168,11 @@ public class GameState : MonoBehaviour
 			float progress = (Time.time - startTime) / retry_move_time;
 			Camera.main.transform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
 			Camera.main.transform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
-			// Debug.Log($"camera main: {Camera.main.transform.position.x}, {Camera.main.transform.position.y},{Camera.main.transform.position.z}");
 			yield return null;
 		}
 		cameraTransform.position = dummyCameraTransform.position;
 		cameraTransform.rotation = dummyCameraTransform.rotation;
-		Debug.Log($"dummy camera transform position: {dummyCameraTransform.position.x}, {dummyCameraTransform.position.y}, {dummyCameraTransform.position.z}");
 		// grid matrix will be enabled at transition to build
-		Debug.Log("Move camera to grid called");
 		if (publishevent)
 		{
 			TransitionToBuild();
@@ -237,7 +210,6 @@ public class GameState : MonoBehaviour
 		Quaternion cameraStartRotation = cameraTransform.rotation;
 		while (Time.time < end_time)
 		{
-			// Debug.Log("Rotating");
 			cameraTransform.rotation = Quaternion.Slerp(cameraStartRotation, cameraRefTransform.rotation, (Time.time - start_time) / camera_rotation_time);
 			yield return null;
 		}
@@ -279,9 +251,6 @@ public class GameState : MonoBehaviour
 
 	void OnAnimationExit(AnimationExitEvent e)
 	{
-		Debug.Log("Animation exit called");
-		// Camera.main.transform.parent = null;
-		// cameraAnimator.Rebind();
 		StartCoroutine(MoveCameraToGrid());
 	}
 	//void GoToBuild()

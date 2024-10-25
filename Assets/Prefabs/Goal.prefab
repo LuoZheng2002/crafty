@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1936473032558467758}
   - component: {fileID: 4360773788608954635}
   - component: {fileID: 6969331477999008926}
-  - component: {fileID: 4948842878454813863}
+  - component: {fileID: 234514139779251850}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 145.6, y: 72, z: 195.7}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 60.04, y: 7.79, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4948842878454813863
+--- !u!114 &234514139779251850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,3 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3415f8dd317443342887a8cd0da47731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level_num: 0

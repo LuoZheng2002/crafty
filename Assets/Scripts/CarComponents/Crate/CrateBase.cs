@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CrateBase : VehicleComponent
+public abstract class CrateBase : CrateComponent
 {
 	public Material transparent;
 	public Material opaque;

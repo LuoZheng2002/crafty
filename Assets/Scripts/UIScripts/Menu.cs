@@ -23,7 +23,10 @@ public class Menu : MonoBehaviour
 		if (scalable)
 		{
 			GameState.shown_menu = true;
-			buttonScale.ScaleStop();
+			if (buttonScale != null)
+			{
+				buttonScale.ScaleStop();
+			}
 		}
     }
 }

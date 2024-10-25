@@ -20,8 +20,6 @@ public class MenuGoalReached : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("You win!");
-		GameState.Inst.TransitionToOutro();
 		meshRenderer.enabled = false;
 		c.enabled = false;
 		StartCoroutine(Recover());
