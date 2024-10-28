@@ -3,33 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//public class UpdateWASDEvent
-//{
-//    public bool wa;
-//    public bool sd;
-//    public UpdateWASDEvent(bool wa, bool sd)
-//    {
-//        this.wa = wa;
-//        this.sd = sd;
-//    }
-//}
 
 public class PlayButtonsDisplayer : MonoBehaviour
 {
+    public static PlayButtonsDisplayer Inst
+    {
+        get { Debug.Assert(inst != null, "PlayButtonDisplayer is not set"); return inst; }
+    }
+    static PlayButtonsDisplayer inst;
     // Start is called before the first frame update
     Image w_img;
     Image a_img;
     Image s_img;
     Image d_img;
-    static Color transparent = new Color(1, 1, 1, 0.2f);
+    static Color transparent = new Color(1, 1, 1, 0.05f);
     void Start()
     {
         w_img = transform.Find("W").GetComponent<Image>();
         a_img = transform.Find("A").GetComponent<Image>();
 		s_img = transform.Find("S").GetComponent<Image>();
 		d_img = transform.Find("D").GetComponent<Image>();
+        Debug.Assert(inst == null, "PlayButtonsDisplayer is already set");
+        inst = this;
 	}
-    bool ws = false;
+	private void OnDestroy()
+	{
+		inst = null;
+	}
+	bool ws = false;
     bool ad = false;
     public void UpdateWASD(bool ws, bool ad)
     {

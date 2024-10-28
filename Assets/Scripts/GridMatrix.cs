@@ -271,8 +271,8 @@ public class GridMatrix : MonoBehaviour
 			}
 		}	
 	}
-	bool wa = false;
-	bool sd = false;
+	bool ws = false;
+	bool ad = false;
 	void BuildAndStickAccessories(int h_idx, int w_idx, int l_idx)
 	{
 		AccessoryComponent accessory = accessories[h_idx, w_idx, l_idx];
@@ -282,8 +282,8 @@ public class GridMatrix : MonoBehaviour
 			mem_accessories[h_idx, w_idx, l_idx] = accessory.Content;
 			accessory_directions[h_idx, w_idx, l_idx] = accessory.Direction;
 			(bool _wa, bool _sd) = accessory.GetWASD();
-			if (_wa) wa = true;
-			if (_sd) sd = true;
+			if (_wa) ws = true;
+			if (_sd) ad = true;
 			accessory.Build();
 			// to do
 			(var h, var w, var l) = accessory.AttachDir();
@@ -312,8 +312,8 @@ public class GridMatrix : MonoBehaviour
 	public void BuildAndDeactivate()
 	{
 		GameState.Inst.Components.Clear();
-		wa = false;
-		sd = false;
+		ws = false;
+		ad = false;
 
 		mem_crates = new Util.Content[height, width, length];
 		mem_accessories = new Util.Content[height, width, length];
@@ -355,6 +355,7 @@ public class GridMatrix : MonoBehaviour
 		accessories = new AccessoryComponent[height, width, length];
 		loads = new LoadComponent[height, width, length];
 		Active = false;
+		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad);
 	}
 
 	public void Dump()

@@ -218,24 +218,28 @@ public class GameState : MonoBehaviour
 	}
 	private void Update()
 	{
-        if (camera_follow_pig)
+		CheatCode();
+	}
+	void CheatCode()
+	{
+		if (camera_follow_pig)
 		{
 			Camera.main.transform.position = cameraRefTransform.position;
 			Camera.main.transform.rotation = cameraRefTransform.rotation;
 		}
-		//Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
-		//	{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 }, 
-		//	{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
+		Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
+			{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 },
+			{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
 
-		//foreach (var pair in keycodes)
-		//{
-		//	if (Input.GetKeyDown(pair.Value))
-		//	{
-		//		EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Intro, pair.Key));
-		//	}
-		//}
-    }
-
+		foreach (var pair in keycodes)
+		{
+			if ( Input.GetKey(KeyCode.LeftShift)&& Input.GetKeyDown(pair.Value))
+			{
+				current_level_num = pair.Key;
+				TransitionToIntro();
+			}
+		}
+	}
 	
 	IEnumerator PlayAnimation()
 	{

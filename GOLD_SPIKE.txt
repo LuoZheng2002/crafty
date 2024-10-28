@@ -1,0 +1,1 @@
+Our game features a vehicle building system similar to the one in Bad Piggies, but in 3D, to let the player design vehicles with building blocks of different type, and steer the vehicle to make to the destination.
