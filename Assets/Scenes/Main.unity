@@ -61295,6 +61295,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1906372911}
     m_Modifications:
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 190.89502
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 217.37402
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825668060456491226, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -334.58002
+      objectReference: {fileID: 0}
     - target: {fileID: 2397157904018919180, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -61341,11 +61365,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000107022
+      value: -0.007698477
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.006506549
+      value: 0.0074469754
       objectReference: {fileID: 0}
     - target: {fileID: 5727302945077381083, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_Camera

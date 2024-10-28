@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - CanvasDrag
     - CanvasSwitch
     - ConfirmButton
+    - CustomCursor
     - DragImage
     - Eraser
     - FirstPerson
@@ -19,8 +20,12 @@ ScriptsOnlyBuild:
     - ImageContainer
     - Layers
     - Level
+    - LevelButton
+    - LevelCanvas
     - Menu
+    - MenuCanvasSwitch
     - MenuConfirm
+    - MenuGoalReached
     - MotorWheelPreview
     - NewTutorialPlayer
     - Next
@@ -28,11 +33,14 @@ ScriptsOnlyBuild:
     - PiggyNose
     - PiggyPreview
     - PlayButtonsDisplayer
+    - QuitGame
     - Replay
     - Retry
+    - TimedDestroy
     - ToastManager
     - Trash
     - TurnWheelPreview
+    - VehicleSpawner
     - View
     - ViewCanvasDrag
     - WheelMotor
@@ -64,6 +72,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.GridLayoutGroup
     - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.Mask
@@ -88,32 +97,23 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
   methodsToPreserve:
   - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: OnOKClicked
+    fullTypeName: MenuCanvasSwitch
+    methodName: SwitchToMenu
   - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: OnCrossClicked
+    fullTypeName: LevelButton
+    methodName: OnLevelClicked
   - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: RightClicked
+    fullTypeName: LevelButton
+    methodName: OnLevelClicked
   - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: LeftClicked
+    fullTypeName: QuitGame
+    methodName: OnQuitGame
   - assembly: Assembly-CSharp
-    fullTypeName: MenuConfirm
-    methodName: OnCancelClicked
+    fullTypeName: MenuCanvasSwitch
+    methodName: SwitchToLevel
   - assembly: Assembly-CSharp
-    fullTypeName: MenuConfirm
-    methodName: OnYesClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: Menu
-    methodName: OnMenuClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: Retry
-    methodName: OnRetry
-  - assembly: Assembly-CSharp
-    fullTypeName: FirstPerson
-    methodName: ToggleFirstPerson
+    fullTypeName: LevelButton
+    methodName: OnLevelClicked
   - assembly: Assembly-CSharp
     fullTypeName: Eraser
     methodName: OnClick
@@ -151,6 +151,21 @@ ScriptsOnlyBuild:
     fullTypeName: DragImage
     methodName: OnClick
   - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnCancelClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnYesClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Menu
+    methodName: OnMenuClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Retry
+    methodName: OnRetry
+  - assembly: Assembly-CSharp
+    fullTypeName: FirstPerson
+    methodName: ToggleFirstPerson
+  - assembly: Assembly-CSharp
     fullTypeName: Next
     methodName: OnNext
   - assembly: Assembly-CSharp
@@ -159,6 +174,18 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: Replay
     methodName: OnReplay
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: OnOKClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: OnCrossClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: RightClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: LeftClicked
   sceneClasses:
     Assets/Scenes/Main.unity:
     - Class: 1
@@ -258,6 +285,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4422}
     - Class: 114
+      Script: {instanceID: 4726}
+    - Class: 114
       Script: {instanceID: 5060}
     - Class: 114
       Script: {instanceID: 5094}
@@ -326,6 +355,109 @@ ScriptsOnlyBuild:
     - Class: 224
       Script: {instanceID: 0}
     - Class: 225
+      Script: {instanceID: 0}
+    - Class: 850595691
+      Script: {instanceID: 0}
+    Assets/Scenes/Menu.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 54
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1578}
+    - Class: 114
+      Script: {instanceID: 1580}
+    - Class: 114
+      Script: {instanceID: 1626}
+    - Class: 114
+      Script: {instanceID: 2742}
+    - Class: 114
+      Script: {instanceID: 2914}
+    - Class: 114
+      Script: {instanceID: 2968}
+    - Class: 114
+      Script: {instanceID: 3430}
+    - Class: 114
+      Script: {instanceID: 3866}
+    - Class: 114
+      Script: {instanceID: 3990}
+    - Class: 114
+      Script: {instanceID: 4892}
+    - Class: 114
+      Script: {instanceID: 5060}
+    - Class: 114
+      Script: {instanceID: 5124}
+    - Class: 114
+      Script: {instanceID: 5754}
+    - Class: 114
+      Script: {instanceID: 6034}
+    - Class: 114
+      Script: {instanceID: 6644}
+    - Class: 114
+      Script: {instanceID: 7276}
+    - Class: 114
+      Script: {instanceID: 7328}
+    - Class: 114
+      Script: {instanceID: 7770}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 135
+      Script: {instanceID: 0}
+    - Class: 138
+      Script: {instanceID: 0}
+    - Class: 146
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 850595691
       Script: {instanceID: 0}
@@ -1502,5 +1634,6 @@ ScriptsOnlyBuild:
     className: View
   platform: 19
   scenePathNames:
+  - Assets/Scenes/Menu.unity
   - Assets/Scenes/Main.unity
   playerPath: C:/Users/luo20/Desktop/UnityProjects/crafty/Build/crafty.exe

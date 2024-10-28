@@ -97,6 +97,12 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
   methodsToPreserve:
   - assembly: Assembly-CSharp
+    fullTypeName: QuitGame
+    methodName: OnQuitGame
+  - assembly: Assembly-CSharp
+    fullTypeName: MenuCanvasSwitch
+    methodName: SwitchToLevel
+  - assembly: Assembly-CSharp
     fullTypeName: MenuCanvasSwitch
     methodName: SwitchToMenu
   - assembly: Assembly-CSharp
@@ -106,35 +112,8 @@ ScriptsOnlyBuild:
     fullTypeName: LevelButton
     methodName: OnLevelClicked
   - assembly: Assembly-CSharp
-    fullTypeName: QuitGame
-    methodName: OnQuitGame
-  - assembly: Assembly-CSharp
-    fullTypeName: MenuCanvasSwitch
-    methodName: SwitchToLevel
-  - assembly: Assembly-CSharp
     fullTypeName: LevelButton
     methodName: OnLevelClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: Next
-    methodName: OnNext
-  - assembly: Assembly-CSharp
-    fullTypeName: Menu
-    methodName: OnMenuClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: Replay
-    methodName: OnReplay
-  - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: OnOKClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: OnCrossClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: RightClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: NewTutorialPlayer
-    methodName: LeftClicked
   - assembly: Assembly-CSharp
     fullTypeName: Eraser
     methodName: OnClick
@@ -172,12 +151,6 @@ ScriptsOnlyBuild:
     fullTypeName: DragImage
     methodName: OnClick
   - assembly: Assembly-CSharp
-    fullTypeName: MenuConfirm
-    methodName: OnCancelClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: MenuConfirm
-    methodName: OnYesClicked
-  - assembly: Assembly-CSharp
     fullTypeName: Menu
     methodName: OnMenuClicked
   - assembly: Assembly-CSharp
@@ -186,6 +159,33 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: FirstPerson
     methodName: ToggleFirstPerson
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: OnOKClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: OnCrossClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: RightClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: NewTutorialPlayer
+    methodName: LeftClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnCancelClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: MenuConfirm
+    methodName: OnYesClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Next
+    methodName: OnNext
+  - assembly: Assembly-CSharp
+    fullTypeName: Menu
+    methodName: OnMenuClicked
+  - assembly: Assembly-CSharp
+    fullTypeName: Replay
+    methodName: OnReplay
   sceneClasses:
     Assets/Scenes/Main.unity:
     - Class: 1
