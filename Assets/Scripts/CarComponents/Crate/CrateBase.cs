@@ -19,10 +19,11 @@ public abstract class CrateBase : CrateComponent
 	}
 	IEnumerator AddForce()
 	{
+		//for now turn this off
 		Rigidbody rb = GetComponent<Rigidbody>();
 		for(int i = 0;i < 5;i++)
 		{
-			rb.AddForce(Random.onUnitSphere * random_force, ForceMode.Impulse);
+			//rb.AddForce(Random.onUnitSphere * random_force, ForceMode.Impulse);
 			yield return new WaitForSeconds(0.25f);
 		}
 	}

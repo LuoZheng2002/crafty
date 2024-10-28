@@ -299,7 +299,8 @@ public class GameState : MonoBehaviour
 		
 		DragImage.Current = null;
 		GridMatrix.SelectGridMatrix(current_level_num);
-		if (!shown_tutorials[current_level_num - 1])
+		//neglect level6 tutorial for now
+		if (current_level_num != 6&&!shown_tutorials[current_level_num - 1])
 		{
 			shown_tutorials[current_level_num - 1] = true;
 			StartCoroutine(ShowTutorial(current_level_num - 1));

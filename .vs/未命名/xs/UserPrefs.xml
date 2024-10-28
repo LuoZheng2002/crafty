@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{F8B59E0B-BBA3-EE07-7D44-A287AF8B2F13}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameState.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Util.cs" Line="76" Column="27" />
+      <File FileName="Assets/Scripts/CarComponents/Crate/CrateBase.cs" Line="25" Column="4" />
+      <File FileName="Assets/Scripts/Goal.cs" Line="19" Column="14" />
+      <File FileName="Assets/Scripts/GameState.cs" Line="332" Column="3" />
+      <File FileName="Assets/Scripts/UIScripts/Eraser.cs" />
+      <File FileName="Assets/Scripts/UIScripts/Menu.cs" />
+      <File FileName="Assets/Scripts/UIScripts/CanvasSwitch.cs" />
+      <File FileName="Assets/Scripts/GridMatrix.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="未命名" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="CarComponents" expanded="True">
+                  <Node name="Crate" expanded="True" />
+                </Node>
+                <Node name="UIScripts" expanded="True" />
+                <Node name="GameState.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="bc437782-e8ea-4402-82b7-c7bf4cd8ff91" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

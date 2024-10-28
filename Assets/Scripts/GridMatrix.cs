@@ -232,7 +232,7 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 		SetLayerActive(activeLayerIndex, true);
-		Util.Delay(this, 1, RebuildVehicle);
+		Util.Delay(this, 5, RebuildVehicle);
 	}
 	void Deactivate()
 	{

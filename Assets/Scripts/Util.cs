@@ -58,6 +58,8 @@ public class Util
 		{3, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.TurnWheel, 2)} },
 		{4, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
 		{5, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
+		{6, new() { (Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 8), } },
+
 	};
 
 	public static Dictionary<Content, ContentType> ContentInfos = new()
