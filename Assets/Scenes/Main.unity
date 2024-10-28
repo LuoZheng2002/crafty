@@ -122,56 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &28529173
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 28529175}
-  - component: {fileID: 28529174}
-  m_Layer: 0
-  m_Name: CustomCursor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &28529174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28529173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89a43378a9cbaea4fa73adef10cf47c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleCursorTexture: {fileID: 2800000, guid: 9ba138ee277dac2489b1c6c6d8e54d26, type: 3}
-  pressedCursorTexture: {fileID: 2800000, guid: 5106a2e867c3cd64a804bd2ddf9976ba, type: 3}
-  hotSpot: {x: 24, y: 24}
-  cursorMode: 1
-  cursorWidth: 128
-  cursorHeight: 128
---- !u!4 &28529175
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28529173}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 194.45, y: 62.450005, z: 289.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &116252140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59930,6 +59880,56 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1719181234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1719181236}
+  - component: {fileID: 1719181235}
+  m_Layer: 0
+  m_Name: CustomCursor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1719181235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719181234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a43378a9cbaea4fa73adef10cf47c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleCursorTexture: {fileID: 2800000, guid: 9ba138ee277dac2489b1c6c6d8e54d26, type: 3}
+  pressedCursorTexture: {fileID: 2800000, guid: 5106a2e867c3cd64a804bd2ddf9976ba, type: 3}
+  hotSpot: {x: 0, y: 0}
+  cursorMode: 0
+  cursorWidth: 64
+  cursorHeight: 64
+--- !u!4 &1719181236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719181234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 79.32705, y: 37.377502, z: 642.4841}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1765982617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61154,6 +61154,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ViewCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7866712878034734720, guid: 91710a376a5a93f418a6f9fb4aa0d4ae, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -61337,11 +61341,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038626832
+      value: -0.000107022
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0074841473
+      value: 0.006506549
       objectReference: {fileID: 0}
     - target: {fileID: 5727302945077381083, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_Camera
@@ -62242,5 +62246,5 @@ SceneRoots:
   - {fileID: 265984112}
   - {fileID: 116252140}
   - {fileID: 9189829416679551769}
-  - {fileID: 28529175}
   - {fileID: 327758517}
+  - {fileID: 1719181236}
