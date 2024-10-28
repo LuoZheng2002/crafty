@@ -447,15 +447,8 @@ public class GridMatrix : MonoBehaviour
 					}
 				}
 			}
-			if (closestEmptyGrid != null)
-			{
-				if (DragImage.Current != null && DragImage.Current.Count > 0)
-				{
-					SelectedGrid = closestEmptyGrid;
-					DragImage.Current.ClickPlace();
-				}
-			}
-			else if (closestOccupiedGrid!= null)
+			
+			if (closestOccupiedGrid!= null)
 			{
 				if (DragImage.Current!= null && DragImage.Current.contentType == Util.ContentType.Load
 					&& accessories[closestOccupiedGrid.heightIdx, closestOccupiedGrid.widthIdx, closestOccupiedGrid.lengthIdx] == null
@@ -481,6 +474,14 @@ public class GridMatrix : MonoBehaviour
 				if (directionalPreview != null)
 				{
 					directionalPreview.ChangeDirection();
+				}
+			}
+			else if (closestEmptyGrid != null)
+			{
+				if (DragImage.Current != null && DragImage.Current.Count > 0)
+				{
+					SelectedGrid = closestEmptyGrid;
+					DragImage.Current.ClickPlace();
 				}
 			}
 		}

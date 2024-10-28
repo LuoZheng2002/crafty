@@ -32436,7 +32436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebf2038cd5c84248b6e33c41e62071d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildClip: {fileID: 8300000, guid: 89009dec86676d94da0614516b251f1b, type: 3}
+  buildClip: {fileID: 8300000, guid: 9cc93bec402ba9b4d9f7c944e61717b2, type: 3}
   playClip: {fileID: 8300000, guid: 5c6d0bab55da7c842b13e3d46d22c475, type: 3}
   clearClip: {fileID: 8300000, guid: 806456efa41be9e4ab0a727af58fc49c, type: 3}
   menuClip: {fileID: 8300000, guid: bc54142398c872b458096963369d28c6, type: 3}
@@ -32721,7 +32721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 802158876094551314, guid: 1976f624b08e5984daad8181da0e3293, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 802158876094551314, guid: 1976f624b08e5984daad8181da0e3293, type: 3}
       propertyPath: m_LocalPosition.z
@@ -61337,11 +61337,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0033725502
+      value: -0.0038626832
       objectReference: {fileID: 0}
     - target: {fileID: 3997938262682560066, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0039438857
+      value: 0.0074841473
       objectReference: {fileID: 0}
     - target: {fileID: 5727302945077381083, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_Camera
