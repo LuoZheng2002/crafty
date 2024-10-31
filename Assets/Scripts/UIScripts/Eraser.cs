@@ -46,13 +46,15 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 	bool dragging = false;
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		Debug.LogError("Deprecated!");
 		GameState.shown_eraser = true;
 		buttonScale.ScaleStop();
-		DragImage.OnEraseStart();
+		// DragImage.OnEraseStart();
 		dragging = true;
 	}
 	public void OnDrag(PointerEventData eventData)
 	{
+		Debug.LogError("Deprecated!");
 		RectTransformUtility.ScreenPointToWorldPointInRectangle(
 			rectTransform,
 			eventData.position,
@@ -65,8 +67,9 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 	}
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		Debug.LogError("Deprecated!");
 		transform.localPosition = Vector3.zero;
-		DragImage.OnEraseEnd();
+		// DragImage.OnEraseEnd();
 		GridMatrix.Current.OnEraseEnd();
 		dragging = false;
 	}

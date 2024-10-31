@@ -13,8 +13,8 @@ public class PiggyCameraPivot : MonoBehaviour
 	public float default_dist = 7.0f;
 	float current_dist = 0.0f;
 	public Vector3 dragEulerAngle;
-
-	
+	public Transform CameraRef { get;private set; }
+	Transform cameraRefTarget;
 	public float CurrentDist {
 		get
 		{
@@ -48,9 +48,13 @@ public class PiggyCameraPivot : MonoBehaviour
 	{
 		Debug.Assert(inst == null, "Piggy Camera Pivot instance already set");
 		inst = this;
-		cameraEndTransform = transform.GetChild(0);
+		cameraEndTransform = transform.Find("CameraEnd");
+		Debug.Assert(cameraEndTransform != null, "camera end transform is null");
 		dragEulerAngle = new Vector3 (0, 0, 0);
 		CurrentDist = default_dist;
+		cameraRefTarget = transform;
+		CameraRef = transform.Find("CameraRef");
+		Debug.Assert(CameraRef != null);
 	}
 	private void OnDestroy()
 	{
@@ -67,7 +71,23 @@ public class PiggyCameraPivot : MonoBehaviour
 		piggyTransform = null;
 		dragEulerAngle = Vector3.zero;
 	}
-
+	
+	public void OnFirstPersonChanged(bool first_person)
+	{
+		if (first_person)
+		{
+			cameraRefTarget = transform;
+		}
+		else
+		{
+			cameraRefTarget = cameraEndTransform;
+		}
+	}
+	private void Update()
+	{
+		CameraRef.position = cameraRefTarget.position;
+		CameraRef.rotation = cameraRefTarget.rotation;
+	}
 	void LateUpdate()
 	{
 		// Calculate the target position with the offset

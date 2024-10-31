@@ -19,7 +19,6 @@ public class Menu : MonoBehaviour
 	}
     public void OnMenuClicked()
     {
-		CanvasSwitch.Inst.ShowMenuConfirm();
 		if (scalable)
 		{
 			GameState.shown_menu = true;

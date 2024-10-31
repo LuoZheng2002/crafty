@@ -6,6 +6,7 @@ public class Replay : MonoBehaviour
 {
     public void OnReplay()
     {
-        GameState.Inst.TransitionToIntro();
+        Debug.LogError("Deprecated!");
+        // GameState.Inst.TransitionToIntro();
     }
 }

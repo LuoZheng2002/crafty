@@ -6,13 +6,12 @@ public class CustomCursor : MonoBehaviour
 {
 	// Drag your cursor texture here in the Inspector
 	public Texture2D idleCursorTexture;
-	Texture2D resizedIdleCursor;
 	public Texture2D pressedCursorTexture;
-	Texture2D resizedPressedCursor;
+	public Texture2D eraserCursorTexture;
+	public Texture2D wrenchCursorTexture;
 	public Vector2 hotSpot = Vector2.zero;  // Position of the cursor point
 	public CursorMode cursorMode = CursorMode.Auto;
-	public int cursorWidth = 64;
-	public int cursorHeight = 64;
+	Util.CursorMode cursorState = Util.CursorMode.Idle;
 	public static CustomCursor Inst
 	{
 		get { Debug.Assert(inst != null, "Custom Cursor not set");return inst; }
@@ -45,8 +44,6 @@ public class CustomCursor : MonoBehaviour
 		Debug.Assert(inst == null, "Custom Cursor Already Set");
 		inst = this;
 		// Set the custom cursor at the start of the game
-		resizedIdleCursor = ResizeTexture(idleCursorTexture, cursorWidth, cursorHeight);
-		resizedPressedCursor = ResizeTexture(pressedCursorTexture, cursorWidth, cursorHeight);
 		Cursor.SetCursor(idleCursorTexture, hotSpot, cursorMode);
 	}
 	private void OnDestroy()
@@ -56,13 +53,16 @@ public class CustomCursor : MonoBehaviour
 	}
 	private void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
+		if (cursorState == Util.CursorMode.Idle)
 		{
-			SetCursor(pressedCursorTexture);
-		}
-		else if (Input.GetMouseButtonUp(0))
-		{
-			SetCursor(idleCursorTexture);
+			if (Input.GetMouseButtonDown(0))
+			{
+				SetCursor(pressedCursorTexture);
+			}
+			else if (Input.GetMouseButtonUp(0))
+			{
+				SetCursor(idleCursorTexture);
+			}
 		}
 	}
 	// If you want to change the cursor dynamically, you can add functions like this:
@@ -72,7 +72,18 @@ public class CustomCursor : MonoBehaviour
 	}
 	public void SetIdleCursor()
 	{
+		cursorState = Util.CursorMode.Idle;
 		SetCursor(idleCursorTexture);
+	}
+	public void SetEraserCursor()
+	{
+		cursorState = Util.CursorMode.Erase;
+		SetCursor(eraserCursorTexture);
+	}
+	public void SetWrenchCursor()
+	{
+		cursorState = Util.CursorMode.ChangeDirection;
+		SetCursor(wrenchCursorTexture);
 	}
 	// To reset to the default system cursor:
 	public void ResetCursor()

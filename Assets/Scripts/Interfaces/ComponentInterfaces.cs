@@ -17,7 +17,7 @@ public abstract class VehicleComponent : MonoBehaviour
         rb.MovePosition(position);
 		// Debug.Log($"{caller} changed {Content}'s global position");
 	}
-	public abstract Util.Content Content { get; }
+	public abstract Util.Component Component { get; }
     //void Awake()
     //{
     //    EventBus.Subscribe<GameStateChangedEvent>(OnGameStateChanged);

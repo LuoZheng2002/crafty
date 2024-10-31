@@ -28,14 +28,14 @@ public class PiggyPreview : LoadComponent
 	float frame_3_vel = 0.0f;
 	float frame_4_vel = 0.0f;
 
-	public override Util.Content Content => Util.Content.Pig;
+	public override Util.Component Component => Util.Component.Pig;
 
 	private void Start()
 	{
 		mesh = transform.GetChild(0).gameObject;
 		Debug.Assert(mesh != null);
 		rb = GetComponent<Rigidbody>();
-		EventBus.Subscribe<InvisibleChangedEvent>(SetInvisible);
+		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnFIrstPersonChanged);
 	}
 	private void Update()
 	{
@@ -61,9 +61,9 @@ public class PiggyPreview : LoadComponent
 		rb.useGravity = true;
 		c.enabled = true;
 	}
-	void SetInvisible(InvisibleChangedEvent e)
+	void OnFIrstPersonChanged(InvisibleStateUpdateEvent e)
 	{
-		if (e.invisible)
+		if (GameState.Inst.FirstPerson && GameState.Inst.PiggyPermitInvisible)
 		{
 			mesh.SetActive(false);
 		}

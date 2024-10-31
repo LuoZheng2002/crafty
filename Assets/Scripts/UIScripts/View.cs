@@ -16,7 +16,6 @@ public class View : MonoBehaviour
 	}
 	public void OnViewClicked()
 	{
-		CanvasSwitch.Inst.ShowViewCanvas();
 		CustomCursor.Inst.ResetCursor();
 		GameState.shown_view = true;
 		buttonScale.ScaleStop();

@@ -5,13 +5,8 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class InvisibleChangedEvent
+public class InvisibleStateUpdateEvent
 {
-	public bool invisible = false;
-    public InvisibleChangedEvent(bool invisible)
-    {
-        this.invisible = invisible;
-    }
 }
 //public class GameStateChangedEvent
 //{
@@ -55,8 +50,17 @@ public class GameState : MonoBehaviour
 	public static bool shown_retry = false;
 	public static bool drag_screen_shown = false;
 	public static List<bool> shown_tutorials = new() { false, false, false, false, false };
+
+	public static Dictionary<Util.Component, int> Inventory { get; set; } = new()
+	{
+		{Util.Component.Pig, 1 },
+		{Util.Component.WoodenCrate, 6 },
+		{Util.Component.Wheel, 4 },
+		{Util.Component.TurnWheel, 0 },
+		{Util.Component.MotorWheel, 0 }
+	};
+
 	public GameObject cameraAnimationPrefab;
-	Transform piggyCameraEndTransform;
 	bool camera_follow_pig = false;
 	public int current_level_num = 1;
 	public float move_to_pig_time = 0.5f;
@@ -64,36 +68,21 @@ public class GameState : MonoBehaviour
 	public float retry_move_time = 0.5f;
 	public float rise_height = 10.0f;
 	public float rise_time = 2.0f;
+
+	Util.WaypointName retry_waypoint = Util.WaypointName.None;
+	Util.GoalName retry_goal = Util.GoalName.None;
 	public bool FirstPerson
 	{
 		get { return first_person; }
 		set 
 		{ 
 			first_person = value;
-			if (first_person)
-			{
-				cameraRefTransform = PiggyCameraPivot.Inst.transform;
-			}
-			else
-			{
-				cameraRefTransform = piggyCameraEndTransform;
-			}
-			if (Piggy != null)
-			{
-				if (first_person)
-				{
-					EventBus.Publish(new InvisibleChangedEvent(true));
-				}
-				else if (piggy_permit_invisible)
-				{
-					EventBus.Publish(new InvisibleChangedEvent(false));
-				}
-			}
+			EventBus.Publish(new InvisibleStateUpdateEvent());
+			PiggyCameraPivot.Inst.OnFirstPersonChanged(value);
 		}
 	}
 	private bool first_person = true;
-	Transform cameraRefTransform;
-	bool piggy_permit_invisible = false;
+	public bool PiggyPermitInvisible { get; set; } = false;
 	public List<VehicleComponent> Components { get; set; } = new();
 
 	public PiggyPreview Piggy { get; set; }
@@ -113,47 +102,43 @@ public class GameState : MonoBehaviour
 			return level;
 		} }
 
-	public void GoBackToBuild()
-	{
-		StartCoroutine(MoveCameraToGrid(false));
-	}
+	//public void GoBackToBuild()
+	//{
+	//	StartCoroutine(MoveCameraToGrid(false));
+	//}
 	private void Start()
 	{
+		// temporary shut down
 		Debug.Assert(inst == null, "Game State already instantiated");
 		inst = this;
-		EventBus.Subscribe<NextEvent>(OnNext);
-		EventBus.Subscribe<AnimationExitEvent>(OnAnimationExit);
-		current_level_num = start_level;
-		// work?
 		Util.Delay(this, () =>
 		{
-			TransitionToIntro();
-			piggyCameraEndTransform = PiggyCameraPivot.Inst.transform.GetChild(0);
-			cameraRefTransform = PiggyCameraPivot.Inst.transform;
+			TransitionToStory(Util.StoryName.Crash);
 		});
+		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 	}
 	private void OnDestroy()
 	{
 		inst = null;
 	}
-	void OnNext(NextEvent e)
-	{
-		if (current_level_num >= Util.LevelItems.Count) // count starting from 1
-		{
-			ToastManager.Toast("More levels coming soon!\nThanks for playing!");
-			return;
-		}
-		current_level_num++;
-		TransitionToIntro();
-	}
+	//void OnNext(NextEvent e)
+	//{
+	//	if (current_level_num >= Util.WaypointItems.Count) // count starting from 1
+	//	{
+	//		ToastManager.Toast("More levels coming soon!\nThanks for playing!");
+	//		return;
+	//	}
+	//	current_level_num++;
+	//	TransitionToIntro();
+	//}
 	public void Retry()
 	{
 		PiggyCameraPivot.Inst.EndFollow();
 		camera_follow_pig = false;
-		piggy_permit_invisible = false;
-		StartCoroutine(MoveCameraToGrid());
+		PiggyPermitInvisible = false;
+		TransitionToBuild(retry_waypoint, retry_goal);
 	}
-	IEnumerator MoveCameraToGrid(bool publishevent=true)
+	IEnumerator MoveCameraToGrid()
 	{
 		yield return null;
 		float startTime = Time.time;
@@ -161,7 +146,7 @@ public class GameState : MonoBehaviour
 		Transform cameraTransform = Camera.main.transform;
 		Vector3 startPosition = cameraTransform.position;
 		Quaternion startRotation = cameraTransform.rotation;
-		Transform dummyCameraTransform = CurrentLevel.transform.Find("GridMatrix").Find("DummyCamera");
+		Transform dummyCameraTransform = GridMatrix.Current.DummyCamera;
 		Debug.Assert(dummyCameraTransform != null, "dummy camera transform is null");
 		while (Time.time < endTime)
 		{
@@ -172,74 +157,31 @@ public class GameState : MonoBehaviour
 		}
 		cameraTransform.position = dummyCameraTransform.position;
 		cameraTransform.rotation = dummyCameraTransform.rotation;
-		// grid matrix will be enabled at transition to build
-		if (publishevent)
-		{
-			TransitionToBuild();
-		}
-	}
-	IEnumerator CameraToPig()
-	{
-		Debug.Assert(Piggy != null);
-		float start_time = Time.time;
-		float end_time = start_time + move_to_pig_time;
-		Transform cameraTransform = Camera.main.transform;
-		Vector3 cameraStartPos = cameraTransform.position;
-		// force pivot to move to place immediately
-		PiggyCameraPivot.Inst.transform.position = Piggy.transform.position;
-		PiggyCameraPivot.Inst.transform.rotation = Piggy.transform.rotation;
-		while (Time.time < end_time)
-		{
-			if ((Time.time - start_time) / move_to_pig_time > 0.8)
-			{
-				piggy_permit_invisible = true;
-				if (FirstPerson)
-				{
-					EventBus.Publish(new InvisibleChangedEvent(true));
-				}
-			}
-			cameraTransform.LookAt(cameraRefTransform, Vector3.up);
-			cameraTransform.position = Vector3.Lerp(cameraStartPos, cameraRefTransform.position, (Time.time - start_time) / move_to_pig_time);
-			yield return null;
-		}
-		cameraTransform.position = cameraRefTransform.position;
-
-		// rotate to piggyCameraPivot's transform
-		start_time = Time.time;
-		end_time = start_time + camera_rotation_time;
-		Quaternion cameraStartRotation = cameraTransform.rotation;
-		while (Time.time < end_time)
-		{
-			cameraTransform.rotation = Quaternion.Slerp(cameraStartRotation, cameraRefTransform.rotation, (Time.time - start_time) / camera_rotation_time);
-			yield return null;
-		}
-		cameraTransform.rotation = cameraRefTransform.rotation;
-		camera_follow_pig = true; // start constantly follow pig
 	}
 	private void Update()
 	{
-		CheatCode();
+		// CheatCode();
 	}
-	void CheatCode()
-	{
-		if (camera_follow_pig)
-		{
-			Camera.main.transform.position = cameraRefTransform.position;
-			Camera.main.transform.rotation = cameraRefTransform.rotation;
-		}
-		Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
-			{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 },
-			{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
+	//void CheatCode()
+	//{
+	//	if (camera_follow_pig)
+	//	{
+	//		Camera.main.transform.position = cameraRefTransform.position;
+	//		Camera.main.transform.rotation = cameraRefTransform.rotation;
+	//	}
+	//	Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
+	//		{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 },
+	//		{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
 
-		foreach (var pair in keycodes)
-		{
-			if ( Input.GetKey(KeyCode.LeftShift)&& Input.GetKeyDown(pair.Value))
-			{
-				current_level_num = pair.Key;
-				TransitionToIntro();
-			}
-		}
-	}
+	//	foreach (var pair in keycodes)
+	//	{
+	//		if ( Input.GetKey(KeyCode.LeftShift)&& Input.GetKeyDown(pair.Value))
+	//		{
+	//			current_level_num = pair.Key;
+	//			TransitionToIntro();
+	//		}
+	//	}
+	//}
 	
 	IEnumerator PlayAnimation()
 	{
@@ -253,10 +195,10 @@ public class GameState : MonoBehaviour
 		animator.SetTrigger($"level{current_level_num}");
 	}
 
-	void OnAnimationExit(AnimationExitEvent e)
-	{
-		StartCoroutine(MoveCameraToGrid());
-	}
+	//void OnAnimationExit(AnimationExitEvent e)
+	//{
+	//	StartCoroutine(MoveCameraToGrid());
+	//}
 	//void GoToBuild()
 	//{
 	//	ToastManager.Toast("Gone to build");
@@ -277,88 +219,109 @@ public class GameState : MonoBehaviour
 		}
 		Components.Clear();
 		Piggy = null;
-		
 	}
-	public void TransitionToIntro()
+	public void TransitionToStory(Util.StoryName story_name)
 	{
-		CanvasSwitch.Inst.TransitionToIntro();
-		AudioPlayer.Inst.TransitionToIntro();
-		Goal.Select(current_level_num);
-		DestroyComponentsInScene();
+		Goal.Deselect();
+		PlayCanvas.Inst.Hide();
 		PiggyCameraPivot.Inst.EndFollow();
-		ToastManager.Toast($"Level {current_level_num}");
-
-		StartCoroutine(PlayAnimation());
-	}
-	void TransitionToBuild()
-	{
-		CanvasSwitch.Inst.TransitionToBuild();
-		AudioPlayer.Inst.TransitionToBuild();
-		Goal.Select(current_level_num);
-		DestroyComponentsInScene();
-		
-		DragImage.Current = null;
-		GridMatrix.SelectGridMatrix(current_level_num);
-		//neglect level6 tutorial for now
-		if (current_level_num != 6&&!shown_tutorials[current_level_num - 1])
+		PiggyPermitInvisible = false;		
+		EventBus.Publish(new InvisibleStateUpdateEvent());
+		switch (story_name)
 		{
-			shown_tutorials[current_level_num - 1] = true;
-			StartCoroutine(ShowTutorial(current_level_num - 1));
+			case Util.StoryName.Crash:
+				TransitionToStoryCrash();
+				break;
+			case Util.StoryName.Intro:
+				TransitionToStoryIntro();
+				break;
+			case Util.StoryName.InTown:
+				TransitionToStoryInTown();
+				break;
 		}
-
-		piggy_permit_invisible = false;
-		PiggyCameraPivot.Inst.EndFollow();
-		Util.Delay(this, () =>
+	}
+	void TransitionToStoryCrash()
+	{
+		BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, () =>
 		{
-			DragImage.SetComponentCollection(Util.LevelItems[current_level_num].Select((pair) => KeyValuePair.Create(pair.Item1, pair.Item2)).ToList());
+			Debug.Log("Story!");
+			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		});
 	}
-	
+	void TransitionToStoryIntro()
+	{
+		MainCamera.Inst.Stop();
+		BlackoutCanvas.Inst.Blackout(2.0f, 1.0f, () =>
+		{
+			TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+		});
+	}
+	void TransitionToStoryInTown()
+	{
+		MainCamera.Inst.Stop();
+		BlackoutCanvas.Inst.Blackout(3.0f, 3.0f, () =>
+		{
+			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		});
+	}
+	//public void TransitionToIntro()
+	//{
+	//	DestroyComponentsInScene();
+	//	PiggyCameraPivot.Inst.EndFollow();
+	//	ToastManager.Toast($"Level {current_level_num}");
+
+	//	StartCoroutine(PlayAnimation());
+	//}
+	static HashSet<Util.WaypointName> can_retry_waypoints = new()
+	{
+		Util.WaypointName.PreStory1,
+		Util.WaypointName.PreStory2
+	};
+	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name)
+	{
+		if (can_retry_waypoints.Contains(waypoint_name))
+		{
+			retry_waypoint = waypoint_name;
+			retry_goal = goal_name;
+		}
+		else
+		{
+			waypoint_name = Util.WaypointName.None;
+		}
+		BuildCanvas.Inst.Show();
+		// AudioPlayer.Inst.TransitionToBuild();
+		DestroyComponentsInScene();		
+		DragImage.Current = null;
+		GridMatrix.SelectGridMatrix(waypoint_name);
+		if (goal_name != Util.GoalName.None)
+		{
+			Goal.Select(goal_name);
+		}
+		MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
+		PiggyPermitInvisible = false;
+		PiggyCameraPivot.Inst.EndFollow();
+	}
+	void OnGoalReached(GoalReachedEvent e)
+	{
+		switch (e.goal_name)
+		{
+			case Util.GoalName.PreStory1:
+				TransitionToStory(Util.StoryName.Intro);
+				break;
+			case Util.GoalName.PreStory2:
+				TransitionToStory(Util.StoryName.InTown);
+				break;
+		}
+	}
 	public void TransitionToPlay()
 	{
-		CanvasSwitch.Inst.TransitionToPlay();
+		BuildCanvas.Inst.Hide();
+		PlayCanvas.Inst.Show();
 		AudioPlayer.Inst.TransitionToPlay();
 		GridMatrix.Current.BuildAndDeactivate();
 		GridMatrix.DeselectGridMatrix();
 		PiggyCameraPivot.Inst.StartFollow(Piggy);
 		// coroutine that moves camera to position
-		StartCoroutine(CameraToPig());
-		if (!drag_screen_shown)
-		{
-			drag_screen_shown = true;
-			CanvasSwitch.Inst.ShowDragScreen();
-		}
-	}
-	public void TransitionToOutro()
-	{
-		CanvasSwitch.Inst.TransitionToOutro();
-		AudioPlayer.Inst.TransitionToOutro();
-		Goal.Deselect();
-		camera_follow_pig = false;
-		EventBus.Publish(new InvisibleChangedEvent(false));
-		if (unlocked_levels < current_level_num + 1 && current_level_num < Util.LevelItems.Count)
-		{
-			unlocked_levels = current_level_num + 1;
-		}
-		StartCoroutine(RiseAndWatch());
-	}
-	IEnumerator RiseAndWatch()
-	{
-		float start_time = Time.time;
-		float end_time = start_time + rise_time;
-		Transform cameraTransform = Camera.main.transform;
-		Vector3 initialPos = cameraTransform.position;
-		Vector3 goalPos = cameraTransform.position + new Vector3(0, rise_height, 0);
-		while(Time.time < end_time && Piggy != null)
-		{
-			cameraTransform.position = Vector3.Lerp(initialPos, goalPos, (Time.time - start_time) / rise_time);
-			cameraTransform.LookAt(Piggy.transform);
-			yield return null;
-		}
-		while(piggy_permit_invisible && Piggy != null)
-		{
-			cameraTransform.LookAt(Piggy.transform);
-			yield return null;
-		}
+		MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
 	}
 }

@@ -32,30 +32,44 @@ public class ConfirmButton : MonoBehaviour
 	}
 	void OnTrash(ResetCountEvent e)
 	{
-		image.color = transparentColor;
-		buttonScale.ScaleStop();
+		OnGridStateChanged();
 	}
-	public void OnPiggyRemoved()
+	bool can_start = false;
+	public void OnGridStateChanged()
 	{
-		image.color = transparentColor;
-		buttonScale.ScaleStop();
-	}
-	public void OnPiggyInstantiated()
-	{
-		image.color = solidColor;
-		if (!GameState.shown_confirm)
+		if (GridMatrix.Current.design_index >=0)
 		{
+			can_start = true;
+			foreach(var dragImage in DragImage.DragImages)
+			{
+				if(dragImage.Value.Count > 0)
+				{
+					can_start = false;
+					break;
+				}
+			}
+		}
+		else
+		{
+			// to do
+			can_start = GameState.Inst.Piggy != null;
+		}
+		if (can_start)
+		{
+			image.color = solidColor;
 			buttonScale.ScaleStart();
+		}
+		else
+		{
+			image.color = transparentColor;
+			buttonScale.ScaleStop();
 		}
 	}
 	public void OnConfirmClicked()
     {
-		Debug.Log("OnConfirmClicked");
-		if (GameState.Inst.Piggy!=null)
+		if (can_start)
 		{
 			GameState.Inst.TransitionToPlay();
 		}
-		GameState.shown_confirm = true;
-		buttonScale.ScaleStop();
     }
 }

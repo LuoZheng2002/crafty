@@ -1,51 +1,47 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public class GridMatrixDragEvent
+{
+	public float deltaX;
+	public float deltaY;
+    public GridMatrixDragEvent(float deltaX, float deltaY)
+    {
+		this.deltaX = deltaX;
+		this.deltaY = deltaY;
+    }
+}
+
 public class CanvasDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	float sign = 1;
-	public bool active = false;
-	public float rotationSpeed = 0.05f;  // Speed of rotation
-	public static CanvasDrag Inst
-	{
-		get { Debug.Assert(inst != null); return inst; }
-	}
-	static CanvasDrag inst;
+    public event Action DragBegin;
+    public event Action<float, float> Drag;
+    public event Action DragEnd;
+	public bool is_grid_matrix = false;
 	private void Start()
 	{
-		Debug.Assert(inst == null, "Canvas Drag already set");
-		inst = this;
-	}
-	private void OnDestroy()
-	{
-		inst = null;
-	}
-	public void OnFirstPersonChanged()
-	{
-		sign = GameState.Inst.FirstPerson ? 1 : -1;
+		Debug.Log("Canvas Drag Instantiated");
 	}
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		// Debug.Log("Drag begin");
+		DragBegin?.Invoke();
+		Debug.Log("Dragged!");
 	}
-
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		if (!active)
+		Drag?.Invoke(eventData.delta.x, eventData.delta.y);
+		if (is_grid_matrix)
 		{
-			return;
+			EventBus.Publish(new GridMatrixDragEvent(eventData.delta.x, eventData.delta.y));
 		}
-		float rotationX = eventData.delta.y * rotationSpeed * sign;  // Vertical rotation
-		float rotationY = -eventData.delta.x * rotationSpeed * sign;  // Horizontal rotation
-		// Rotate the camera accordingly
-		PiggyCameraPivot.Inst.dragEulerAngle += new Vector3(rotationX, rotationY, 0);
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		// Debug.Log("Drag end");
+		DragEnd?.Invoke();
 	}
 }
