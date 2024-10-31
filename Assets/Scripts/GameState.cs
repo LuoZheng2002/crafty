@@ -113,9 +113,11 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			TransitionToStory(Util.StoryName.Crash);
+			// TransitionToStory(Util.StoryName.Crash);
+			TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory1);
 		});
-		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
+		//EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
+
 	}
 	private void OnDestroy()
 	{

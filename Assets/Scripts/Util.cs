@@ -59,7 +59,17 @@ public class Util
 		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
 	};
 
-	public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
+    public static List<(Quaternion, (int, int, int))> BoosterRotations = new()
+    {
+        (Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
+        (Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
+        (Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
+        (Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
+        (Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
+        (Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
+    };
+
+    public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
 	{
 		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
 		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
@@ -208,6 +218,7 @@ public class Util
 		Umbrella,
 		Propeller,
 		Fan,
+		Rocket,
 
 		// load
 		Motor,

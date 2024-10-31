@@ -21,10 +21,15 @@ public class WheelPreview : AccessoryComponent
 			transform.localRotation = Util.WheelRotations[current_rotation].Item1;
 		}
 	}
-	public override void Build()
+    Rigidbody rb ;
+    Collider c;
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+
+    }
+    public override void Build()
 	{
-		Rigidbody rb = GetComponent<Rigidbody>();
-		Collider c = GetComponent<Collider>();
 		rb.useGravity = true;
 		c.enabled = true;
 		Debug.Assert(cylinderTransform != null);

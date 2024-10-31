@@ -658,8 +658,55 @@ public class GridMatrix : MonoBehaviour
 				{
 					Debug.LogError("An invariant found: selected a grid but cannot erase");
 				}
+			}if (SelectedGrid != null)
+			{
+				(var h, var w, var l) = (SelectedGrid.heightIdx, SelectedGrid.widthIdx, SelectedGrid.lengthIdx);
+				var load = loads[h, w, l];
+				var crate = crates[h, w, l];
+				var accessory = accessories[h, w, l];
+				if (load != null)
+				{
+					Destroy (load.gameObject);
+					DragImage.DragImages[load.Component].Count++;
+					loads[h, w, l] = null;
+				}
+				else if (crate != null)
+				{
+					Destroy(crate.gameObject);
+					DragImage.DragImages[crate.Component].Count++;
+					crates[h, w, l] = null;
+				}
+				else if (accessory != null)
+				{
+					Destroy(accessory.gameObject);
+					DragImage.DragImages[accessory.Component].Count++;
+					accessories[h, w, l] = null;
+				}
+				else
+				{
+					Debug.LogError("An invariant found: selected a grid but cannot erase");
+				}
 			}
 		}
+		else if(CurrentCursorMode == Util.CursorMode.ChangeDirection)
+		{
+            if (SelectedGrid != null)
+            {
+                (var h, var w, var l) = (SelectedGrid.heightIdx, SelectedGrid.widthIdx, SelectedGrid.lengthIdx);
+                var load = loads[h, w, l];
+                var crate = crates[h, w, l];
+                var accessory = accessories[h, w, l];
+
+                if (accessory != null)
+                {
+                    accessory.ChangeDirection(true);
+                }
+                else
+                {
+                    Debug.LogWarning("An invariant found: selected a grid but cannot change direction");
+                }
+            }
+        }
 	}
 	private void Update()
 	{

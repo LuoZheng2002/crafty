@@ -4,17 +4,7 @@ using UnityEngine;
 
 public class Rocket : BoosterPreview
 {
-    public override Util.Content Content => Util.Content.Rocket;
+    public override Util.Component Component => Util.Component.Rocket;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -5,22 +5,34 @@ using static UnityEngine.ParticleSystem;
 
 public abstract class BoosterPreview : AccessoryComponent
 {
-    public override int Direction { get => 0; set { } }
+    int current_rotation = 0;
+    public override int Direction { get { return current_rotation; } set {
+        current_rotation = value;
+           transform.localRotation = Util.BoosterRotations[current_rotation].Item1;
+        } }
 
-    public abstract override Util.Content Content {  get; }
+    public abstract override Util.Component Component {  get; }
+
+    Rigidbody rb;
+    Collider c;
+    public float thrust = 2.0f;
 
     bool built;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        c = GetComponent<Collider>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.V))
+        {
+            rb.AddForce(transform.up * thrust);
+        }
     }
     public override (bool wa, bool sd) GetWASD()
     {
@@ -29,7 +41,7 @@ public abstract class BoosterPreview : AccessoryComponent
 
     public override (int h_delta, int w_delta, int l_delta) AttachDir()
     {
-        return (0, 0, 0);
+        return (-1, 0, 0);
     }
 
     public override void ChangeDirection(bool forward = true)
@@ -47,8 +59,6 @@ public abstract class BoosterPreview : AccessoryComponent
 
     public override void Build()
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
-        Collider c = GetComponent<Collider>();
         rb.useGravity = true;
         c.enabled = true;
         built = true;

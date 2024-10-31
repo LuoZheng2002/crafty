@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4578648581016281298}
   - component: {fileID: 3447875441928540461}
   - component: {fileID: 798458831687227219}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 794624356282226589}
   - component: {fileID: 5958725182636638429}
   - component: {fileID: 1304623790503355917}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &1304623790503355917
@@ -222,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9572d64ef89594a81fd085534e1949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thrust: 20
 --- !u!1 &6035416338205741186
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +234,7 @@ GameObject:
   - component: {fileID: 1188151443259974434}
   - component: {fileID: 700479320441341966}
   - component: {fileID: 8261394692555557430}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
