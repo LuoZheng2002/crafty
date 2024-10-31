@@ -17,7 +17,7 @@ public class FirstPerson : MonoBehaviour
 	public void ToggleFirstPerson()
     {
         GameState.Inst.FirstPerson = !GameState.Inst.FirstPerson;
-		CanvasDrag.Inst.OnFirstPersonChanged();
+		PlayCanvasDrag.Inst.OnFirstPersonChanged();
         GameState.shown_third_person = true;
 		buttonScale.ScaleStop();
     }

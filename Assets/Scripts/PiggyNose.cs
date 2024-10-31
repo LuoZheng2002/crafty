@@ -11,15 +11,16 @@ public class PiggyNose : MonoBehaviour
 	{
 		meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
 		EventBus.Subscribe<PiggyDestroyEvent>(OnPiggyDestroy);
-		EventBus.Subscribe<InvisibleChangedEvent>(OnInvisibleChanged);
+		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnInvisibleChanged);
+		meshRenderer.enabled = false;
 	}
 	void OnPiggyDestroy(PiggyDestroyEvent e)
 	{
 		meshRenderer.enabled = false;
 	}
-	void OnInvisibleChanged(InvisibleChangedEvent e)
+	void OnInvisibleChanged(InvisibleStateUpdateEvent e)
 	{
-		if (e.invisible)
+		if (GameState.Inst.FirstPerson && GameState.Inst.PiggyPermitInvisible)
 		{
 			meshRenderer.enabled = true;
 		}

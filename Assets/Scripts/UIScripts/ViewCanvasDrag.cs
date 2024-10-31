@@ -52,7 +52,7 @@ public class ViewCanvasDrag : MonoBehaviour
 		Camera.main.transform.position += deltaPosition;
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			GameState.Inst.GoBackToBuild();
+			Debug.LogError("Deprecated!");
 			buildCanvas.SetActive(true);
 			gameObject.SetActive(false);
 			Cursor.lockState = CursorLockMode.None;

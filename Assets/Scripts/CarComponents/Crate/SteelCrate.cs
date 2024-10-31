@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class SteelCrate : CrateBase
 {
-	public override Util.Content Content => Util.Content.SteelCrate;
+	public override Util.Component Component => Util.Component.SteelCrate;
 }

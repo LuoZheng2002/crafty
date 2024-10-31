@@ -6,6 +6,7 @@ public class WheelTurner : MonoBehaviour
 {
 	public float max_turn_angle = 15.0f;
 	WheelCollider wheelCollider;
+	public Transform shaftTransform;
 	public bool allow_turn = true;
 	void Start()
     {
@@ -18,7 +19,9 @@ public class WheelTurner : MonoBehaviour
 		if (allow_turn)
 		{
 			float h_input = Input.GetAxis("Horizontal");
-			wheelCollider.steerAngle = h_input * max_turn_angle;
+			float steerAngle = h_input * max_turn_angle;
+			wheelCollider.steerAngle = steerAngle;
+			shaftTransform.localRotation = Quaternion.Euler(0, steerAngle, 0);
 		}
 	}
 }

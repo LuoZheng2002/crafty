@@ -2,38 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+public class GoalReachedEvent
+{
+	public Util.GoalName goal_name;
+    public GoalReachedEvent(Util.GoalName goal_name)
+    {
+		this.goal_name = goal_name;
+    }
+}
 
 public class Goal : MonoBehaviour
 {
 	MeshRenderer meshRenderer;
 	Collider c;
-	public int level_num = 0;
-	static Dictionary<int, Goal> goals = new();
+	public Util.GoalName goal_name; 
+	static Dictionary<Util.GoalName, Goal> goals = new();
 	/// <summary>
 	/// Show the goal specified by level_num and hide the previous goal
 	/// </summary>
 	static Goal current = null;
-	public static void Select(int level_num)
+	public static void Select(Util.GoalName goal_name)
 	{
 		if (current!=null)
 		{
 			current.Hide();
 		}
-		Debug.Assert(goals.ContainsKey(level_num));
-		current = goals[level_num];
+		Debug.Assert(goals.ContainsKey(goal_name));
+		current = goals[goal_name];
 		current.Show();
 	}
 	public static void Deselect()
 	{
-		Debug.Assert(current!=null);
-		current.Hide();
-		current = null;
+		if (current != null)
+		{
+			current.Hide();
+			current = null;
+		}
 	}
 	private void Start()
 	{
-		Debug.Assert(!goals.ContainsKey(level_num));
-		goals[level_num] = this;
+		Debug.Assert(!goals.ContainsKey(goal_name));
+		goals[goal_name] = this;
 		meshRenderer = GetComponent<MeshRenderer>();
 		c = GetComponent<Collider>();
 		meshRenderer.enabled = false;
@@ -46,7 +55,7 @@ public class Goal : MonoBehaviour
 	private void OnTriggerEnter(Collider other)
 	{
 		Debug.Log("You win!");
-		GameState.Inst.TransitionToOutro();
+		EventBus.Publish(new GoalReachedEvent(goal_name));
 		meshRenderer.enabled = false;
 		c.enabled = false;
 	}

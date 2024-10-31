@@ -15,7 +15,7 @@ public class LevelCanvas : MonoBehaviour
         {
             Destroy(panel.GetChild(i).gameObject);
         }
-		for (int i = 1;i <= Util.LevelItems.Count;i++)
+		for (int i = 1;i <= Util.WaypointItems.Count;i++)
         {
             GameObject button = Instantiate(levelButtonPrefab);
             button.transform.SetParent(panel);

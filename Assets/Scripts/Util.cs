@@ -16,6 +16,14 @@ public class Util
 		Outro
 	}
 
+	public enum CursorMode
+	{
+		Idle,
+		AddComponent,
+		ChangeDirection,
+		Erase
+	}
+
 	// Set the layer of the GameObject and all its children
 	public static void SetLayerRecursively(GameObject obj, string newLayerName)
 	{
@@ -51,25 +59,96 @@ public class Util
 		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
 	};
 
-	public static Dictionary<int, List<(Content,int)>> LevelItems = new()
+	public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
 	{
-		{1, new(){(Content.Pig, 1), (Content.WoodenCrate, 6), (Content.Wheel, 4)} },
-		{2, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4)} },
-		{3, new(){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.TurnWheel, 2)} },
-		{4, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
-		{5, new (){(Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 4), (Content.MotorWheel, 2)} },
-		{6, new() { (Content.Pig, 1), (Content.WoodenCrate, 9), (Content.Wheel, 8), } },
-
+		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
+		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
 	};
 
-	public static Dictionary<Content, ContentType> ContentInfos = new()
+	public static Dictionary<Component, ComponentType> ContentInfos = new()
 	{
-		{Content.Pig, ContentType.Load }, // content preview, sprite
-		{Content.WoodenCrate, ContentType.Crate },
-		{Content.Wheel, ContentType.Accessory },
-		{Content.MotorWheel, ContentType.Accessory },
-		{Content.TurnWheel, ContentType.Accessory },
+		{Component.Pig, ComponentType.Load }, // content preview, sprite
+		{Component.Partner, ComponentType.Load},
+		{Component.WoodenCrate, ComponentType.Crate },
+		{Component.Wheel, ComponentType.Accessory },
+		{Component.MotorWheel, ComponentType.Accessory },
+		{Component.TurnWheel, ComponentType.Accessory },
 	};
+	// crate, accessory, load
+	public static Dictionary<int, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
+	public static Dictionary<int, (Component[,,], Component[,,], Component[,,])> CreateForcedDesigns()
+	{
+		Dictionary<int, (Component[,,], Component[,,], Component[,,])> designs = new();
+		designs[0] = CreateForcedDesign0();
+		designs[1] = CreateForcedDesign1();
+		return designs;
+	}
+
+	public enum StoryName
+	{
+		None,
+		Crash,
+		Intro,
+		InTown,
+
+	}
+
+	public enum GoalName
+	{
+		None,
+		PreStory1,
+		PreStory2
+	}
+
+	public enum WaypointName
+	{
+		None,
+		PreStory1,
+		PreStory2
+	}
+
+	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
+	{
+		Component[,,] crates = new Component[3, 2, 3];
+		Component[,,] loads = new Component[3, 2, 3];
+		Component[,,] accessories = new Component[3, 2, 3];
+		crates[1, 0, 0] = Component.WoodenCrate;
+		crates[1, 0, 1] = Component.WoodenCrate;
+		crates[1, 0, 2] = Component.WoodenCrate;
+		crates[1, 1, 0] = Component.WoodenCrate;
+		crates[1, 1, 1] = Component.WoodenCrate;
+		crates[1, 1, 2] = Component.WoodenCrate;
+		loads[1, 1, 2] = Component.Pig;
+		loads[1, 1, 1] = Component.Partner;
+		accessories[0, 0, 0] = Component.Wheel;
+		accessories[0, 0, 2] = Component.Wheel;
+		accessories[0, 1, 0] = Component.Wheel;
+		accessories[0, 1, 2] = Component.Wheel;
+		return (crates, accessories, loads);
+	}
+	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign1()
+	{
+		Component[,,] crates = new Component[2, 3, 3];
+		Component[,,] loads = new Component[2, 3, 3];
+		Component[,,] accessories = new Component[2, 3, 3];
+		crates[1, 0, 0] = Component.WoodenCrate;
+		crates[1, 0, 1] = Component.WoodenCrate;
+		crates[1, 0, 2] = Component.WoodenCrate;
+		crates[1, 1, 0] = Component.WoodenCrate;
+		crates[1, 1, 1] = Component.WoodenCrate;
+		crates[1, 1, 2] = Component.WoodenCrate;
+		crates[1, 2, 0] = Component.WoodenCrate;
+		crates[1, 2, 1] = Component.WoodenCrate;
+		crates[1, 2, 2] = Component.WoodenCrate;
+		loads[1, 1, 2] = Component.Pig;
+		loads[1, 0, 2] = Component.Partner;
+		accessories[0, 0, 0] = Component.MotorWheel;
+		accessories[0, 0, 2] = Component.TurnWheel;
+		accessories[0, 2, 0] = Component.MotorWheel;
+		accessories[0, 2, 2] = Component.TurnWheel;
+		return (crates, accessories, loads);
+	}
+
 	/// <summary>
 	/// Delay 1 frame to execute the function
 	/// </summary>
@@ -89,7 +168,7 @@ public class Util
 	{
 		Delay(m, 1, func);
 	}
-	public enum ContentType
+	public enum ComponentType
 	{
 		None,
 		Crate,
@@ -113,9 +192,11 @@ public class Util
 		Power,
 		Momentum
 	}
-	public enum Content
+	public enum Component
 	{
 		None,
+		Pig,
+		Partner,
 		// crate type
 		WoodenCrate,
 		SteelCrate,
@@ -124,14 +205,13 @@ public class Util
 		Wheel,
 		TurnWheel,
 		MotorWheel,
+		Umbrella,
 		Propeller,
 		Fan,
 
 		// load
-		Pig,
 		Motor,
 		Engine,
-		QueenPig,
 	}
 	// IAccessoryPreview
 	// ILoadPreview

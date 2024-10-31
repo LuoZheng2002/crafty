@@ -11,18 +11,25 @@ public class ResetCountEvent
 {
 
 }
-public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class OtherItemSelectedEvent
 {
+
+}
+public class DragImage : MonoBehaviour
+{
+	public bool empty = false;
+	public int empty_index = 0;
 	public int initial_count = 5;
 	public float rayDistance = 5.0f;
-	public Util.ContentType contentType;
-	public Util.Content content;
+	public Util.ComponentType contentType;
+	public Util.Component content;
 	public VehicleComponent componentPrefab;
+	public VehicleComponent componentDesignPrefab;
 	VehicleComponent componentInstance = null;
 	private RectTransform rectTransform;
 	// GridMatrix gridMatrix;
 	Text text;
-	ButtonScale buttonScale;
+	// ButtonScale buttonScale;
 
 	int count = 0;
 	public int Count
@@ -36,7 +43,6 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 
 	Image selectionImage;
-	Image image;
 
 
 	public float minScale = 0.8f;
@@ -44,9 +50,35 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	public float scaleSpeed = 5.0f;
 	static DragImage current;
 
-	public static Dictionary<Util.Content, DragImage> DragImages = new();
-	public static void SetComponentCollection(List<KeyValuePair<Util.Content, int>> components)
+	public static SortedDictionary<Util.Component, DragImage> DragImages = new();
+
+	public static Dictionary<int, DragImage> EmptyImages = new();
+	public static void ClearCountAll()
 	{
+		foreach(var dragImage in DragImages)
+		{
+			dragImage.Value.SetInitialCount(0);
+		}
+	}
+	public static void DetachAll()
+	{
+		foreach (var dragImage in DragImages)
+		{
+			dragImage.Value.transform.SetParent(null);
+		}
+		foreach(var emptyImage in EmptyImages)
+		{
+			emptyImage.Value.transform.SetParent(null);
+		}
+	}
+	public void SetInitialCount(int count)
+	{
+		initial_count = count;
+		Count = count;
+	}
+	public static void SetComponentCollection(List<KeyValuePair<Util.Component, int>> components)
+	{
+		Debug.LogError("Deprecated!");
 		foreach (var dragImage in DragImages)
 		{
 			dragImage.Value.transform.SetParent(null);
@@ -85,35 +117,44 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			}
 			else
 			{
-				CurrentContentType = Util.ContentType.None;
+				CurrentContentType = Util.ComponentType.None;
 				Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
-	public static Util.ContentType CurrentContentType { get; private set; }
+	public static Util.ComponentType CurrentContentType { get; private set; }
 
-	public static void OnEraseStart()
-	{
-		CurrentContentType = Util.ContentType.Erase;
-	}
-	public static void OnEraseEnd()
-	{
-		CurrentContentType = Util.ContentType.None;
-	}
+	//public static void OnEraseStart()
+	//{
+	//	CurrentContentType = Util.ContentType.Erase;
+	//}
+	//public static void OnEraseEnd()
+	//{
+	//	CurrentContentType = Util.ContentType.None;
+	//}
 	private void OnEnable()
 	{
-		buttonScale = GetComponent<ButtonScale>();
-		image = GetComponent<Image>();
 		if (!GameState.shown_drag_images)
 		{
-			buttonScale.ScaleStart();
+			// buttonScale.ScaleStart();
 		}
 	}
 	private void OnDestroy()
 	{
 		DragImages.Clear();
 	}
-	public VehicleComponent InstantiateContent(Vector3 position, bool local, int direction)
+	public VehicleComponent InstantiateDesignComponent(GridCell grid)
+	{
+		Debug.Assert(componentDesignPrefab != null);
+		Debug.Log($"Instantiated a design component {content}");
+		GameObject inst = Instantiate(componentDesignPrefab.gameObject, GridMatrix.Current.transform);
+		Debug.Assert(inst != null);
+		VehicleComponent component = inst.GetComponent<VehicleComponent>();
+		Debug.Assert(component != null);
+		component.MoveGlobal(grid.transform.position);
+		return component;
+	}
+	public VehicleComponent InstantiateComponent(Vector3 position, bool local, int direction)
 	{
 		Debug.Assert(componentPrefab != null);
 		GameObject inst= Instantiate(componentPrefab.gameObject, GridMatrix.Current.transform);
@@ -140,7 +181,7 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		{
 			if (text == null)
 			{
-				text = transform.GetChild(0).GetComponent<Text>();
+				text = transform.Find("Count").GetComponent<Text>();
 				Debug.Assert(text != null, "Text not found");
 			}
 			return text;
@@ -154,124 +195,112 @@ public class DragImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	private void Start()
 	{
 		Debug.Assert(!DragImages.ContainsKey(content));
-		DragImages[content] = this;
+		if (!empty)
+		{
+			DragImages[content] = this;
+		}
+		else
+		{
+			EmptyImages[empty_index] = this;
+		}
 		EventBus.Subscribe<ResetCountEvent>(ResetCount);
 		Count=initial_count;
 		selectionImage = transform.Find("Selection").GetComponent<Image>();
 		selectionImage.enabled = false;
 		Debug.Assert(selectionImage != null);
+		EventBus.Subscribe<OtherItemSelectedEvent>(OnAddComponentInterrupt);
 	}
 	public void ResetCount(ResetCountEvent e)
 	{
 		Count = initial_count;
 	}
-	public void ClickPlace()
+	bool mouse_click_flag = false;
+	IEnumerator StartDrag()
 	{
-		if (count > 0)
-		{
-			VehicleComponent componentInst = InstantiateContent(GridMatrix.SelectedGrid.transform.localPosition, true, 0);
-			Count--;
-			GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInst);
-			if (Count <=0)
-			{
-				Current = null;
-			}
-		}
-		else
-		{
-			Current = null;
-		}
-	}
-	public void OnBeginDrag(PointerEventData eventData)
-	{
-		GameState.shown_drag_images = true;
-		buttonScale.ScaleStop();
-		if (count > 0)
+		while (count > 0)
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			// Get the direction of the ray
 			Vector3 rayDirection = ray.direction;
 
 			Vector3 instantiatePos = ray.origin + rayDirection * rayDistance;
-			Transform gridMatrixTransform = GridMatrix.Current.transform;
-
-			componentInstance = InstantiateContent(instantiatePos, false, 0);
-			Util.SetLayerRecursively(componentInstance.gameObject, "MaskLayer");
-			Count--;
-			Current = this;
-		}
-		else
-		{
-			Current = null;
-		}
-	}
-	void DragHelper()
-	{
-		if (componentInstance == null)
-		{
-			return;
-		}
-		// awkward fix
-		// componentInstance.transform.localRotation = Quaternion.identity;
-
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		// Get the direction of the ray
-		Vector3 rayDirection = ray.direction;
-		if (GridMatrix.SelectedGrid != null)
-		{
-			componentInstance.MoveGlobal(GridMatrix.SelectedGrid.transform.position);
-			Util.SetLayerRecursively(componentInstance.gameObject, "ContentCrate");
-		}
-		else
-		{
-			Vector3 newPos = ray.origin + rayDirection * rayDistance;
-			componentInstance.MoveGlobal(newPos);
-			Util.SetLayerRecursively(componentInstance.gameObject, "MaskLayer");
-		}
-	}
-	public void OnDrag(PointerEventData eventData)
-	{
-		DragHelper();
-	}
-
-	public void OnEndDrag(PointerEventData eventData)
-	{
-		Debug.Assert(componentInstance != null);
-		if (componentInstance == null)
-		{
-			return;
-		}
-		if (GridMatrix.SelectedGrid != null)
-		{
-			Util.SetLayerRecursively(componentInstance.gameObject, "ContentCrate");
-			GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInstance);
-			componentInstance = null;
-			if (Count == 0)
+			componentInstance = InstantiateComponent(instantiatePos, false, 0);
+			while(!mouse_click_flag)
 			{
-				Current = null;
+				// don't know if it will work
+				if (Input.GetMouseButtonDown(0))
+				{
+					mouse_click_flag = true;
+				}
+				Debug.Assert(componentInstance != null);
+				ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				// Get the direction of the ray
+				rayDirection = ray.direction;
+				if (GridMatrix.SelectedGrid != null)
+				{
+					componentInstance.MoveGlobal(GridMatrix.SelectedGrid.transform.position);
+				}
+				else
+				{
+					Vector3 newPos = ray.origin + rayDirection * rayDistance;
+					componentInstance.MoveGlobal(newPos);
+				}
+				yield return null;
+			}
+			// mouse has clicked
+			mouse_click_flag = false;
+			// handle post click event
+			Debug.Assert(componentInstance != null);
+			if (GridMatrix.SelectedGrid != null)
+			{
+				Count--;
+				GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInstance);
+				componentInstance = null;
+			}
+			else
+			{
+				Destroy(componentInstance.gameObject);
+				componentInstance = null;
+			}
+			GridMatrix.SelectedGrid = null;
+		}
+	}
+	void OnAddComponentInterrupt(OtherItemSelectedEvent e)
+	{
+		Debug.Log($"{content} gets interrupted!");
+		Current = null;
+		if (coroutine != null)
+		{
+			StopCoroutine(coroutine);
+			coroutine = null;
+			if (componentInstance != null)
+			{
+				Destroy(componentInstance.gameObject) ;
+				componentInstance = null;
 			}
 		}
-		else
-		{
-			Count++;
-			Destroy(componentInstance.gameObject);
-			componentInstance = null;
-		}
-		GridMatrix.SelectedGrid = null;
-		// CurrentContentType = Util.ContentType.None;
 	}
+	IEnumerator coroutine;
 	public void OnClick()
 	{
+		EventBus.Publish(new OtherItemSelectedEvent());
+		CustomCursor.Inst.SetIdleCursor();
+		GridMatrix.Current.CurrentCursorMode = Util.CursorMode.AddComponent;
+		Current = this;
 		if (count > 0)
 		{
-			GameState.shown_drag_images = true;
-			buttonScale.ScaleStop();
-			ToastManager.Toast("Drag!");
-			Current = this;
-		}
-		else
-		{
-			Current = null;
+			// GameState.shown_drag_images = true;
+			// buttonScale.ScaleStop();
+			// ToastManager.Toast("Drag!");
+			if (coroutine == null)
+			{
+				coroutine = StartDrag();
+				StartCoroutine(coroutine);
+			}
+			else
+			{
+				Debug.LogWarning("A coroutine already in progress");
+			}
 		}
 	}
 }

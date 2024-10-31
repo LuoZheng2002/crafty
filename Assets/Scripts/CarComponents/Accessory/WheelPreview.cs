@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WheelPreview : AccessoryComponent
 {
-	public override Util.Content Content => Util.Content.Wheel;
-	WheelCollider wheelCollider;
-	Transform cylinderTransform;
-	bool built = false;
+	public override Util.Component Component => Util.Component.Wheel;
+	protected WheelCollider wheelCollider;
+	public Transform cylinderTransform;
+	protected bool built = false;
 	int current_rotation = 0;
 	public override int Direction
 	{
@@ -27,7 +27,6 @@ public class WheelPreview : AccessoryComponent
 		Collider c = GetComponent<Collider>();
 		rb.useGravity = true;
 		c.enabled = true;
-		cylinderTransform = transform.Find("Cylinder");
 		Debug.Assert(cylinderTransform != null);
 		wheelCollider = transform.Find("Collider").GetComponent<WheelCollider>();
 		Debug.Assert(wheelCollider != null);
