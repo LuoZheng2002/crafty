@@ -61,17 +61,18 @@ public class Util
 
 	public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
 	{
-		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
-		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
+		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
+		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
 	};
 
-	public static Dictionary<Component, ContentType> ContentInfos = new()
+	public static Dictionary<Component, ComponentType> ContentInfos = new()
 	{
-		{Component.Pig, ContentType.Load }, // content preview, sprite
-		{Component.WoodenCrate, ContentType.Crate },
-		{Component.Wheel, ContentType.Accessory },
-		{Component.MotorWheel, ContentType.Accessory },
-		{Component.TurnWheel, ContentType.Accessory },
+		{Component.Pig, ComponentType.Load }, // content preview, sprite
+		{Component.Partner, ComponentType.Load},
+		{Component.WoodenCrate, ComponentType.Crate },
+		{Component.Wheel, ComponentType.Accessory },
+		{Component.MotorWheel, ComponentType.Accessory },
+		{Component.TurnWheel, ComponentType.Accessory },
 	};
 	// crate, accessory, load
 	public static Dictionary<int, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
@@ -108,9 +109,9 @@ public class Util
 
 	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
 	{
-		Component[,,] crates = new Component[2, 2, 3];
-		Component[,,] loads = new Component[2, 2, 3];
-		Component[,,] accessories = new Component[2, 2, 3];
+		Component[,,] crates = new Component[3, 2, 3];
+		Component[,,] loads = new Component[3, 2, 3];
+		Component[,,] accessories = new Component[3, 2, 3];
 		crates[1, 0, 0] = Component.WoodenCrate;
 		crates[1, 0, 1] = Component.WoodenCrate;
 		crates[1, 0, 2] = Component.WoodenCrate;
@@ -118,6 +119,7 @@ public class Util
 		crates[1, 1, 1] = Component.WoodenCrate;
 		crates[1, 1, 2] = Component.WoodenCrate;
 		loads[1, 1, 2] = Component.Pig;
+		loads[1, 1, 1] = Component.Partner;
 		accessories[0, 0, 0] = Component.Wheel;
 		accessories[0, 0, 2] = Component.Wheel;
 		accessories[0, 1, 0] = Component.Wheel;
@@ -139,6 +141,7 @@ public class Util
 		crates[1, 2, 1] = Component.WoodenCrate;
 		crates[1, 2, 2] = Component.WoodenCrate;
 		loads[1, 1, 2] = Component.Pig;
+		loads[1, 0, 2] = Component.Partner;
 		accessories[0, 0, 0] = Component.MotorWheel;
 		accessories[0, 0, 2] = Component.TurnWheel;
 		accessories[0, 2, 0] = Component.MotorWheel;
@@ -165,7 +168,7 @@ public class Util
 	{
 		Delay(m, 1, func);
 	}
-	public enum ContentType
+	public enum ComponentType
 	{
 		None,
 		Crate,
@@ -192,6 +195,8 @@ public class Util
 	public enum Component
 	{
 		None,
+		Pig,
+		Partner,
 		// crate type
 		WoodenCrate,
 		SteelCrate,
@@ -200,14 +205,13 @@ public class Util
 		Wheel,
 		TurnWheel,
 		MotorWheel,
+		Umbrella,
 		Propeller,
 		Fan,
 
 		// load
-		Pig,
 		Motor,
 		Engine,
-		QueenPig,
 	}
 	// IAccessoryPreview
 	// ILoadPreview

@@ -247,6 +247,8 @@ public class GameState : MonoBehaviour
 			Debug.Log("Story!");
 			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		});
+
+		// animation end 
 	}
 	void TransitionToStoryIntro()
 	{
@@ -289,6 +291,7 @@ public class GameState : MonoBehaviour
 			waypoint_name = Util.WaypointName.None;
 		}
 		BuildCanvas.Inst.Show();
+		PlayCanvas.Inst.Hide();
 		// AudioPlayer.Inst.TransitionToBuild();
 		DestroyComponentsInScene();		
 		DragImage.Current = null;

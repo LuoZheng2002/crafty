@@ -72,9 +72,11 @@
     <Compile Include="Assets\Scripts\AudioPlayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\DragImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Load\PiggyPreview.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\MotorWheelPreview.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
     <Compile Include="Assets\Scripts\DrawGizmos.cs" />
+    <Compile Include="Assets\Scripts\CarComponents\Load\Partner.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Assets\Scripts\CustomCursor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
+    <Compile Include="Assets\Scripts\StoryAnimation.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Help.cs" />
     <Compile Include="Assets\Scripts\StateMachineBehavior\CameraAnimExit.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\TurnWheelPreview.cs" />
@@ -115,7 +118,6 @@
     <Compile Include="Assets\Scripts\TimedDestroy.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Next.cs" />
-    <Compile Include="Assets\Scripts\CarComponents\Content\PiggyPreview.cs" />
     <Compile Include="Assets\Scripts\Test\TestScript.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BlackoutCanvas.cs" />
     <Compile Include="Assets\Scripts\GameState.cs" />

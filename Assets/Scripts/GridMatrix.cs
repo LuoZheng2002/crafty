@@ -226,6 +226,7 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
+		ConfirmButton.Inst.OnGridStateChanged();
 	}
 	Vector3 dragEulerAngle = Vector3.zero;
 	void OnGridMatrixDrag(GridMatrixDragEvent e)
@@ -287,6 +288,7 @@ public class GridMatrix : MonoBehaviour
 		{
 
 		}
+		BuildCanvas.Inst.InitializeItems();
 		Util.Delay(this, 5, RebuildVehicle);
 	}
 	void LoadDesignVisuals()
@@ -731,9 +733,9 @@ public class GridMatrix : MonoBehaviour
 					{
 						if (!Occupied(h, w, l))
 							break;
-						if (DragImage.CurrentContentType == Util.ContentType.Load && AllowLoad(h, w, l))
+						if (DragImage.CurrentContentType == Util.ComponentType.Load && AllowLoad(h, w, l))
 							break;
-						if (DragImage.CurrentContentType == Util.ContentType.Crate && AllowCrate(h, w, l))
+						if (DragImage.CurrentContentType == Util.ComponentType.Crate && AllowCrate(h, w, l))
 							break;
 					}
 					else
@@ -793,7 +795,7 @@ public class GridMatrix : MonoBehaviour
 			// do nothing
 		}
 	}
-	public void AddComponent(GridCell selectedGrid, Util.ContentType contentType, VehicleComponent content)
+	public void AddComponent(GridCell selectedGrid, Util.ComponentType contentType, VehicleComponent content)
 	{
 		ConfirmButton.Inst.OnGridStateChanged();
 		Debug.Assert(content != null);
@@ -801,17 +803,17 @@ public class GridMatrix : MonoBehaviour
 		(var h, var w, var l) = (grid.heightIdx, grid.widthIdx, grid.lengthIdx);
 		switch (contentType)
 		{
-			case Util.ContentType.Crate:
+			case Util.ComponentType.Crate:
 				CrateComponent cratePreview = content as CrateComponent;
 				Debug.Assert(cratePreview != null);
 				crates[h, w, l] = cratePreview;
 				break;
-			case Util.ContentType.Accessory:
+			case Util.ComponentType.Accessory:
 				AccessoryComponent accessoryPreview = content as AccessoryComponent;
 				Debug.Assert(accessoryPreview != null);
 				accessories[h, w, l] = accessoryPreview;
 				break;
-			case Util.ContentType.Load:
+			case Util.ComponentType.Load:
 				LoadComponent loadPreview = content as LoadComponent;
 				Debug.Assert(loadPreview != null);
 				loads[h, w, l] = loadPreview;

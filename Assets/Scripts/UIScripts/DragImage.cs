@@ -17,9 +17,11 @@ public class OtherItemSelectedEvent
 }
 public class DragImage : MonoBehaviour
 {
+	public bool empty = false;
+	public int empty_index = 0;
 	public int initial_count = 5;
 	public float rayDistance = 5.0f;
-	public Util.ContentType contentType;
+	public Util.ComponentType contentType;
 	public Util.Component content;
 	public VehicleComponent componentPrefab;
 	public VehicleComponent componentDesignPrefab;
@@ -48,12 +50,25 @@ public class DragImage : MonoBehaviour
 	public float scaleSpeed = 5.0f;
 	static DragImage current;
 
-	public static Dictionary<Util.Component, DragImage> DragImages = new();
+	public static SortedDictionary<Util.Component, DragImage> DragImages = new();
+
+	public static Dictionary<int, DragImage> EmptyImages = new();
 	public static void ClearCountAll()
 	{
 		foreach(var dragImage in DragImages)
 		{
 			dragImage.Value.SetInitialCount(0);
+		}
+	}
+	public static void DetachAll()
+	{
+		foreach (var dragImage in DragImages)
+		{
+			dragImage.Value.transform.SetParent(null);
+		}
+		foreach(var emptyImage in EmptyImages)
+		{
+			emptyImage.Value.transform.SetParent(null);
 		}
 	}
 	public void SetInitialCount(int count)
@@ -102,12 +117,12 @@ public class DragImage : MonoBehaviour
 			}
 			else
 			{
-				CurrentContentType = Util.ContentType.None;
+				CurrentContentType = Util.ComponentType.None;
 				Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
-	public static Util.ContentType CurrentContentType { get; private set; }
+	public static Util.ComponentType CurrentContentType { get; private set; }
 
 	//public static void OnEraseStart()
 	//{
@@ -180,7 +195,14 @@ public class DragImage : MonoBehaviour
 	private void Start()
 	{
 		Debug.Assert(!DragImages.ContainsKey(content));
-		DragImages[content] = this;
+		if (!empty)
+		{
+			DragImages[content] = this;
+		}
+		else
+		{
+			EmptyImages[empty_index] = this;
+		}
 		EventBus.Subscribe<ResetCountEvent>(ResetCount);
 		Count=initial_count;
 		selectionImage = transform.Find("Selection").GetComponent<Image>();
