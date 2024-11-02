@@ -5,9 +5,28 @@ using UnityEngine.UI;
 
 public class Retry : MonoBehaviour
 {
+	static Retry inst;
+	public static Retry Inst
+	{
+		get { Debug.Assert(inst != null); return inst; }
+	}
+	private void Start()
+	{
+		Debug.Assert(inst == null);
+		inst = this;
+		gameObject.SetActive(false);
+	}
+	private void OnDestroy()
+	{
+		inst = null;
+	}
+	public void Show()
+	{
+		gameObject.SetActive(true);
+	}
 	public void OnRetry()
     {
-		GameState.Inst.Retry();
+		GameState.Inst.OnRetry();
 		GameState.shown_retry = true;
     }
 }

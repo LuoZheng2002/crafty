@@ -18,7 +18,7 @@ public class InvisibleStateUpdateEvent
 //		this.level_num = level_num;
 //    }
 //}
-
+public class WASDPressedEvent { }
 public class GameState : MonoBehaviour
 {
 	public static int unlocked_levels = 1;
@@ -67,7 +67,7 @@ public class GameState : MonoBehaviour
 	public float camera_rotation_time = 0.5f;
 	public float retry_move_time = 0.5f;
 	public float rise_height = 10.0f;
-	public float rise_time = 2.0f;
+	
 
 	Util.WaypointName retry_waypoint = Util.WaypointName.None;
 	Util.GoalName retry_goal = Util.GoalName.None;
@@ -113,10 +113,11 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			// TransitionToStory(Util.StoryName.Crash);
-			TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory1);
+			TransitionToStory(Util.StoryName.Crash);
+			//TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+			// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		});
-		//EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
+		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 
 	}
 	private void OnDestroy()
@@ -133,36 +134,20 @@ public class GameState : MonoBehaviour
 	//	current_level_num++;
 	//	TransitionToIntro();
 	//}
-	public void Retry()
+	public void OnRetry()
 	{
 		PiggyCameraPivot.Inst.EndFollow();
 		camera_follow_pig = false;
 		PiggyPermitInvisible = false;
 		TransitionToBuild(retry_waypoint, retry_goal);
 	}
-	IEnumerator MoveCameraToGrid()
-	{
-		yield return null;
-		float startTime = Time.time;
-		float endTime = startTime + retry_move_time;
-		Transform cameraTransform = Camera.main.transform;
-		Vector3 startPosition = cameraTransform.position;
-		Quaternion startRotation = cameraTransform.rotation;
-		Transform dummyCameraTransform = GridMatrix.Current.DummyCamera;
-		Debug.Assert(dummyCameraTransform != null, "dummy camera transform is null");
-		while (Time.time < endTime)
-		{
-			float progress = (Time.time - startTime) / retry_move_time;
-			Camera.main.transform.position = Vector3.Lerp(startPosition, dummyCameraTransform.position, progress);
-			Camera.main.transform.rotation = Quaternion.Slerp(startRotation, dummyCameraTransform.rotation, progress);
-			yield return null;
-		}
-		cameraTransform.position = dummyCameraTransform.position;
-		cameraTransform.rotation = dummyCameraTransform.rotation;
-	}
 	private void Update()
 	{
-		// CheatCode();
+		if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A)
+			|| Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
+		{
+			EventBus.Publish(new WASDPressedEvent());
+		}
 	}
 	//void CheatCode()
 	//{
@@ -185,33 +170,7 @@ public class GameState : MonoBehaviour
 	//	}
 	//}
 	
-	IEnumerator PlayAnimation()
-	{
-		GameObject cameraAnim = Instantiate(cameraAnimationPrefab, Vector3.zero, Quaternion.identity);
-		Animator animator = cameraAnim.GetComponent<Animator>();
-		yield return null;
-		Camera.main.transform.parent = animator.transform;
-		yield return null;
-		animator.Rebind();
-		yield return null;
-		animator.SetTrigger($"level{current_level_num}");
-	}
 
-	//void OnAnimationExit(AnimationExitEvent e)
-	//{
-	//	StartCoroutine(MoveCameraToGrid());
-	//}
-	//void GoToBuild()
-	//{
-	//	ToastManager.Toast("Gone to build");
-	//	EventBus.Publish(new GameStateChangedEvent(Util.GameStateType.Build, current_level_num));
-	//}
-	IEnumerator ShowTutorial(int index)
-	{
-		yield return null;
-		EventBus.Publish(new ShowNewTutorialEvent((Util.NewTutorialType)index));
-		yield break;
-	}
 
 	void DestroyComponentsInScene()
 	{
@@ -229,13 +188,21 @@ public class GameState : MonoBehaviour
 		PiggyCameraPivot.Inst.EndFollow();
 		PiggyPermitInvisible = false;		
 		EventBus.Publish(new InvisibleStateUpdateEvent());
+		if (story_name != Util.StoryName.Intro && story_name!= Util.StoryName.FallOffCliff
+			&& story_name != Util.StoryName.InTown)
+		{
+			DestroyComponentsInScene();
+		}
 		switch (story_name)
 		{
 			case Util.StoryName.Crash:
 				TransitionToStoryCrash();
 				break;
 			case Util.StoryName.Intro:
-				TransitionToStoryIntro();
+				StartCoroutine(TransitionToStoryIntro());
+				break;
+			case Util.StoryName.FallOffCliff:
+				StartCoroutine(TransitionToStoryCliff());
 				break;
 			case Util.StoryName.InTown:
 				TransitionToStoryInTown();
@@ -244,18 +211,69 @@ public class GameState : MonoBehaviour
 	}
 	void TransitionToStoryCrash()
 	{
-		BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, () =>
+		//BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, () =>
+		//{
+		//	Debug.Log("Story!");
+		//	TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		//});
+		StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
+		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
-			Debug.Log("Story!");
 			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		});
-
 		// animation end 
 	}
-	void TransitionToStoryIntro()
+	public float rise_time = 5.0f;
+	IEnumerator TransitionToStoryIntro()
+	{
+		Goal.Select(Util.GoalName.FallOffCliff);
+		MainCamera.Inst.Stop();
+		PiggyPermitInvisible = false;
+		EventBus.Publish(new InvisibleStateUpdateEvent());
+		float start_time = Time.time;
+		Vector3 initial_position = MainCamera.Inst.transform.position;
+		Quaternion initial_rotation = MainCamera.Inst.transform.rotation;
+		Transform introCameraTransform = IntroCamera.Inst.transform;
+		while(Time.time - start_time < rise_time)
+		{
+			MainCamera.Inst.transform.position = Vector3.Lerp(initial_position, introCameraTransform.position, (Time.time - start_time) / rise_time);
+			Quaternion target_rotation = Quaternion.Slerp(initial_rotation, introCameraTransform.rotation, (Time.time - start_time) / rise_time);
+			Vector3 look_dir = Piggy.transform.position - MainCamera.Inst.transform.position;
+			Quaternion lookat_rotation = Quaternion.LookRotation(look_dir);
+			MainCamera.Inst.transform.rotation = Quaternion.Slerp(lookat_rotation, target_rotation, (Time.time - start_time) / rise_time);
+			yield return null;
+		}
+		MainCamera.Inst.transform.position = introCameraTransform.position;
+		MainCamera.Inst.transform.rotation = introCameraTransform.rotation;
+		IntroCanvas.Inst.Play();
+	}
+	public float shake_duration = 2.0f;
+	public float shake_intensity = 1.0f;
+	IEnumerator TransitionToStoryCliff()
 	{
 		MainCamera.Inst.Stop();
-		BlackoutCanvas.Inst.Blackout(2.0f, 1.0f, () =>
+		Debug.Log("Falling off cliff!");
+		AudioPlayer.Inst.Wilhelm();
+		yield return new WaitForSeconds(1.5f);
+		Vector3 original_position = MainCamera.Inst.transform.position;
+		float elapsedTime = 0f;
+		while (elapsedTime < shake_duration)
+		{
+			// Calculate vibration offset using Perlin noise
+			float x = (Mathf.PerlinNoise(Time.time * 10, 0) - 0.5f) * 2 * shake_intensity;
+			float y = (Mathf.PerlinNoise(0, Time.time * 10) - 0.5f) * 2 * shake_intensity;
+
+			// Apply vibration offset to the original position
+			MainCamera.Inst.transform.position = original_position + new Vector3(x, y, 0);
+
+			elapsedTime += Time.deltaTime;
+			yield return null; // Wait for the next frame
+		}
+		// Reset to the original position
+		MainCamera.Inst.transform.position = original_position;
+		yield return new WaitForSeconds(2.0f);
+		StoryAnimation.Inst.PlayAnimation(Util.StoryName.FallOffCliff);
+		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
 			TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		});
@@ -263,10 +281,18 @@ public class GameState : MonoBehaviour
 	void TransitionToStoryInTown()
 	{
 		MainCamera.Inst.Stop();
-		BlackoutCanvas.Inst.Blackout(3.0f, 3.0f, () =>
+		StoryAnimation.Inst.CanSpeedup = false;
+		StoryAnimation.Inst.PlayAnimation(Util.StoryName.InTown);
+		MainCamera.Inst.FollowStory();
+		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
-			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+			TransitionToPlay(false);
+			StoryAnimation.Inst.CanSpeedup = true;
 		});
+		//BlackoutCanvas.Inst.Blackout(3.0f, 3.0f, () =>
+		//{
+		//	TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		//});
 	}
 	//public void TransitionToIntro()
 	//{
@@ -283,6 +309,7 @@ public class GameState : MonoBehaviour
 	};
 	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name)
 	{
+		current_waypoint = waypoint_name;
 		if (can_retry_waypoints.Contains(waypoint_name))
 		{
 			retry_waypoint = waypoint_name;
@@ -305,6 +332,103 @@ public class GameState : MonoBehaviour
 		MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
 		PiggyPermitInvisible = false;
 		PiggyCameraPivot.Inst.EndFollow();
+
+		switch(waypoint_name)
+		{
+			case Util.WaypointName.PreStory1:
+				StartCoroutine(Prestory1Build());
+				break;
+			case Util.WaypointName.PreStory2:
+				StartCoroutine(Prestory2Build());
+				break;
+		}
+	}
+	IEnumerator ShowLineAndContinue(LineCanvas line_canvas, string name, string line, float time)
+	{
+		line_canvas.Name = name;
+		line_canvas.Line = line;
+		yield return new WaitForSeconds(time);
+		line_canvas.ShowContinue();
+		while (!Input.GetMouseButtonDown(0))
+		{
+			yield return null;
+		}
+		line_canvas.HideContinue();
+	}
+	IEnumerator ShowLine(LineCanvas line_canvas, string name, string line, float time)
+	{
+		line_canvas.Name = name;
+		line_canvas.Line = line;
+		yield return new WaitForSeconds(time);
+	}
+
+	IEnumerator ShowLineAndListenForEvent<Event_>(LineCanvas line_canvas, string name, string line, Func<Event_, bool> handler)
+	{
+		if (name != null || line != null)
+		{
+			line_canvas.Name = name;
+			line_canvas.Line = line;
+		}
+		bool criteria_met = false;
+		var subscription = EventBus.Subscribe<Event_>((Event_ e) =>
+		{
+			if (handler(e))
+			{
+				criteria_met = true;
+			}
+		});
+		while (!criteria_met)
+		{
+			yield return null;
+		}
+		EventBus.Unsubscribe(subscription);
+	}
+	IEnumerator Prestory1Build()
+	{
+		yield return new WaitForSeconds(1.5f);
+		Trash.Inst.gameObject.SetActive(false);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Welcome to the grid building system!", 0.2f);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Oh! There is a mess! Let's clean it up using the eraser!", 0.2f);
+		LineCanvas.Top.Line = "Oh! There is a mess! Let's clean it up using the eraser!";
+		LineCanvas.Top.Line = "Start by clicking the eraser.";
+		EraserImage.Inst.StartScale();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Start by clicking the eraser.", (ToolClickedEvent e) =>
+		{
+			return e.cursor_mode == Util.CursorMode.Erase;
+		});
+		EraserImage.Inst.EndScale();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Good! Hover your mouse on the grid and click to erase a component.",
+			(ItemErasedEvent e) => true);
+		Trash.Inst.gameObject.SetActive(true);
+		Trash.Inst.StartScale();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Perfect! Now let's use the trashcan to remove all the components at once!",
+			(ResetCountEvent e)=>true);
+		Trash.Inst.EndScale();
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Now we have a clear space to build our vehicle!", 0.2f);
+		GridMatrix.Current.ShowDesign();
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "For now, let's adhere to a standard vehicle design", 0.2f);
+		DragImage.StartScaleAll();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Start by clicking on a component icon.",
+			(DragImageClickedEvent e) => true);
+		DragImage.EndScaleAll();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Perfect! Hover your mouse on the grid and click to place a component.",
+			(ComponentAddedEvent e)=>true);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Let's place the rest of the components.", 0.2f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, null, null, (ReadyToGoEvent e) => true);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "You are learning fast! Now click the confirm button to start our journey!",
+			(ConfirmSuccessEvent e) => true);
+		LineCanvas.Top.Hide();
+	}
+
+	public IEnumerator Prestory2Build()
+	{
+		yield return new WaitForSeconds(1.5f);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "This time, let's build a wider vehicle with a sophisticated control system.", 0.5f);
+		LineCanvas.Top.Hide();
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, null, null, (ReadyToGoEvent e) => true);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Let's roll!",
+			(ConfirmSuccessEvent e) => true);
+		LineCanvas.Top.Hide();
 	}
 	void OnGoalReached(GoalReachedEvent e)
 	{
@@ -313,20 +437,50 @@ public class GameState : MonoBehaviour
 			case Util.GoalName.PreStory1:
 				TransitionToStory(Util.StoryName.Intro);
 				break;
+			case Util.GoalName.FallOffCliff:
+				TransitionToStory(Util.StoryName.FallOffCliff);
+				break;
 			case Util.GoalName.PreStory2:
 				TransitionToStory(Util.StoryName.InTown);
 				break;
 		}
 	}
-	public void TransitionToPlay()
+	Util.WaypointName current_waypoint;
+	public void TransitionToPlay(bool build)
 	{
 		BuildCanvas.Inst.Hide();
 		PlayCanvas.Inst.Show();
-		AudioPlayer.Inst.TransitionToPlay();
-		GridMatrix.Current.BuildAndDeactivate();
-		GridMatrix.DeselectGridMatrix();
+		// AudioPlayer.Inst.TransitionToPlay();
+		if (build)
+		{
+			GridMatrix.Current.BuildAndDeactivate();
+			GridMatrix.DeselectGridMatrix();
+		}
 		PiggyCameraPivot.Inst.StartFollow(Piggy);
 		// coroutine that moves camera to position
 		MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
+		if (build)
+		{
+			switch (current_waypoint)
+			{
+				case Util.WaypointName.PreStory2:
+					StartCoroutine(PlayPreStory2());
+					break;
+			}
+		}
+	}
+	public IEnumerator PlayPreStory2()
+	{
+		yield return new WaitForSeconds(1.0f);
+		Retry.Inst.Show();
+		// claustrophobia
+		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Woohoo! We're rolling!", 1.5f);
+		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Hope you don't have claustrophobia in your little crate.", 3.5f);
+		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Actually, you may feel more comfortable if you can look at me. I'm on your left.", 3.5f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Bottom, "Shirley", "**Drag the screen to look around**", (PlayCanvasDraggedEvent e) => true);
+		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Perfect! Now let's start the car.", 2.5f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Bottom, "Shirley", "**Press W/S to move and A/D to turn.", (WASDPressedEvent e) => true);
+		yield return ShowLine(LineCanvas.Bottom, "Shirley", "You're learning fast! Let's see if you can make to the destination.", 3.5f);
+		LineCanvas.Bottom.Hide();
 	}
 }

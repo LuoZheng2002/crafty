@@ -6,7 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
+public class ItemErasedEvent { }
+public class ComponentAddedEvent { }
 public class GridMatrix : MonoBehaviour
 {
 	public Util.WaypointName waypoint_name;
@@ -273,6 +274,10 @@ public class GridMatrix : MonoBehaviour
 		if (design_index != -1)
 		{
 			LoadDesignVisuals();
+			if (waypoint_name != Util.WaypointName.PreStory1)
+			{
+				ShowDesign();
+			}
 		}
 		// reset counts
 		if (Util.WaypointItems.ContainsKey(waypoint_name))
@@ -289,7 +294,52 @@ public class GridMatrix : MonoBehaviour
 
 		}
 		BuildCanvas.Inst.InitializeItems();
+		if (waypoint_name == Util.WaypointName.PreStory1)
+		{
+			mem_crates = new Util.Component[height, width,length];
+			mem_loads = new Util.Component[height, width,length];
+			mem_accessories = new Util.Component[height, width,length];
+			accessory_directions = new int[height, width,length];
+			load_directions = new int[height, width,length];
+			mem_crates[0, 0, 0] = Util.Component.WoodenCrate;
+			mem_crates[1, 0, 0] = Util.Component.WoodenCrate;
+			mem_crates[1, 1, 0] = Util.Component.WoodenCrate;
+			mem_crates[1, 1, 1] = Util.Component.WoodenCrate;
+			mem_accessories[1, 0, 1] = Util.Component.Wheel;
+			mem_accessories[1, 1, 2] = Util.Component.Wheel;
+			accessory_directions[1, 0, 1] = 1;
+			accessory_directions[1, 1, 2] = 2;
+		}
 		Util.Delay(this, 5, RebuildVehicle);
+	}
+	public void ShowDesign()
+	{
+		if (design_crates == null)
+		{
+			Debug.LogError("Trying to show a design when there is none.");
+			return;
+		}
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				for (int k = 0; k < length; k++)
+				{
+					if (design_crates[i, j, k] != null)
+					{
+						design_crates[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
+					}
+					if (design_accessories[i, j, k] != null)
+					{
+						design_accessories[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
+					}
+					if (design_loads[i, j, k] != null)
+					{
+						design_loads[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
+					}
+				}
+			}
+		}
 	}
 	void LoadDesignVisuals()
 	{
@@ -309,17 +359,19 @@ public class GridMatrix : MonoBehaviour
 					if (design_crates_type[i, j, k] != Util.Component.None)
 					{
 						design_crates[i, j, k] = DragImage.DragImages[design_crates_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as CrateComponent;
+						design_crates[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
 					}
 					if (design_accessories_type[i, j, k] != Util.Component.None)
 					{
 						Debug.Log($"Type: {design_accessories_type[i, j, k]}");
 						design_accessories[i, j, k] = DragImage.DragImages[design_accessories_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as AccessoryComponent;
+						design_accessories[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
 					}
 					if (design_loads_type[i, j, k] != Util.Component.None)
 					{
 						design_loads[i, j, k] = DragImage.DragImages[design_loads_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as LoadComponent;
+						design_loads[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
 					}
-					
 				}
 			}
 		}
@@ -658,34 +710,7 @@ public class GridMatrix : MonoBehaviour
 				{
 					Debug.LogError("An invariant found: selected a grid but cannot erase");
 				}
-			}if (SelectedGrid != null)
-			{
-				(var h, var w, var l) = (SelectedGrid.heightIdx, SelectedGrid.widthIdx, SelectedGrid.lengthIdx);
-				var load = loads[h, w, l];
-				var crate = crates[h, w, l];
-				var accessory = accessories[h, w, l];
-				if (load != null)
-				{
-					Destroy (load.gameObject);
-					DragImage.DragImages[load.Component].Count++;
-					loads[h, w, l] = null;
-				}
-				else if (crate != null)
-				{
-					Destroy(crate.gameObject);
-					DragImage.DragImages[crate.Component].Count++;
-					crates[h, w, l] = null;
-				}
-				else if (accessory != null)
-				{
-					Destroy(accessory.gameObject);
-					DragImage.DragImages[accessory.Component].Count++;
-					accessories[h, w, l] = null;
-				}
-				else
-				{
-					Debug.LogError("An invariant found: selected a grid but cannot erase");
-				}
+				EventBus.Publish(new ItemErasedEvent());
 			}
 		}
 		else if(CurrentCursorMode == Util.CursorMode.ChangeDirection)
@@ -844,6 +869,7 @@ public class GridMatrix : MonoBehaviour
 	}
 	public void AddComponent(GridCell selectedGrid, Util.ComponentType contentType, VehicleComponent content)
 	{
+		EventBus.Publish(new ComponentAddedEvent());
 		ConfirmButton.Inst.OnGridStateChanged();
 		Debug.Assert(content != null);
 		GridCell grid = selectedGrid;

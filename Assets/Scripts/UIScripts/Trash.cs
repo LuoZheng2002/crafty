@@ -18,6 +18,7 @@ public class Trash : MonoBehaviour
 	private void OnEnable()
 	{
 		buttonScale = GetComponent<ButtonScale>();
+		Debug.Assert(buttonScale != null);
 		Util.Delay(this, () =>
 		{
 			if (!GameState.shown_trashcan && GameState.Inst.Components.Count > 0)
@@ -30,12 +31,13 @@ public class Trash : MonoBehaviour
 	{
 		inst = null;
 	}
-	public void OnPlacedAComponent()
+	public void StartScale()
 	{
-		if (!GameState.shown_trashcan)
-		{
-			buttonScale.ScaleStart();
-		}
+		buttonScale.ScaleStart();
+	}
+	public void EndScale()
+	{
+		buttonScale.ScaleStop();
 	}
 	public void OnImageClick()
     {

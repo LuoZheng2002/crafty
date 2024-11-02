@@ -62,7 +62,7 @@ public class Goal : MonoBehaviour
 
 	void Show()
 	{
-		meshRenderer.enabled = true;
+		// meshRenderer.enabled = true;
 		c.enabled = true;
 	}
 	void Hide()

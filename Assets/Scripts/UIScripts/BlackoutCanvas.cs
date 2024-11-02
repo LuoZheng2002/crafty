@@ -18,29 +18,27 @@ public class BlackoutCanvas : MonoBehaviour
         Debug.Assert(inst == null, "Blackout Canvas already set");
         image = transform.Find("Black").GetComponent<Image>();
         inst = this;
-        gameObject.SetActive(false);
-    }
-    public void Blackout(float time, float time_stay, Action func)
+        SetImageAlpha(0.0f);
+	}
+    void SetImageAlpha(float alpha)
     {
-		gameObject.SetActive(true);
-		StartCoroutine(BlackoutHelper(time, time_stay, func));
+		Color color = image.color;
+		color.a = alpha;
+		image.color = color;
+	}
+    public void Blackout(float time, bool turns_black)
+    {
+		StartCoroutine(BlackoutHelper(time, turns_black));
     }
-    IEnumerator BlackoutHelper(float time_transition, float time_stay, Action func)
+    IEnumerator BlackoutHelper(float time_transition, bool turns_black)
     {
         float start_time = Time.time;
+        float initial_alpha = turns_black ? 0.0f : 1.0f;
+        float end_alpha = turns_black ? 1.0f: 0.0f;
         while (Time.time - start_time < time_transition)
         {
-            Color color = image.color;
-            color.a = Mathf.Lerp(0.0f, 1.0f, (Time.time - start_time) / time_transition);
-            image.color = color;
+            SetImageAlpha(Mathf.Lerp(initial_alpha, end_alpha, (Time.time - start_time) / time_transition));
             yield return null;
         }
-        start_time = Time.time;
-        while(Time.time - start_time < time_stay)
-        {
-            yield return null;
-        }
-		gameObject.SetActive(false);
-		func();
     }
 }

@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class ToolClickedEvent
+{
+	public Util.CursorMode cursor_mode;
+    public ToolClickedEvent(Util.CursorMode cursor_mode)
+    {
+        this.cursor_mode = cursor_mode;
+    }
+}
 public class ToolImage : MonoBehaviour
 {
 	public Util.CursorMode cursor_mode;
@@ -31,6 +39,7 @@ public class ToolImage : MonoBehaviour
 	public void OnClick()
 	{
 		EventBus.Publish(new OtherItemSelectedEvent());
+		EventBus.Publish(new ToolClickedEvent(cursor_mode));
 		GridMatrix.Current.CurrentCursorMode = cursor_mode;
 		selectionImage.enabled = true;
 		switch (cursor_mode)

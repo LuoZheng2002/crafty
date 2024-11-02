@@ -99,14 +99,15 @@ public class Util
 		None,
 		Crash,
 		Intro,
+		FallOffCliff,
 		InTown,
-
 	}
 
 	public enum GoalName
 	{
 		None,
 		PreStory1,
+		FallOffCliff,
 		PreStory2
 	}
 
@@ -119,9 +120,9 @@ public class Util
 
 	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
 	{
-		Component[,,] crates = new Component[3, 2, 3];
-		Component[,,] loads = new Component[3, 2, 3];
-		Component[,,] accessories = new Component[3, 2, 3];
+		Component[,,] crates = new Component[2, 2, 3];
+		Component[,,] loads = new Component[2, 2, 3];
+		Component[,,] accessories = new Component[2, 2, 3];
 		crates[1, 0, 0] = Component.WoodenCrate;
 		crates[1, 0, 1] = Component.WoodenCrate;
 		crates[1, 0, 2] = Component.WoodenCrate;
@@ -129,7 +130,7 @@ public class Util
 		crates[1, 1, 1] = Component.WoodenCrate;
 		crates[1, 1, 2] = Component.WoodenCrate;
 		loads[1, 1, 2] = Component.Pig;
-		loads[1, 1, 1] = Component.Partner;
+		loads[1, 0, 2] = Component.Partner;
 		accessories[0, 0, 0] = Component.Wheel;
 		accessories[0, 0, 2] = Component.Wheel;
 		accessories[0, 1, 0] = Component.Wheel;

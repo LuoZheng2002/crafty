@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+public class ReadyToGoEvent { }
+public class ConfirmSuccessEvent { }
 public class ConfirmButton : MonoBehaviour
 {
 	Image image;
@@ -56,6 +57,7 @@ public class ConfirmButton : MonoBehaviour
 		}
 		if (can_start)
 		{
+			EventBus.Publish(new ReadyToGoEvent());
 			image.color = solidColor;
 			buttonScale.ScaleStart();
 		}
@@ -69,7 +71,8 @@ public class ConfirmButton : MonoBehaviour
     {
 		if (can_start)
 		{
-			GameState.Inst.TransitionToPlay();
+			EventBus.Publish(new ConfirmSuccessEvent());
+			GameState.Inst.TransitionToPlay(true);
 		}
     }
 }

@@ -10,6 +10,7 @@ public class AudioPlayer : MonoBehaviour
     public AudioClip menuClip;
     public AudioClip snore;
     public AudioClip scream;
+    public AudioClip wilhelm;
     AudioSource musicSource;
     AudioSource soundEffectSource;
     public float min_snore_interval = 10.0f;
@@ -45,6 +46,16 @@ public class AudioPlayer : MonoBehaviour
         soundEffectSource.loop = false;
         soundEffectSource.Play();
     }
+    public void Wilhelm()
+    {
+		if (soundEffectSource.isPlaying)
+		{
+			soundEffectSource.Stop();
+		}
+		soundEffectSource.clip = wilhelm;
+		soundEffectSource.loop = false;
+		soundEffectSource.Play();
+	}
     IEnumerator Snore()
     {
         while(true)

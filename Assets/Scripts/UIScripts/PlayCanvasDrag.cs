@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public class PlayCanvasDraggedEvent { }
 public class PlayCanvasDrag : MonoBehaviour
 {
 	float sign = 1;
@@ -39,5 +40,6 @@ public class PlayCanvasDrag : MonoBehaviour
 		float rotationY = -deltaX * rotationSpeed * sign;  // Horizontal rotation
 		// Rotate the camera accordingly
 		PiggyCameraPivot.Inst.dragEulerAngle += new Vector3(rotationX, rotationY, 0);
+		EventBus.Publish(new PlayCanvasDraggedEvent());
 	}
 }

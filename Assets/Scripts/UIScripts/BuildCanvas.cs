@@ -19,6 +19,7 @@ public class BuildCanvas : MonoBehaviour
         inst = this;
         Util.Delay(this, () =>
         {
+            DragImage.DetachAll();
             gameObject.SetActive(false);
         });
         itemBar = transform.Find("ItemBar");

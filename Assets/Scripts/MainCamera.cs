@@ -66,6 +66,10 @@ public class MainCamera : MonoBehaviour
 		transform.rotation = target_rotation;
         transformToFollow = target_transform;
 	}
+    public void FollowStory()
+    {
+        transformToFollow = StoryAnimation.Inst.AnimationCamera;
+    }
     public void MoveAndStickToPig(float move_to_pig_time, float camera_rotation_time)
     {
         StartCoroutine(MoveAndStickToPigHelper(move_to_pig_time, camera_rotation_time));

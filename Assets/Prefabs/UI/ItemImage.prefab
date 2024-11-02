@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 6988023597998142244}
   - component: {fileID: 5023783018224830640}
   - component: {fileID: 4508440497880821576}
+  - component: {fileID: 94334434744321466}
   m_Layer: 5
   m_Name: ItemImage
   m_TagString: Untagged
@@ -321,11 +322,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e8b3aff2263f74aaa218e15d07f349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  empty: 0
+  empty_index: 0
   initial_count: 5
   rayDistance: 5
   contentType: 0
   content: 0
   componentPrefab: {fileID: 0}
+  componentDesignPrefab: {fileID: 0}
   minScale: 0.8
   maxScale: 1.2
   scaleSpeed: 5
@@ -385,3 +389,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &94334434744321466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6960805080903524972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406f69cc5a944384aae2b4721329221a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minScale: 0.8
+  maxScale: 1.2
+  scaleSpeed: 5

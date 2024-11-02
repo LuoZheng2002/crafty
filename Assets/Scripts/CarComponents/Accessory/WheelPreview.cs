@@ -26,7 +26,7 @@ public class WheelPreview : AccessoryComponent
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+		c = GetComponent<Collider>();
     }
     public override void Build()
 	{

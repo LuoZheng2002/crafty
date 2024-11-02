@@ -15,6 +15,7 @@ public class OtherItemSelectedEvent
 {
 
 }
+public class DragImageClickedEvent { }
 public class DragImage : MonoBehaviour
 {
 	public bool empty = false;
@@ -29,7 +30,7 @@ public class DragImage : MonoBehaviour
 	private RectTransform rectTransform;
 	// GridMatrix gridMatrix;
 	Text text;
-	// ButtonScale buttonScale;
+	ButtonScale buttonScale;
 
 	int count = 0;
 	public int Count
@@ -69,6 +70,20 @@ public class DragImage : MonoBehaviour
 		foreach(var emptyImage in EmptyImages)
 		{
 			emptyImage.Value.transform.SetParent(null);
+		}
+	}
+	public static void StartScaleAll()
+	{
+		foreach (var dragImage in DragImages)
+		{
+			dragImage.Value.buttonScale.ScaleStart();
+		}
+	}
+	public static void EndScaleAll()
+	{
+		foreach (var dragImage in DragImages)
+		{
+			dragImage.Value.buttonScale.ScaleStop();
 		}
 	}
 	public void SetInitialCount(int count)
@@ -134,9 +149,14 @@ public class DragImage : MonoBehaviour
 	//}
 	private void OnEnable()
 	{
-		if (!GameState.shown_drag_images)
+
+	}
+	private void OnDisable()
+	{
+		if (componentInstance != null)
 		{
-			// buttonScale.ScaleStart();
+			Destroy(componentInstance.gameObject);
+			componentInstance = null;
 		}
 	}
 	private void OnDestroy()
@@ -194,6 +214,8 @@ public class DragImage : MonoBehaviour
 	}
 	private void Start()
 	{
+		buttonScale = GetComponent<ButtonScale>();
+		Debug.Assert(buttonScale != null);
 		Debug.Assert(!DragImages.ContainsKey(content));
 		if (!empty)
 		{
@@ -283,6 +305,7 @@ public class DragImage : MonoBehaviour
 	IEnumerator coroutine;
 	public void OnClick()
 	{
+		EventBus.Publish(new DragImageClickedEvent());
 		EventBus.Publish(new OtherItemSelectedEvent());
 		CustomCursor.Inst.SetIdleCursor();
 		GridMatrix.Current.CurrentCursorMode = Util.CursorMode.AddComponent;
