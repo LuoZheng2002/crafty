@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StoryAnimation : MonoBehaviour
 {
-	public bool CanSpeedup { get; set; }
+	public bool CanSpeedup { get; set; } = true;
 	static StoryAnimation inst;
 	public static StoryAnimation Inst
 	{
@@ -32,6 +32,7 @@ public class StoryAnimation : MonoBehaviour
 	public void PlayAnimation(Util.StoryName storyName)
 	{
 		animator.enabled = true;
+		animator.speed = 1.0f;
 		MainCamera.Inst.FollowStory();
 		switch (storyName)
 		{

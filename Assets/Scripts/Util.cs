@@ -58,8 +58,16 @@ public class Util
 		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
 		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
 	};
-
-    public static List<(Quaternion, (int, int, int))> BoosterRotations = new()
+	public static List<(Quaternion, (int, int, int))> UmbrellaRotations = new()
+	{
+		(Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
+		(Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
+		(Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
+		(Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
+		(Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
+		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
+	};
+	public static List<(Quaternion, (int, int, int))> BoosterRotations = new()
     {
         (Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
         (Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),

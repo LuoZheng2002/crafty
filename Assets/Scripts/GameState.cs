@@ -113,9 +113,9 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			TransitionToStory(Util.StoryName.Crash);
+			// TransitionToStory(Util.StoryName.Crash);
 			//TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
-			// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+			TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 
@@ -422,6 +422,7 @@ public class GameState : MonoBehaviour
 
 	public IEnumerator Prestory2Build()
 	{
+		StoryAnimation.Inst.CanSpeedup = false;
 		yield return new WaitForSeconds(1.5f);
 		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "This time, let's build a wider vehicle with a sophisticated control system.", 0.5f);
 		LineCanvas.Top.Hide();

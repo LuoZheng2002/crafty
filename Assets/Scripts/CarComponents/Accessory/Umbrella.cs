@@ -17,7 +17,7 @@ public class Umbrella : AccessoryComponent
         
     }
 
-    public override Util.Content Content => Util.Content.Umbrella;
+    public override Util.Component Component => Util.Component.Umbrella;
 
     public override (int h_delta, int w_delta, int l_delta) AttachDir()
     {
