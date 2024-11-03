@@ -312,6 +312,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8700617353114198275, guid: 357492950d01e44bc9594ff882815995, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 357492950d01e44bc9594ff882815995, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -350,6 +354,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 357492950d01e44bc9594ff882815995, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65702495048144492, guid: 357492950d01e44bc9594ff882815995, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 357492950d01e44bc9594ff882815995, type: 3}
@@ -8079,7 +8087,7 @@ PrefabInstance:
     - target: {fileID: 5023783018224830640, guid: a4978ca5899b487469eacc1795383bb3, type: 3}
       propertyPath: componentDesignPrefab
       value: 
-      objectReference: {fileID: 4078575116772929299, guid: 280781ea5e3f2da468c1666766d99778, type: 3}
+      objectReference: {fileID: 3375262244362957493, guid: 6a4e51770ff546a4ba3e5320ca4165e6, type: 3}
     - target: {fileID: 6960805080903524972, guid: a4978ca5899b487469eacc1795383bb3, type: 3}
       propertyPath: m_Name
       value: Partner
