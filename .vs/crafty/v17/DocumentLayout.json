@@ -3,15 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\storyanimation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\storyanimation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\uiscripts\\introcanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uiscripts\\introcanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|c:\\users\\luo20\\desktop\\unityprojects\\crafty\\assets\\scripts\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|c:\\users\\luo20\\desktop\\unityprojects\\crafty\\assets\\scripts\\carcomponents\\accessory\\umbrella.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|c:\\users\\luo20\\desktop\\unityprojects\\crafty\\assets\\scripts\\storyanimation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\storyanimation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\carcomponents\\accessory\\umbrella.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\carcomponents\\accessory\\umbrella.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -49,10 +53,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\audioplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\audioplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\uiscripts\\introcanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uiscripts\\introcanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FB654AD6-F807-402F-22A6-788757BC0A9C}|Assembly-CSharp.csproj|C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\assets\\scripts\\introcamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -326,7 +326,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
@@ -348,32 +348,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Umbrella.cs",
-              "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
-              "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
-              "RelativeToolTip": "Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAIwBcAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-02T20:37:52.491Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "StoryAnimation.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\StoryAnimation.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\StoryAnimation.cs",
               "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\StoryAnimation.cs",
               "RelativeToolTip": "Assets\\Scripts\\StoryAnimation.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAA7wCIAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAAAkwCIAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-31T19:50:40.778Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "CanvasDrag.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\CanvasDrag.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\CanvasDrag.cs",
@@ -385,7 +372,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "PlayCanvasDrag.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\PlayCanvasDrag.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\PlayCanvasDrag.cs",
@@ -397,7 +384,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Retry.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\Retry.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\Retry.cs",
@@ -409,7 +396,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Util.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\Util.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Util.cs",
@@ -417,8 +404,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Util.cs",
               "ViewState": "AgIAADwAAAAAAAAAAADgvz8AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-13T18:54:29.157Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-13T18:54:29.157Z"
             },
             {
               "$type": "Document",
@@ -428,14 +414,39 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\GameState.cs",
               "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\GameState.cs",
               "RelativeToolTip": "Assets\\Scripts\\GameState.cs",
-              "ViewState": "AgIAAKABAAAAAAAAAAAvwKgBAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAIBAAAAAAAAAADgvxIBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-30T04:46:36.939Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
+              "Title": "IntroCanvas.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
+              "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAkwCYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-01T21:50:34.066Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Umbrella.cs",
+              "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
+              "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
+              "RelativeToolTip": "Assets\\Scripts\\CarComponents\\Accessory\\Umbrella.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAIwBcAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T20:37:52.491Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "DragImage.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\DragImage.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\DragImage.cs",
@@ -447,7 +458,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ConfirmButton.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\ConfirmButton.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\ConfirmButton.cs",
@@ -459,7 +470,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "AudioPlayer.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\AudioPlayer.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\AudioPlayer.cs",
@@ -471,7 +482,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "GridMatrix.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\GridMatrix.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GridMatrix.cs",
@@ -483,7 +494,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Goal.cs",
               "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\Goal.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Goal.cs",
@@ -492,18 +503,6 @@
               "ViewState": "AgIAADQAAAAAAAAAAAAAAEAAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-23T05:31:45.126Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IntroCanvas.cs",
-              "DocumentMoniker": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
-              "ToolTip": "C:\\Users\\luo20\\Desktop\\UnityProjects\\crafty\\Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
-              "RelativeToolTip": "Assets\\Scripts\\UIScripts\\IntroCanvas.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAkwCcAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-01T21:50:34.066Z"
             },
             {
               "$type": "Document",

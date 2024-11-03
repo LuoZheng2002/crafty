@@ -113,9 +113,9 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			// TransitionToStory(Util.StoryName.Crash);
+			TransitionToStory(Util.StoryName.Crash);
 			//TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
-			TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+			// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 
@@ -272,6 +272,7 @@ public class GameState : MonoBehaviour
 		// Reset to the original position
 		MainCamera.Inst.transform.position = original_position;
 		yield return new WaitForSeconds(2.0f);
+		DestroyComponentsInScene();
 		StoryAnimation.Inst.PlayAnimation(Util.StoryName.FallOffCliff);
 		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
