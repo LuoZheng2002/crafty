@@ -29,7 +29,7 @@ public abstract class BoosterPreview : AccessoryComponent
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.V))
+        if (Input.GetKey(KeyCode.Q))
         {
             rb.AddForce(transform.up * thrust);
         }

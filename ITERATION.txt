@@ -1,11 +1,10 @@
-Help popup is not very recognizable because it blends with the actual game scene -> Adopted a new help system that guides players with bouncy buttons
-Players attempted to press WASD when the icons on the screen are grayed out -> Added explicit toasting message that says WASD keys are not useful yet
-The grid got cleared when the players attempted a new trial -> Added a design preserving feature to load the previous design on retry
-Non-Bad-Piggies players feel hard to understand the dragging mechanics -> Added explicit toasting messages to ask them to drag the components
-It's better to have a placement by click feature -> Implemented it.
-The vehicle turns over at the last moment before reaching the goal -> Added a random disturbance feature that knocks out unstable design early
-There is no single component erasing feature / undo feature -> Added an eraser that erases single component
-Players didn't get the message of "press space" to switch layer -> Added an explicit button for switching layer, and then redirecting players to use the space hotkey
-IA got stuck on the turn-wheel level because she made all four wheels turnable -> Reduced the stock turn wheel count to 2 to guide the design
-It's hard to tell which direction the pig is going to go -> Added a map view functionality at the building stage
-Grid build drift bug -> Cannot source the bug, and used a dirty fix, and still occasionally there will be a bug that can only be cleared by restarting the level
+P3 gold issues:
+static grid -> changed to scrollable grid
+less freedom in vehicle design-> added more components
+awkward component direction system -> now added specific tool to change component direction
+drag convention, layer switch -> using a new click and place system and an optional layer switch mechanism
+level-based design -> open world and storytelling
+refined vehicle physics
+added Blender modeled models
+used Blender to model large terrain
+more considerate (hopefully) guidance and instruction

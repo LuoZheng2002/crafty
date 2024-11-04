@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class ItemErasedEvent { }
 public class ComponentAddedEvent { }
+public class SwitchLayerEvent { }
+public class FullLayerEvent { }
 public class GridMatrix : MonoBehaviour
 {
 	public Util.WaypointName waypoint_name;
@@ -259,6 +261,7 @@ public class GridMatrix : MonoBehaviour
 					float offset_width = (float)width / 2 - 0.5f;
 					float offset_length = (float)length / 2 - 0.5f;
 					grid.transform.localPosition = new Vector3(j - offset_width, i - offset_height, k - offset_length);
+					grid.transform.localRotation = Quaternion.identity;
 					Debug.Assert(grid != null);
 					GridCell gridComponent = grid.GetComponent<GridCell>();
 					Debug.Assert(gridComponent != null);
@@ -291,7 +294,12 @@ public class GridMatrix : MonoBehaviour
 		}
 		else
 		{
-
+			DragImage.ClearCountAll();
+			var items = GameState.Inventory;
+			foreach (var item in items)
+			{
+				DragImage.DragImages[item.Key].SetInitialCount(item.Value);
+			}
 		}
 		BuildCanvas.Inst.InitializeItems();
 		if (waypoint_name == Util.WaypointName.PreStory1)
@@ -578,6 +586,7 @@ public class GridMatrix : MonoBehaviour
 	}
 	public void SwitchLayer()
 	{
+		EventBus.Publish(new SwitchLayerEvent());
 		if (activeLayerIndex != -1)
 		{
 			SetLayerActive(activeLayerIndex, false);
@@ -587,6 +596,7 @@ public class GridMatrix : MonoBehaviour
 		{
 			activeLayerIndex = -1;
 			SetAllLayerActive();
+			EventBus.Publish(new FullLayerEvent());
 		}
 		else
 		{

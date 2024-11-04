@@ -60,21 +60,21 @@ public class Util
 	};
 	public static List<(Quaternion, (int, int, int))> UmbrellaRotations = new()
 	{
-		(Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
+		(Quaternion.Euler(0f, 0f, 0f), (-1, 0, 0)),
 		(Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
 		(Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
 		(Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
 		(Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
-		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
+		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(1, 0, 0)),
 	};
 	public static List<(Quaternion, (int, int, int))> BoosterRotations = new()
     {
-        (Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
+        (Quaternion.Euler(0f, 0f, 0f), (-1, 0, 0)),
         (Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
         (Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
         (Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
         (Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
-        (Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
+        (Quaternion.Euler(0.0f, 0.0f, 180.0f),(1, 0, 0)),
     };
 
     public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
@@ -109,6 +109,7 @@ public class Util
 		Intro,
 		FallOffCliff,
 		InTown,
+		TownWaypoint
 	}
 
 	public enum GoalName
@@ -116,14 +117,19 @@ public class Util
 		None,
 		PreStory1,
 		FallOffCliff,
-		PreStory2
+		PreStory2,
+		Town,
 	}
 
 	public enum WaypointName
 	{
 		None,
 		PreStory1,
-		PreStory2
+		PreStory2,
+		Town,
+		Canyon,
+		Rocket,
+		Wild1,
 	}
 
 	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
@@ -270,7 +276,7 @@ public class Util
 		JointDrive drive = new JointDrive();
 		drive.positionSpring = position_spring;
 		drive.positionDamper = position_damper;
-		drive.maximumForce = 1000000;
+		drive.maximumForce = Mathf.Infinity;
 		configurableJoint.xDrive = drive;
 		configurableJoint.yDrive = drive;
 		configurableJoint.zDrive = drive;

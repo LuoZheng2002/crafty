@@ -28,7 +28,7 @@ public class PlayCanvasDrag : MonoBehaviour
 	}
 	public void OnFirstPersonChanged()
 	{
-		sign = GameState.Inst.FirstPerson ? 1 : -1;
+		sign = GameState.Inst.IsFirstPerson ? 1 : -1;
 	}
 	void OnDrag(float deltaX, float deltaY)
 	{

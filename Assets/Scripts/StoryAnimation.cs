@@ -31,6 +31,7 @@ public class StoryAnimation : MonoBehaviour
 	}
 	public void PlayAnimation(Util.StoryName storyName)
 	{
+		gameObject.SetActive(true);
 		animator.enabled = true;
 		animator.speed = 1.0f;
 		MainCamera.Inst.FollowStory();
@@ -45,7 +46,14 @@ public class StoryAnimation : MonoBehaviour
 			case Util.StoryName.InTown:
 				animator.Play("town");
 				break;
+			case Util.StoryName.TownWaypoint:
+				animator.Play("townwaypoint");
+				break;
 		}
+	}
+	public void WaypointChangeToGreen(Util.WaypointName waypoint_name)
+	{
+		Waypoint.Waypoints[waypoint_name].ChangeToGreen();
 	}
 	Action func;
 	public void RegisterEndAnimationFunc(Action func)
@@ -54,6 +62,7 @@ public class StoryAnimation : MonoBehaviour
 	}
 	public void EndAnimation()
 	{
+		gameObject.SetActive(false);
 		animator.enabled = false;
 		LineCanvas.Bottom.Hide();
 		if (func != null)

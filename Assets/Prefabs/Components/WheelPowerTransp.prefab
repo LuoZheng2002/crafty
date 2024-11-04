@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a1f4617b4563e3040af620da0272381e, type: 2}
+    - target: {fileID: 6943888758988859901, guid: f753ce2a36a133340a3854001d62af8a, type: 3}
+      propertyPath: torque_factor
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 9100471390814191696, guid: f753ce2a36a133340a3854001d62af8a, type: 3}
       propertyPath: m_Name
       value: WheelPowerTransp

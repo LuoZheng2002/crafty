@@ -93,7 +93,7 @@ public class MainCamera : MonoBehaviour
 			if ((Time.time - start_time) / move_to_pig_time > 0.8)
 			{
 				GameState.Inst.PiggyPermitInvisible = true;
-				if (GameState.Inst.FirstPerson)
+				if (GameState.Inst.IsFirstPerson)
 				{
 					EventBus.Publish(new InvisibleStateUpdateEvent());
 				}

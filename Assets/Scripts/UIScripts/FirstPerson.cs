@@ -5,7 +5,17 @@ using UnityEngine.UI;
 
 public class FirstPerson : MonoBehaviour
 {
-	ButtonScale buttonScale;
+	static FirstPerson inst;
+	public static FirstPerson Inst
+	{
+		get { Debug.Assert(inst != null); return inst; }
+	}
+	private void Start()
+	{
+		buttonScale = GetComponent<ButtonScale>();
+		Debug.Assert(inst == null);
+		inst = this;
+	}
 	private void OnEnable()
 	{
 		buttonScale = GetComponent<ButtonScale>();
@@ -14,9 +24,22 @@ public class FirstPerson : MonoBehaviour
 			buttonScale.ScaleStart();
 		}
 	}
+	private void OnDisable()
+	{
+		buttonScale.ScaleStop();
+	}
+	public void Show()
+	{
+		gameObject.SetActive(true);
+	}
+	public void Hide()
+	{
+		gameObject.SetActive(false);
+	}
+	ButtonScale buttonScale;
 	public void ToggleFirstPerson()
     {
-        GameState.Inst.FirstPerson = !GameState.Inst.FirstPerson;
+        GameState.Inst.IsFirstPerson = !GameState.Inst.IsFirstPerson;
 		PlayCanvasDrag.Inst.OnFirstPersonChanged();
         GameState.shown_third_person = true;
 		buttonScale.ScaleStop();

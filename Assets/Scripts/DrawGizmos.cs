@@ -15,6 +15,6 @@ public class DrawGizmos : MonoBehaviour
 		// Gizmos.DrawSphere(transform.position, gizmoSize);
 		Gizmos.DrawWireCube(transform.position, Vector3.one);
 		Gizmos.color = gizmoColor2;
-		Gizmos.DrawMesh(mesh, transform.position, Quaternion.Euler(new Vector3(90, 0, 0)));
+		Gizmos.DrawMesh(mesh, transform.position, transform.rotation * Quaternion.Euler(new Vector3(90, 0, 0)));
 	}
 }

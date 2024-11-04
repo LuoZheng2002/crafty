@@ -20,7 +20,7 @@ public class PiggyNose : MonoBehaviour
 	}
 	void OnInvisibleChanged(InvisibleStateUpdateEvent e)
 	{
-		if (GameState.Inst.FirstPerson && GameState.Inst.PiggyPermitInvisible)
+		if (GameState.Inst.IsFirstPerson && GameState.Inst.PiggyPermitInvisible)
 		{
 			meshRenderer.enabled = true;
 		}

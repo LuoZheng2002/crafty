@@ -28,6 +28,7 @@ public class BlackoutCanvas : MonoBehaviour
 	}
     public void Blackout(float time, bool turns_black)
     {
+        gameObject.SetActive(true);
 		StartCoroutine(BlackoutHelper(time, turns_black));
     }
     IEnumerator BlackoutHelper(float time_transition, bool turns_black)

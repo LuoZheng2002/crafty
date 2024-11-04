@@ -63,7 +63,7 @@ public class PiggyPreview : LoadComponent
 	}
 	void OnFIrstPersonChanged(InvisibleStateUpdateEvent e)
 	{
-		if (GameState.Inst.FirstPerson && GameState.Inst.PiggyPermitInvisible)
+		if (GameState.Inst.IsFirstPerson && GameState.Inst.PiggyPermitInvisible)
 		{
 			mesh.SetActive(false);
 		}

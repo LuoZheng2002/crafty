@@ -54,10 +54,12 @@ public class GameState : MonoBehaviour
 	public static Dictionary<Util.Component, int> Inventory { get; set; } = new()
 	{
 		{Util.Component.Pig, 1 },
-		{Util.Component.WoodenCrate, 6 },
+		{Util.Component.WoodenCrate, 9 },
 		{Util.Component.Wheel, 4 },
-		{Util.Component.TurnWheel, 0 },
-		{Util.Component.MotorWheel, 0 }
+		{Util.Component.TurnWheel, 4 },
+		{Util.Component.MotorWheel, 4 },
+		{Util.Component.Rocket, 8 },
+		{Util.Component.Umbrella, 8 }
 	};
 
 	public GameObject cameraAnimationPrefab;
@@ -71,7 +73,7 @@ public class GameState : MonoBehaviour
 
 	Util.WaypointName retry_waypoint = Util.WaypointName.None;
 	Util.GoalName retry_goal = Util.GoalName.None;
-	public bool FirstPerson
+	public bool IsFirstPerson
 	{
 		get { return first_person; }
 		set 
@@ -106,6 +108,20 @@ public class GameState : MonoBehaviour
 	//{
 	//	StartCoroutine(MoveCameraToGrid(false));
 	//}
+	void Init()
+	{
+		TransitionToStory(Util.StoryName.Crash);
+		//TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		// TransitionToStory(Util.StoryName.FallOffCliff);
+		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+		// TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
+		// TransitionToStory(Util.StoryName.TownWaypoint);
+		// town_waypoint_met = true;
+		// TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
+
+		FirstPerson.Inst.Show();
+		Retry.Inst.Show();
+	}
 	private void Start()
 	{
 		// temporary shut down
@@ -113,9 +129,7 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			TransitionToStory(Util.StoryName.Crash);
-			//TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
-			// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+			Init();
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 
@@ -207,7 +221,20 @@ public class GameState : MonoBehaviour
 			case Util.StoryName.InTown:
 				TransitionToStoryInTown();
 				break;
+			case Util.StoryName.TownWaypoint:
+				StartCoroutine(TransitionToStoryTownWaypoint());
+				break;
 		}
+	}
+	IEnumerator TransitionToStoryTownWaypoint()
+	{
+		BlackoutCanvas.Inst.Blackout(1.0f, true);
+		yield return new WaitForSeconds(1.0f);
+		StoryAnimation.Inst.PlayAnimation(Util.StoryName.TownWaypoint);
+		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
+		{
+			TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
+		});
 	}
 	void TransitionToStoryCrash()
 	{
@@ -289,6 +316,7 @@ public class GameState : MonoBehaviour
 		{
 			TransitionToPlay(false);
 			StoryAnimation.Inst.CanSpeedup = true;
+			Goal.Activate(Util.GoalName.Town);
 		});
 		//BlackoutCanvas.Inst.Blackout(3.0f, 3.0f, () =>
 		//{
@@ -311,15 +339,18 @@ public class GameState : MonoBehaviour
 	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name)
 	{
 		current_waypoint = waypoint_name;
-		if (can_retry_waypoints.Contains(waypoint_name))
-		{
-			retry_waypoint = waypoint_name;
-			retry_goal = goal_name;
-		}
-		else
-		{
-			waypoint_name = Util.WaypointName.None;
-		}
+		retry_waypoint = waypoint_name;
+		retry_goal = goal_name;
+		//if (can_retry_waypoints.Contains(waypoint_name))
+		//{
+			
+		//}
+		//else
+		//{
+		//	// waypoint_name = Util.WaypointName.None;
+		//	retry_waypoint = Util.WaypointName.None;
+		//	retry_goal = Util.GoalName.None;
+		//}
 		BuildCanvas.Inst.Show();
 		PlayCanvas.Inst.Hide();
 		// AudioPlayer.Inst.TransitionToBuild();
@@ -342,8 +373,16 @@ public class GameState : MonoBehaviour
 			case Util.WaypointName.PreStory2:
 				StartCoroutine(Prestory2Build());
 				break;
+			case Util.WaypointName.Town:
+				if (!town_waypoint_met)
+				{
+					town_waypoint_met = true;
+					StartCoroutine(TownWaypointBuild());
+				}
+				break;
 		}
 	}
+	bool town_waypoint_met = false;
 	IEnumerator ShowLineAndContinue(LineCanvas line_canvas, string name, string line, float time)
 	{
 		line_canvas.Name = name;
@@ -432,6 +471,19 @@ public class GameState : MonoBehaviour
 			(ConfirmSuccessEvent e) => true);
 		LineCanvas.Top.Hide();
 	}
+	public IEnumerator TownWaypointBuild()
+	{
+		yield return new WaitForSeconds(1.5f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "**Drag the screen to view the grid**", (GridMatrixDragEvent e) => true);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Now there's an **important** feature that you want to learn", 1.0f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "**Press \"Space\" to toggle build layers.**", (SwitchLayerEvent e) => true);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Without previous design constraints, it would be hard to locate a cell without specifying layers.", 0.2f);
+		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Now, press \"Space\" a few more times to go back to the full layer mode.", (FullLayerEvent e) => true);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Awesome! And I have got a present for you: the third person view!", 0.2f);
+		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Check it out when you start driving!", 0.2f);
+		LineCanvas.Top.Hide();
+		FirstPerson.Inst.Show();
+	}
 	void OnGoalReached(GoalReachedEvent e)
 	{
 		switch (e.goal_name)
@@ -445,6 +497,9 @@ public class GameState : MonoBehaviour
 			case Util.GoalName.PreStory2:
 				TransitionToStory(Util.StoryName.InTown);
 				break;
+			case Util.GoalName.Town:
+				TransitionToStory(Util.StoryName.TownWaypoint);
+				break;
 		}
 	}
 	Util.WaypointName current_waypoint;
@@ -452,6 +507,7 @@ public class GameState : MonoBehaviour
 	{
 		BuildCanvas.Inst.Hide();
 		PlayCanvas.Inst.Show();
+		
 		// AudioPlayer.Inst.TransitionToPlay();
 		if (build)
 		{
@@ -465,6 +521,10 @@ public class GameState : MonoBehaviour
 		{
 			switch (current_waypoint)
 			{
+				case Util.WaypointName.PreStory1:
+					FirstPerson.Inst.Hide();
+					Retry.Inst.Hide();
+					break;
 				case Util.WaypointName.PreStory2:
 					StartCoroutine(PlayPreStory2());
 					break;

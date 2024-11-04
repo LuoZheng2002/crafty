@@ -130,16 +130,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79ee3052aaac33c42b9f30d723e3c50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level_num: 1
+  waypoint_name: 0
   camera_move_speed: 5
   camera_rotation_time: 0.5
   gridPrefab: {fileID: 4002971093886716659, guid: fb1bb113a53fa204ba123e948f3b0468, type: 3}
   height: 2
   width: 3
   length: 3
-  position_spring: 5000
-  position_damper: 100
+  position_spring: 500000
+  position_damper: 10000
   activeLayerIndex: 0
+  drag_rotation_speed: 0.05
+  design_index: -1
+  min_dist: 3
+  max_dist: 7
+  zoom_speed: 0.25
 --- !u!114 &3162200608899753330
 MonoBehaviour:
   m_ObjectHideFlags: 0

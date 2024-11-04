@@ -31,9 +31,12 @@ public class WheelPreview : AccessoryComponent
     public override void Build()
 	{
 		rb.useGravity = true;
-		c.enabled = true;
+		if (c != null)
+		{
+			c.enabled = true;
+		}
 		Debug.Assert(cylinderTransform != null);
-		wheelCollider = transform.Find("Collider").GetComponent<WheelCollider>();
+		wheelCollider = GetComponent<WheelCollider>();
 		Debug.Assert(wheelCollider != null);
 		wheelCollider.enabled = true;
 		built = true;

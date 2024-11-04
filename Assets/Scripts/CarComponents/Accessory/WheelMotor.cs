@@ -6,10 +6,12 @@ public class WheelMotor : MonoBehaviour
 {
 	WheelCollider wheelCollider;
 	public float torque_factor = 5.0f;
+	Rigidbody rb;
 	// Start is called before the first frame update
 	void Start()
     {
-		wheelCollider = transform.Find("Collider").GetComponent<WheelCollider>();
+		wheelCollider = GetComponent<WheelCollider>();
+		rb = GetComponent<Rigidbody>();
 	}
 
     // Update is called once per frame

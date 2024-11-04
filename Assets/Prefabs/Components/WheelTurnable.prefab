@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max_turn_angle: 45
+  turn_speed: 0.02
   shaftTransform: {fileID: 496202556060478207}
   allow_turn: 1
 --- !u!114 &8239606889629058600

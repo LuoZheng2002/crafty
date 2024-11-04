@@ -68,9 +68,5 @@ public class Umbrella : AccessoryComponent
     {
         rb = GetComponent<Rigidbody>();
         c = GetComponent<Collider>();
-
-        
-
-        
     }
 }

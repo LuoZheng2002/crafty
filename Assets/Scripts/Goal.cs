@@ -31,6 +31,11 @@ public class Goal : MonoBehaviour
 		current = goals[goal_name];
 		current.Show();
 	}
+	public static void Activate(Util.GoalName goal_name)
+	{
+		Debug.Assert(goals.ContainsKey(goal_name));
+		goals[goal_name].Show();
+	}
 	public static void Deselect()
 	{
 		if (current != null)
