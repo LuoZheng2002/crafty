@@ -15,7 +15,9 @@ public abstract class BoosterPreview : AccessoryComponent
 
     Rigidbody rb;
     Collider c;
-    public float thrust = 2.0f;
+    [SerializeField] float thrust = 2.0f;
+    [SerializeField] float fuel = 100f;
+    [SerializeField] float fuel_usage = 5f;
 
     bool built;
 
@@ -29,9 +31,10 @@ public abstract class BoosterPreview : AccessoryComponent
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.V))
+        if (Input.GetKey(KeyCode.V) && fuel > 0)
         {
             rb.AddForce(transform.up * thrust);
+            fuel -= fuel_usage;
         }
     }
     public override (bool wa, bool sd) GetWASD()
