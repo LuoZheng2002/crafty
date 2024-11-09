@@ -171,6 +171,11 @@ public class DragImage : MonoBehaviour
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();
 		Debug.Assert(component != null);
+		AccessoryComponent accessory = component as AccessoryComponent;
+		if (accessory != null)
+		{
+			accessory.GridMatrix = GridMatrix.Current;
+		}
 		component.MoveGlobal(grid.transform.position);
 		return component;
 	}
@@ -180,6 +185,7 @@ public class DragImage : MonoBehaviour
 		GameObject inst= Instantiate(componentPrefab.gameObject, GridMatrix.Current.transform);
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();
+		Debug.Assert(component != null);
 		if (local)
 		{
 			component.MoveLocal(position);
@@ -188,10 +194,12 @@ public class DragImage : MonoBehaviour
 		{
 			component.MoveGlobal(position);
 		}
-		DirectionalComponent directionalPreview = component as DirectionalComponent;
-		if (directionalPreview != null)
+		AccessoryComponent accessory = component as AccessoryComponent;
+		if (accessory != null)
 		{
-			directionalPreview.Direction = direction;
+			Debug.Assert(GridMatrix.Current != null);
+			accessory.GridMatrix = GridMatrix.Current;
+			accessory.Direction = direction;
 		}
 		return component;
 	}

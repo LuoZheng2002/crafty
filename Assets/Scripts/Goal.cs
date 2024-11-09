@@ -13,10 +13,11 @@ public class GoalReachedEvent
 
 public class Goal : MonoBehaviour
 {
-	MeshRenderer meshRenderer;
+	public MeshRenderer meshRenderer;
 	Collider c;
 	public Util.GoalName goal_name; 
 	static Dictionary<Util.GoalName, Goal> goals = new();
+	public bool show_goal = false;
 	/// <summary>
 	/// Show the goal specified by level_num and hide the previous goal
 	/// </summary>
@@ -47,10 +48,15 @@ public class Goal : MonoBehaviour
 	private void Start()
 	{
 		Debug.Assert(!goals.ContainsKey(goal_name));
-		goals[goal_name] = this;
-		meshRenderer = GetComponent<MeshRenderer>();
-		c = GetComponent<Collider>();
+		goals[goal_name] = this;		
+		if (meshRenderer == null)
+		{
+			meshRenderer = GetComponent<MeshRenderer>();
+			Debug.Assert(meshRenderer != null);
+		}
 		meshRenderer.enabled = false;
+		c = GetComponent<Collider>();
+		
 		c.enabled = false;
 	}
 	private void OnDestroy()
@@ -67,7 +73,10 @@ public class Goal : MonoBehaviour
 
 	void Show()
 	{
-		// meshRenderer.enabled = true;
+		if (show_goal)
+		{
+			meshRenderer.enabled = true;
+		}
 		c.enabled = true;
 	}
 	void Hide()

@@ -27,9 +27,4 @@ public abstract class CrateBase : CrateComponent
 			yield return new WaitForSeconds(0.25f);
 		}
 	}
-
-	public override void SetActive(bool active)
-	{
-		this.active = active;
-	}
 }

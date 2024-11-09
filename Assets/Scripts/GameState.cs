@@ -110,11 +110,11 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		// TransitionToStory(Util.StoryName.Crash);
+		TransitionToStory(Util.StoryName.Crash);
 		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
-		 TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
+		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
 		// TransitionToStory(Util.StoryName.TownWaypoint);
 		// town_waypoint_met = true;
 		// TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
@@ -210,7 +210,7 @@ public class GameState : MonoBehaviour
 		switch (story_name)
 		{
 			case Util.StoryName.Crash:
-				TransitionToStoryCrash();
+				StartCoroutine(TransitionToStoryCrash());
 				break;
 			case Util.StoryName.Intro:
 				StartCoroutine(TransitionToStoryIntro());
@@ -228,26 +228,41 @@ public class GameState : MonoBehaviour
 	}
 	IEnumerator TransitionToStoryTownWaypoint()
 	{
-		BlackoutCanvas.Inst.Blackout(1.0f, true);
-		yield return new WaitForSeconds(1.0f);
+		yield return BlackoutCanvas.Inst.Blackout(1.0f, true);
 		StoryAnimation.Inst.PlayAnimation(Util.StoryName.TownWaypoint);
 		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
 			TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
 		});
 	}
-	void TransitionToStoryCrash()
+	IEnumerator TransitionToStoryCrash()
 	{
+		MainCamera.Inst.WarpTo(TransformRef.Get(Util.TransformRefName.CameraPrestory1_1));
+		StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, false);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, true);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, false);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, true);
+		yield return new WaitForSeconds(1.0f);
+		Character.Partner.WarpTo(TransformRef.Get(Util.TransformRefName.PartnerPrestory1));
+		yield return BlackoutCanvas.Inst.Blackout(2.0f, false);
+		Character.Partner.StartTalking();
+		yield return new WaitForSeconds(2.0f);
+		Character.Partner.StopTalking();
+		// Character.Piggy.WarpTo(TransformRef.Get(Util.TransformRefName.PigPrestory1));
+
+
 		//BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, () =>
 		//{
 		//	Debug.Log("Story!");
 		//	TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		//});
-		StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
-		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
-		{
-			TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
-		});
+
+		//StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
+		//StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
+		//{
+		//	TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		//});
 		// animation end 
 	}
 	public float rise_time = 5.0f;
@@ -311,7 +326,7 @@ public class GameState : MonoBehaviour
 		MainCamera.Inst.Stop();
 		StoryAnimation.Inst.CanSpeedup = false;
 		StoryAnimation.Inst.PlayAnimation(Util.StoryName.InTown);
-		MainCamera.Inst.FollowStory();
+		// MainCamera.Inst.FollowStory();
 		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
 		{
 			TransitionToPlay(false);

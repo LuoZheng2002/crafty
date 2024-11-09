@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -63,7 +64,6 @@ public class GridMatrix : MonoBehaviour
 	Util.Component[,,] mem_accessories;
 	Util.Component[,,] mem_loads;
 	int[,,] accessory_directions;
-	int[,,] load_directions;
 
 	CrateComponent[,,] design_crates;
 	AccessoryComponent[,,] design_accessories;
@@ -105,6 +105,19 @@ public class GridMatrix : MonoBehaviour
 	{
 		current.Active = false;
 		current = null;
+	}
+
+	public ref CrateComponent GetCrate(Vec3 pos)
+	{
+		return ref crates[pos.h, pos.w, pos.l];
+	}
+	public ref AccessoryComponent GetAccessory(Vec3 pos)
+	{
+		return ref accessories[pos.h, pos.w, pos.l];
+	}
+	public ref LoadComponent GetLoad(Vec3 pos)
+	{
+		return ref loads[pos.h, pos.w, pos.l];
 	}
 	private void Start()
 	{
@@ -201,29 +214,27 @@ public class GridMatrix : MonoBehaviour
 						{
 							Util.Component content = mem_accessories[i, j, k];
 							var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, accessory_directions[i, j, k]) as AccessoryComponent;
-							accessories[i, j, k] = inst;
-							Debug.Assert(inst != null);
+							AddComponent(grids[i, j, k], Util.ComponentType.Accessory, inst);
+
 							DragImage.DragImages[content].Count--;
 						}
 						if (mem_loads[i, j, k] != Util.Component.None)
 						{
+							Debug.Assert(mem_loads != null);
 							Util.Component content = mem_loads[i, j, k];
-							var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, load_directions[i, j, k]) as LoadComponent;
-							loads[i, j, k] = inst;
+							Debug.Log(content);
+							var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as LoadComponent;
+							Debug.Assert(loads != null);
 							Debug.Assert(inst != null);
-							if (content == Util.Component.Pig)
-							{
-								GameState.Inst.Piggy = inst as PiggyPreview;
-								ConfirmButton.Inst.OnGridStateChanged();
-							}
+							AddComponent(grids[i, j, k], Util.ComponentType.Load, inst);
 							DragImage.DragImages[content].Count--;
 						}
 						if (mem_crates[i, j, k] != Util.Component.None)
 						{
 							Util.Component content = mem_crates[i, j, k];
 							var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as CrateComponent;
-							crates[i, j, k] = inst;
 							Debug.Assert(inst != null);
+							AddComponent(grids[i, j, k], Util.ComponentType.Crate, inst);
 							DragImage.DragImages[content].Count--;
 						}
 					}
@@ -309,7 +320,6 @@ public class GridMatrix : MonoBehaviour
 			mem_loads = new Util.Component[height, width,length];
 			mem_accessories = new Util.Component[height, width,length];
 			accessory_directions = new int[height, width,length];
-			load_directions = new int[height, width,length];
 			mem_crates[0, 0, 0] = Util.Component.WoodenCrate;
 			mem_crates[1, 0, 0] = Util.Component.WoodenCrate;
 			mem_crates[1, 1, 0] = Util.Component.WoodenCrate;
@@ -446,23 +456,33 @@ public class GridMatrix : MonoBehaviour
 			design_loads = null;
 		}
 	}
-
-	void BuildAndStickCrates(int h_idx, int w_idx, int l_idx)
+	public ref Util.Component GetMemCrate(Vec3 pos)
 	{
-		CrateComponent crate = crates[h_idx, w_idx, l_idx];
+		return ref mem_crates[pos.h, pos.w, pos.l];
+	}
+	public ref Util.Component GetMemAccessory(Vec3 pos)
+	{
+		return ref mem_accessories[pos.h, pos.w, pos.l];
+	}
+	public ref Util.Component GetMemLoad(Vec3 pos)
+	{
+		return ref mem_loads[pos.h, pos.w, pos.l];
+	}
+	void BuildAndStickCrates(Vec3 pos)
+	{
+		CrateComponent crate = GetCrate(pos);
 		if (crate != null)
 		{
 			GameState.Inst.Components.Add(crate);
-			mem_crates[h_idx, w_idx, l_idx] = crate.Component;
+			GetMemCrate(pos) = crate.Component;
 			crate.Build();
-			List<(int, int, int)> deltas = new(){ (1, 0, 0), (0, 1, 0), (0, 0, 1) };
+			List<Vec3> deltas = new(){ (1, 0, 0), (0, 1, 0), (0, 0, 1) };
 			foreach (var delta in deltas)
 			{
-				(int h, int w, int l) = delta;
-				(int new_h, int new_w, int new_l) = (h_idx+h, w_idx + w, l_idx+l);
-				if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l]!=null)
+				Vec3 new_pos = pos + delta;
+				if (InGrid(new_pos) && GetCrate(new_pos)!=null)
 				{
-					Util.CreateJoint(crate, crates[new_h, new_w, new_l], position_spring, position_damper);
+					Util.CreateJoint(crate, GetCrate(new_pos), position_spring, position_damper);
 				}
 			}
 		}	
@@ -481,7 +501,7 @@ public class GridMatrix : MonoBehaviour
 			if (_wa) ws = true;
 			if (_sd) ad = true;
 			accessory.Build();
-			accessory.Stick(this, h_idx, w_idx, l_idx);
+			accessory.Stick();
 		}
 	}
 	void BuildAndStickLoads(int h_idx, int w_idx, int l_idx)
@@ -491,7 +511,6 @@ public class GridMatrix : MonoBehaviour
 		{
 			GameState.Inst.Components.Add(load);
 			mem_loads[h_idx, w_idx, l_idx] = load.Component;
-			load_directions[h_idx, w_idx, l_idx] = load.Direction;
 			load.Build();
 			if (crates[h_idx, w_idx, l_idx] != null)
 			{
@@ -509,7 +528,6 @@ public class GridMatrix : MonoBehaviour
 		mem_accessories = new Util.Component[height, width, length];
 		mem_loads = new Util.Component[height, width, length];
 		accessory_directions = new int[height, width, length];
-		load_directions = new int[height, width, length];
 
 		for (int i = 0; i < height; i++)
 		{
@@ -517,7 +535,7 @@ public class GridMatrix : MonoBehaviour
 			{
 				for (int k = 0; k < length; k++)
 				{
-					BuildAndStickCrates(i, j, k);
+					BuildAndStickCrates((i, j, k));
 				}
 			}
 		}
@@ -575,8 +593,9 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 	}
-	public bool InGrid(int h, int w, int l)
+	public bool InGrid(Vec3 pos)
 	{
+		(int h, int w, int l) = pos.Unwrap();
 		return h >= 0 && h < height && w >= 0 && w < width && l >= 0 && l < length;
 	}
 	public void SwitchLayer()
@@ -729,7 +748,7 @@ public class GridMatrix : MonoBehaviour
 
                 if (accessory != null)
                 {
-                    accessory.ChangeDirection(true);
+                    accessory.ChangeDirection();
                 }
                 else
                 {
@@ -889,6 +908,7 @@ public class GridMatrix : MonoBehaviour
 			case Util.ComponentType.Accessory:
 				AccessoryComponent accessoryPreview = content as AccessoryComponent;
 				Debug.Assert(accessoryPreview != null);
+				accessoryPreview.Pos = (h, w, l);
 				accessories[h, w, l] = accessoryPreview;
 				break;
 			case Util.ComponentType.Load:
@@ -903,5 +923,6 @@ public class GridMatrix : MonoBehaviour
 				}
 				break;
 		}
+		EventBus.Publish(new NeighborChangedEvent());
 	}
 }

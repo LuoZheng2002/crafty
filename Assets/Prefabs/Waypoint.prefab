@@ -49,7 +49,7 @@ MonoBehaviour:
   yellow: {fileID: 2100000, guid: 040d8d51a59844e4b98176a1cf576c19, type: 2}
   red: {fileID: 2100000, guid: f34dfc8a98ca85e4baaf994473587c4a, type: 2}
   green: {fileID: 2100000, guid: 94a02ca5d2c15dd49ac4d48eac26109b, type: 2}
-  waypoint_name: 0
+  waypoint_name: 3
 --- !u!1001 &1287573898616690432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 55a7bb3dabe65704095b8b6ab042e471, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 94a02ca5d2c15dd49ac4d48eac26109b, type: 2}
+      objectReference: {fileID: 2100000, guid: 040d8d51a59844e4b98176a1cf576c19, type: 2}
     - target: {fileID: 919132149155446097, guid: 55a7bb3dabe65704095b8b6ab042e471, type: 3}
       propertyPath: m_Name
       value: beacon

@@ -26,20 +26,25 @@ public class BlackoutCanvas : MonoBehaviour
 		color.a = alpha;
 		image.color = color;
 	}
-    public void Blackout(float time, bool turns_black)
+    public void BlackoutAsync(float time, bool turns_black)
+    {
+		gameObject.SetActive(true);
+        StartCoroutine(Blackout(time, turns_black));
+	}
+    public IEnumerator Blackout(float time, bool turns_black)
     {
         gameObject.SetActive(true);
-		StartCoroutine(BlackoutHelper(time, turns_black));
-    }
-    IEnumerator BlackoutHelper(float time_transition, bool turns_black)
-    {
-        float start_time = Time.time;
-        float initial_alpha = turns_black ? 0.0f : 1.0f;
-        float end_alpha = turns_black ? 1.0f: 0.0f;
-        while (Time.time - start_time < time_transition)
+		float start_time = Time.time;
+		float initial_alpha = turns_black ? 0.0f : 1.0f;
+		float end_alpha = turns_black ? 1.0f : 0.0f;
+		while (Time.time - start_time < time)
+		{
+			SetImageAlpha(Mathf.Lerp(initial_alpha, end_alpha, (Time.time - start_time) / time));
+			yield return null;
+		}
+        if (!turns_black)
         {
-            SetImageAlpha(Mathf.Lerp(initial_alpha, end_alpha, (Time.time - start_time) / time_transition));
-            yield return null;
+            gameObject.SetActive(false);
         }
-    }
+	}
 }

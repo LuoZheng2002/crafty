@@ -13,14 +13,7 @@ public class ScreamEvent
 
 public class PiggyPreview : LoadComponent
 {
-	int current_direction;
-	public override int Direction
-	{
-		get { return current_direction; }
-		set { current_direction = value; }
-	}
 	GameObject mesh;
-	Rigidbody rb;
 	public float scream_velocity = 5.0f;
 	bool screaming = false;
 	float frame_1_vel = 0.0f;
@@ -34,7 +27,6 @@ public class PiggyPreview : LoadComponent
 	{
 		mesh = transform.GetChild(0).gameObject;
 		Debug.Assert(mesh != null);
-		rb = GetComponent<Rigidbody>();
 		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnFIrstPersonChanged);
 	}
 	private void Update()
@@ -42,23 +34,22 @@ public class PiggyPreview : LoadComponent
 		frame_1_vel = frame_2_vel;
 		frame_2_vel = frame_3_vel;
 		frame_3_vel = frame_4_vel;
-		frame_4_vel = Mathf.Abs(rb.velocity.z);
+		frame_4_vel = Mathf.Abs(RB.velocity.z);
 		float average_vel = (frame_1_vel + frame_2_vel + frame_3_vel + frame_4_vel) / 4.0f;
 		if (Mathf.Abs(average_vel) > scream_velocity && !screaming)
 		{
 			screaming = true;
 			EventBus.Publish(new ScreamEvent());
 		}
-		else if (Mathf.Abs(rb.velocity.z) < scream_velocity - 1.0f && screaming) 
+		else if (Mathf.Abs(RB.velocity.z) < scream_velocity - 1.0f && screaming) 
 		{
 			screaming = false;
 		}
 	}
 	public override void Build()
 	{
-		Rigidbody rb = GetComponent<Rigidbody>();
 		Collider c = GetComponent<Collider>();
-		rb.useGravity = true;
+		RB.useGravity = true;
 		c.enabled = true;
 	}
 	void OnFIrstPersonChanged(InvisibleStateUpdateEvent e)
@@ -75,14 +66,5 @@ public class PiggyPreview : LoadComponent
 	private void OnDestroy()
 	{
 		EventBus.Publish(new PiggyDestroyEvent());
-	}
-	public override void ChangeDirection(bool forward = true)
-	{
-		// throw new System.NotImplementedException();
-	}
-
-	public override void SetActive(bool active)
-	{
-		// throw new System.NotImplementedException();
 	}
 }

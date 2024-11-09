@@ -21,7 +21,6 @@ public class WheelTurner : MonoBehaviour
 	public float correction_coef = 2.0f;
     void Update()
     {
-		Debug.Log(rb.velocity.magnitude);
 		// float real_max_turn_angle = Mathf.Clamp(max_turn_angle - rb.velocity.magnitude*correction_coef, 10, max_turn_angle);
 		float real_max_turn_angle = max_turn_angle;
 		if (allow_turn)

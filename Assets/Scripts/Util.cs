@@ -4,10 +4,42 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public class RotationInfo
+{
+	public Vec3 attach_dir;
+    public RotationInfo()
+    {
+        
+    }
+    public RotationInfo(Vec3 attach_dir)
+    {
+        this.attach_dir = attach_dir;
+    }
+}
+
 public class Util
 {
 	// occupied type
 	// update
+	public enum TransformRefName
+	{
+		PigPrestory1,
+		PartnerPrestory1,
+		PigPrestory2,
+		PartnerPrestory2,
+		CameraPrestory1_1,
+		CameraPrestory1_2,
+		CameraPrestory2_1,
+		CameraPrestory2_2,
+	}
+	public enum CharacterName
+	{
+		Piggy,
+		Partner,
+		NPC1,
+		NPC2,
+		NPC3,
+	}
 	public enum GameStateType
 	{
 		Intro,
@@ -43,38 +75,38 @@ public class Util
 		}
 	}
 
-	public static List<(Quaternion, (int, int, int))> WheelRotations = new ()
+	public static List<(Quaternion, RotationInfo)> WheelRotations = new ()
 	{
-		(Quaternion.Euler(0f, 0f, 0f), (1, 0, 0)),
-		(Quaternion.Euler(0f, 90.0f, 0f),(1, 0, 0)),
-		(Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
-		(Quaternion.Euler(90.0f, 0.0f, 90.0f),(0, -1, 0)),
-		(Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
-		(Quaternion.Euler(90.0f, 0.0f, 270.0f),(0, 1, 0)),
-		(Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
-		(Quaternion.Euler(90.0f, 90.0f, 90.0f),(0, 0, 1)),
-		(Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
-		(Quaternion.Euler(90.0f, -90.0f, 90.0f),(0, 0, -1)),
-		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(-1, 0, 0)),
-		(Quaternion.Euler(0.0f, 90.0f, 180.0f),(-1, 0, 0)),
+		(Quaternion.Euler(0f, 0f, 0f), new RotationInfo(new Vec3(1, 0, 0))),
+		(Quaternion.Euler(0f, 90.0f, 0f),new RotationInfo(new Vec3(1, 0, 0))),
+		(Quaternion.Euler(0.0f, 0f, 90.0f), new RotationInfo(new Vec3(0, -1, 0))),
+		(Quaternion.Euler(90.0f, 0.0f, 90.0f),new RotationInfo(new Vec3(0, -1, 0))),
+		(Quaternion.Euler(0.0f, 0.0f, 270.0f),new RotationInfo(new Vec3(0, 1, 0))),
+		(Quaternion.Euler(90.0f, 0.0f, 270.0f),new RotationInfo(new Vec3(0, 1, 0))),
+		(Quaternion.Euler(0.0f, 90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, 1))),
+		(Quaternion.Euler(90.0f, 90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, 1))),
+		(Quaternion.Euler(0.0f, -90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, -1))),
+		(Quaternion.Euler(90.0f, -90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, -1))),
+		(Quaternion.Euler(0.0f, 0.0f, 180.0f),new RotationInfo(new Vec3(-1, 0, 0))),
+		(Quaternion.Euler(0.0f, 90.0f, 180.0f),new RotationInfo(new Vec3(-1, 0, 0))),
 	};
-	public static List<(Quaternion, (int, int, int))> UmbrellaRotations = new()
+	public static List<(Quaternion, RotationInfo)> UmbrellaRotations = new()
 	{
-		(Quaternion.Euler(0f, 0f, 0f), (-1, 0, 0)),
-		(Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
-		(Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
-		(Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
-		(Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
-		(Quaternion.Euler(0.0f, 0.0f, 180.0f),(1, 0, 0)),
+		(Quaternion.Euler(0f, 0f, 0f), new RotationInfo(new Vec3(-1, 0, 0))),
+		(Quaternion.Euler(0.0f, 0f, 90.0f),new RotationInfo(new Vec3(0, -1, 0))),
+		(Quaternion.Euler(0.0f, 0.0f, 270.0f),new RotationInfo(new Vec3(0, 1, 0))),
+		(Quaternion.Euler(0.0f, 90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, 1))),
+		(Quaternion.Euler(0.0f, -90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, -1))),
+		(Quaternion.Euler(0.0f, 0.0f, 180.0f),new RotationInfo(new Vec3(1, 0, 0))),
 	};
-	public static List<(Quaternion, (int, int, int))> BoosterRotations = new()
+	public static List<(Quaternion, RotationInfo)> BoosterRotations = new()
     {
-        (Quaternion.Euler(0f, 0f, 0f), (-1, 0, 0)),
-        (Quaternion.Euler(0.0f, 0f, 90.0f),(0, -1, 0)),
-        (Quaternion.Euler(0.0f, 0.0f, 270.0f),(0, 1, 0)),
-        (Quaternion.Euler(0.0f, 90.0f, 90.0f),(0, 0, 1)),
-        (Quaternion.Euler(0.0f, -90.0f, 90.0f),(0, 0, -1)),
-        (Quaternion.Euler(0.0f, 0.0f, 180.0f),(1, 0, 0)),
+		(Quaternion.Euler(0.0f, 90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, 1))),
+		(Quaternion.Euler(0f, 0f, 0f), new RotationInfo(new Vec3(-1, 0, 0))),
+        (Quaternion.Euler(0.0f, 0f, 90.0f),new RotationInfo(new Vec3(0, -1, 0))),
+        (Quaternion.Euler(0.0f, 0.0f, 270.0f),new RotationInfo(new Vec3(0, 1, 0))),
+        (Quaternion.Euler(0.0f, -90.0f, 90.0f),new RotationInfo(new Vec3(0, 0, -1))),
+        (Quaternion.Euler(0.0f, 0.0f, 180.0f),new RotationInfo(new Vec3(1, 0, 0))),
     };
 
     public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()

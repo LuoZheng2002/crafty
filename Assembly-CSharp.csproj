@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Starbox.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Crate\CrateBase.cs" />
     <Compile Include="Assets\Scripts\AudioPlayer.cs" />
+    <Compile Include="Assets\Scripts\Warp.cs" />
     <Compile Include="Assets\Scripts\UIScripts\DragImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Load\PiggyPreview.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToastManager.cs" />
+    <Compile Include="Assets\Scripts\Character.cs" />
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\UIScripts\EraserImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\CustomCursor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
+    <Compile Include="Assets\Scripts\TransformRef.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
     <Compile Include="Assets\Scripts\StoryAnimation.cs" />
     <Compile Include="Assets\Scripts\UIScripts\StarDisplayer.cs" />

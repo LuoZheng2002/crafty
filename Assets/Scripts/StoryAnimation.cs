@@ -12,7 +12,6 @@ public class StoryAnimation : MonoBehaviour
 		get { Debug.Assert(inst != null, "Story Animation not set"); return inst; }
 	}
 	Animator animator;
-	public Transform AnimationCamera { get; private set; }
 	private void Start()
 	{
 		Debug.Assert(inst == null, "Story Animation already set");
@@ -20,10 +19,6 @@ public class StoryAnimation : MonoBehaviour
 		animator = GetComponent<Animator>();
 		Debug.Assert(animator != null);
 		animator.enabled = false;
-		AnimationCamera = transform.Find("AnimationCamera");
-		Debug.Assert(AnimationCamera != null);
-		Camera camera = AnimationCamera.GetComponent<Camera>();
-		camera.enabled = false;
 	}
 	private void OnDestroy()
 	{
@@ -34,7 +29,7 @@ public class StoryAnimation : MonoBehaviour
 		gameObject.SetActive(true);
 		animator.enabled = true;
 		animator.speed = 1.0f;
-		MainCamera.Inst.FollowStory();
+		// MainCamera.Inst.FollowStory();
 		switch (storyName)
 		{
 			case Util.StoryName.Crash:
