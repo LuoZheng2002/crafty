@@ -27,6 +27,7 @@ public class WheelPreview : AccessoryComponent
     {
         rb = GetComponent<Rigidbody>();
 		c = GetComponent<Collider>();
+		EventBus.Subscribe<NeighborChangedEvent>(OnNeighborChanged);
     }
     public override void Build()
 	{
@@ -76,5 +77,18 @@ public class WheelPreview : AccessoryComponent
 	public override (bool wa, bool sd) GetWASD()
 	{
 		return (false, false);
+	}
+	public override void Stick(GridMatrix gridMatrix, int h, int w, int l)
+	{
+		(int dh, int dw, int dl) = AttachDir();
+		(int new_h, int new_w, int new_l) = (h + dh, w + dw, l + dl);
+		if (gridMatrix.InGrid(new_h, new_w, new_l) && gridMatrix.crates[new_h, new_w, new_l] != null)
+		{
+			Util.CreateJoint(this, gridMatrix.crates[new_h, new_w, new_l], gridMatrix.position_spring, gridMatrix.position_damper);
+		}
+	}
+	void OnNeighborChanged(NeighborChangedEvent e)
+	{
+
 	}
 }

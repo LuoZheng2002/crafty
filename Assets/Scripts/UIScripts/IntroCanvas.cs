@@ -36,10 +36,10 @@ public class IntroCanvas : MonoBehaviour
         color.a = 0;
         _3d_text.color= color;
 		float start_time = Time.time;
-        float fade_in_time1 = 1.0f;
-        float fade_in_time2 = 1.0f;
-        float stay_time = 1.0f;
-        float fade_out_time = 2.0f;
+        float fade_in_time1 = 1.2f;
+        float fade_in_time2 = 1.2f;
+        float stay_time = 2.0f;
+        float fade_out_time = 1.5f;
         while(Time.time - start_time <fade_in_time1)
         {
             float alpha = (Time.time - start_time) / fade_in_time1;

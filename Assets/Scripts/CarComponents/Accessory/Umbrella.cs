@@ -7,10 +7,10 @@ public class Umbrella : AccessoryComponent
     Rigidbody rb;
     Collider c;
     public GameObject cube;
-    public float dragForce = 0.5f;
     int current_rotation = 0;
     bool built = false;
     bool open = false;
+    public float damp = 1.0f;
     public override int Direction {
         get => 0;
         set { }
@@ -58,15 +58,29 @@ public class Umbrella : AccessoryComponent
         {
             if (open)
             {
-                rb.AddForce(rb.velocity * -dragForce);
+                rb.mass = 20;
+                rb.drag = damp;
             }
+            else
+            {
+                rb.mass = 2;
+				rb.drag = 0;
+			}
             
         }
     }
-
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         c = GetComponent<Collider>();
     }
+	public override void Stick(GridMatrix gridMatrix, int h, int w, int l)
+	{
+        (int dh, int dw, int dl) = AttachDir();
+		(int new_h, int new_w, int new_l) = (h + dh, w + dw, l + dl);
+		if (gridMatrix.InGrid(new_h, new_w, new_l) && gridMatrix.crates[new_h, new_w, new_l] != null)
+		{
+			Util.CreateJoint(this, gridMatrix.crates[new_h, new_w, new_l], gridMatrix.position_spring, gridMatrix.position_damper);
+		}
+	}
 }

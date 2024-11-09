@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a0fbf3b8dbdd2f04e83c68ece5072be0, type: 2}
+    - target: {fileID: 2587270629425496011, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Mass
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Name
       value: WheelPower
@@ -133,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea201423de0353d44b1924e40c48ae95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  torque_factor: 1800
+  torque_factor: 360
 --- !u!114 &70626792578212898
 MonoBehaviour:
   m_ObjectHideFlags: 0

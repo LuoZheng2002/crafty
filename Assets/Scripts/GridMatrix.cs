@@ -10,6 +10,7 @@ public class ItemErasedEvent { }
 public class ComponentAddedEvent { }
 public class SwitchLayerEvent { }
 public class FullLayerEvent { }
+public class NeighborChangedEvent { }
 public class GridMatrix : MonoBehaviour
 {
 	public Util.WaypointName waypoint_name;
@@ -55,9 +56,9 @@ public class GridMatrix : MonoBehaviour
 		}
 	}
 	GridCell[,,] grids;
-	CrateComponent[,,] crates;
-	AccessoryComponent[,,] accessories;
-	LoadComponent[,,] loads;
+	public CrateComponent[,,] crates;
+	public AccessoryComponent[,,] accessories;
+	public LoadComponent[,,] loads;
 	Util.Component[,,] mem_crates;
 	Util.Component[,,] mem_accessories;
 	Util.Component[,,] mem_loads;
@@ -480,13 +481,7 @@ public class GridMatrix : MonoBehaviour
 			if (_wa) ws = true;
 			if (_sd) ad = true;
 			accessory.Build();
-			// to do
-			(var h, var w, var l) = accessory.AttachDir();
-			(var new_h, var new_w, var new_l) = (h + h_idx, w + w_idx, l + l_idx);
-			if (InGrid(new_h, new_w, new_l) && crates[new_h, new_w, new_l] != null)
-			{
-				Util.CreateJoint(accessory, crates[new_h, new_w, new_l], position_spring, position_damper);
-			}
+			accessory.Stick(this, h_idx, w_idx, l_idx);
 		}
 	}
 	void BuildAndStickLoads(int h_idx, int w_idx, int l_idx)
@@ -580,7 +575,7 @@ public class GridMatrix : MonoBehaviour
 			}
 		}
 	}
-	bool InGrid(int h, int w, int l)
+	public bool InGrid(int h, int w, int l)
 	{
 		return h >= 0 && h < height && w >= 0 && w < width && l >= 0 && l < length;
 	}

@@ -49,4 +49,5 @@ public abstract class AccessoryComponent: DirectionalComponent
 {
 	public abstract (int h_delta, int w_delta, int l_delta) AttachDir();
     public abstract (bool wa, bool sd) GetWASD();
+    public abstract void Stick(GridMatrix gridMatrix, int h, int w, int l);
 }
