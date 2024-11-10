@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvas.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
     <Compile Include="Assets\Scripts\DrawGizmos.cs" />
+    <Compile Include="Assets\Scripts\TRef.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Load\Partner.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
@@ -109,10 +110,10 @@
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\CustomCursor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
-    <Compile Include="Assets\Scripts\TransformRef.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
     <Compile Include="Assets\Scripts\StoryAnimation.cs" />
     <Compile Include="Assets\Scripts\UIScripts\StarDisplayer.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Choice.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Help.cs" />
     <Compile Include="Assets\Scripts\StateMachineBehavior\CameraAnimExit.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\TurnWheelPreview.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\Rocket.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ViewCanvasDrag.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ChoiceCanvas.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\BoosterPreview.cs" />
     <Compile Include="Assets\Scripts\EventBus.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayCanvas.cs" />

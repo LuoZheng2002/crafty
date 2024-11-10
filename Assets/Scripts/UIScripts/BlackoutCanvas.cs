@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class BlackoutCanvas : MonoBehaviour
 {
     Image image;
+    public Text sub_text;
+    public AnimationCurve animationCurve;
     public static BlackoutCanvas Inst
     {
         get { Debug.Assert(inst != null, "Blackout Canvas not set");return inst; }
@@ -19,6 +21,7 @@ public class BlackoutCanvas : MonoBehaviour
         image = transform.Find("Black").GetComponent<Image>();
         inst = this;
         SetImageAlpha(0.0f);
+        SetTextAlpha(0.0f);
 	}
     void SetImageAlpha(float alpha)
     {
@@ -26,23 +29,52 @@ public class BlackoutCanvas : MonoBehaviour
 		color.a = alpha;
 		image.color = color;
 	}
-    public void BlackoutAsync(float time, bool turns_black)
+    void SetTextAlpha(float alpha)
+    {
+        Color color = sub_text.color;
+        color.a = alpha;
+		sub_text.color = color;
+    }
+    public void BlackoutAsync(float time, float start_alpha, float end_alpha)
     {
 		gameObject.SetActive(true);
-        StartCoroutine(Blackout(time, turns_black));
+        StartCoroutine(Blackout(time, start_alpha, end_alpha));
 	}
-    public IEnumerator Blackout(float time, bool turns_black)
+    public void DisplaySubAsync(string sub, float time, float start_alpha, float end_alpha)
+    {
+        gameObject.SetActive(true);
+        StartCoroutine(DisplaySub(sub, time, start_alpha, end_alpha));
+    }
+    public IEnumerator DisplaySub(string sub, float time, float start_alpha, float end_alpha)
+    {
+		gameObject.SetActive(true);
+        if (sub != null)
+        {
+            sub_text.text = sub;
+        }
+		float start_time = Time.time;
+		while (Time.time - start_time < time)
+		{
+			float progress = (Time.time - start_time) / time;
+			float x_val = Mathf.Lerp(start_alpha, end_alpha, progress);
+			float y_val = animationCurve.Evaluate(x_val);
+			SetTextAlpha(y_val);
+			yield return null;
+		}
+	}
+    public IEnumerator Blackout(float time, float start_alpha, float end_alpha)
     {
         gameObject.SetActive(true);
 		float start_time = Time.time;
-		float initial_alpha = turns_black ? 0.0f : 1.0f;
-		float end_alpha = turns_black ? 1.0f : 0.0f;
 		while (Time.time - start_time < time)
 		{
-			SetImageAlpha(Mathf.Lerp(initial_alpha, end_alpha, (Time.time - start_time) / time));
+            float progress = (Time.time - start_time) / time;
+            float x_val = Mathf.Lerp(start_alpha, end_alpha, progress);
+			float y_val = animationCurve.Evaluate(x_val);
+			SetImageAlpha(y_val);
 			yield return null;
 		}
-        if (!turns_black)
+        if (end_alpha == 0.0f)
         {
             gameObject.SetActive(false);
         }

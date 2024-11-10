@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LineCanvas : MonoBehaviour
 {
-	public float seconds_per_char = 0.2f;
+	public int frames_per_char = 6;
 	static LineCanvas topCanvas;
 	static LineCanvas bottomCanvas;
 	public bool top;
@@ -45,49 +47,116 @@ public class LineCanvas : MonoBehaviour
 	{
 		topCanvas = null;
 	}
-	string line_string;
-	public string Name
+	public IEnumerator DisplayLine(string name_str, string line_str)
 	{
-		set {
-			gameObject.SetActive(true);
-			n.text = value; }
-	}
-	IEnumerator ShowText()
-	{
+		gameObject.SetActive(true);
+		n.text = name_str;
 		line.text = "";
-		for (int i = 0; i < line_string.Length; i++)
+		int frame_index = 0;
+		int char_index = 0;
+		while (char_index < line_str.Length)
 		{
-			line.text += line_string[i];
-			yield return new WaitForSeconds(seconds_per_char);
-		}
-	}
-	IEnumerator coroutine;
-	public string Line
-	{
-		set 
-		{
-			gameObject.SetActive(true);
-			line_string = value;
-			if (coroutine != null)
+			if (frame_index == 0)
 			{
-				StopCoroutine(coroutine);
-				coroutine = null;
+				line.text += line_str[char_index++];
 			}
-			coroutine = ShowText();
-			StartCoroutine(coroutine);
+			frame_index = (frame_index + 1) % frames_per_char;
+			yield return null;
 		}
+		line.text = line_str;
 	}
-	public void SetString(string str)
+	public IEnumerator DisplayLineAndWaitForClick(string name_str, string line_str, Character talking_char)
 	{
-
-	}
-	public void Hide()
-	{
-		if (coroutine != null)
+		gameObject.SetActive(true);
+		n.text = name_str;
+		line.text = "";
+		if (talking_char != null)
 		{
-			StopCoroutine(coroutine);
-			coroutine = null;
+			talking_char.StartTalking();
 		}
+		int frame_index = 0;
+		int char_index = 0;
+		while(char_index < line_str.Length)
+		{
+			if (Input.GetMouseButtonDown(0))
+			{
+				break;
+			}
+			if (frame_index == 0)
+			{
+				line.text += line_str[char_index++];
+			}
+			frame_index = (frame_index + 1)%frames_per_char;
+			yield return null;
+		}
+		ShowContinue();
+		line.text = line_str;
+		if (talking_char != null)
+		{
+			talking_char.StopTalking();
+		}
+		yield return null;
+		while(!Input.GetMouseButtonDown(0))
+		{
+			yield return null;
+		}
+		HideContinue();
+		yield return null;
+	}
+
+	public IEnumerator DisplayLineAndWaitForEvent<Event_>(string name_str, string line_str, Func<Event_, bool> handler)
+	{
+		gameObject.SetActive(true);
+		n.text = name_str;
+		line.text = "";
+		int frame_index = 0;
+		int char_index = 0;
+		bool criteria_met = false;
+		var subscription = EventBus.Subscribe<Event_>((Event_ e) =>
+		{
+			if (handler(e))
+			{
+				criteria_met = true;
+			}
+		});
+		while (char_index < line_str.Length)
+		{
+			if (criteria_met || Input.GetMouseButtonDown(0))
+			{
+				break;
+			}
+			if (frame_index == 0)
+			{
+				line.text += line_str[char_index++];
+			}
+			frame_index = (frame_index + 1) % frames_per_char;
+			yield return null;
+		}
+		line.text = line_str;
+		while (!criteria_met)
+		{
+			yield return null;
+		}
+		EventBus.Unsubscribe(subscription);
+	}
+	public IEnumerator WaitForEvent<Event_>(Func<Event_, bool> handler)
+	{
+		bool criteria_met = false;
+		var subscription = EventBus.Subscribe<Event_>((Event_ e) =>
+		{
+			if (handler(e))
+			{
+				criteria_met = true;
+			}
+		});
+		while (!criteria_met)
+		{
+			yield return null;
+		}
+		EventBus.Unsubscribe(subscription);
+	}
+		public void Hide()
+	{
 		gameObject.SetActive(false);
 	}
 	public void ShowContinue()

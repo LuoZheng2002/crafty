@@ -21,8 +21,34 @@ public class Util
 {
 	// occupied type
 	// update
-	public enum TransformRefName
+	public enum ChoiceName
 	{
+		None,
+		DontNeedHelp,
+		NeedHelp
+	}
+	public enum BuildInfo
+	{
+		None,
+		NeedHelp,
+		DontNeedHelp,
+		DontNeedHelpButRetry
+	}
+	public class ChoiceObj
+	{
+		public ChoiceName choice_name;
+        public ChoiceObj(ChoiceName choice_name)
+        {
+            this.choice_name = choice_name;
+        }
+        public ChoiceObj()
+        {
+            choice_name = ChoiceName.None;
+        }
+    }
+	public enum TRefName
+	{
+		Origin,
 		PigPrestory1,
 		PartnerPrestory1,
 		PigPrestory2,
@@ -31,6 +57,23 @@ public class Util
 		CameraPrestory1_2,
 		CameraPrestory2_1,
 		CameraPrestory2_2,
+		CameraPrestory2_3,
+		CameraPrestory2_4,
+		CameraInTown1,
+		CameraInTown2,
+		PigTownW,
+		PartnerTownW,
+		CameraTownW1,
+		CameraTownW2,
+		PartnerC1S1,
+		CameraC1S1,
+		PartnerC1S2,
+		PiggyC1S2,
+		NPC1C1S2,
+		NPC2C1S2,
+		NPC3C1S2,
+		CameraC1S2_1,
+		CameraC1S2_2,
 	}
 	public enum CharacterName
 	{
@@ -55,7 +98,6 @@ public class Util
 		ChangeDirection,
 		Erase
 	}
-
 	// Set the layer of the GameObject and all its children
 	public static void SetLayerRecursively(GameObject obj, string newLayerName)
 	{
@@ -125,12 +167,12 @@ public class Util
 		{Component.TurnWheel, ComponentType.Accessory },
 	};
 	// crate, accessory, load
-	public static Dictionary<int, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
-	public static Dictionary<int, (Component[,,], Component[,,], Component[,,])> CreateForcedDesigns()
+	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
+	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> CreateForcedDesigns()
 	{
-		Dictionary<int, (Component[,,], Component[,,], Component[,,])> designs = new();
-		designs[0] = CreateForcedDesign0();
-		designs[1] = CreateForcedDesign1();
+		Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> designs = new();
+		designs[WaypointName.PreStory1] = CreateForcedDesign0();
+		designs[WaypointName.PreStory2] = CreateForcedDesign1();
 		return designs;
 	}
 
@@ -141,7 +183,9 @@ public class Util
 		Intro,
 		FallOffCliff,
 		InTown,
-		TownWaypoint
+		TownWaypoint,
+		C1S1,
+		C1S2,
 	}
 
 	public enum GoalName
@@ -151,6 +195,8 @@ public class Util
 		FallOffCliff,
 		PreStory2,
 		Town,
+		C1S1,
+		C1S2,
 	}
 
 	public enum WaypointName

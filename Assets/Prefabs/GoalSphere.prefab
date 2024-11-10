@@ -80,6 +80,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 234514139779251850, guid: b87b804a143cee746ae88e28966f5c0b, type: 3}
+      propertyPath: show_goal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 234514139779251850, guid: b87b804a143cee746ae88e28966f5c0b, type: 3}
       propertyPath: meshRenderer
       value: 
       objectReference: {fileID: 6339598421863808924}
@@ -161,7 +165,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

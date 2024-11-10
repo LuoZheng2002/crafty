@@ -34,11 +34,12 @@ public class ConfirmButton : MonoBehaviour
 	void OnTrash(ResetCountEvent e)
 	{
 		OnGridStateChanged();
+		EventBus.Publish(new NeighborChangedEvent());
 	}
 	bool can_start = false;
 	public void OnGridStateChanged()
 	{
-		if (GridMatrix.Current.design_index >=0)
+		if (!GridMatrix.Current.DisableDesign && Util.forced_designs.ContainsKey(GridMatrix.Current.waypoint_name))
 		{
 			can_start = true;
 			foreach(var dragImage in DragImage.DragImages)
@@ -55,6 +56,10 @@ public class ConfirmButton : MonoBehaviour
 			// to do
 			can_start = GameState.Inst.Piggy != null;
 		}
+		if (!EnableConfirm)
+		{
+			can_start = false;
+		}
 		if (can_start)
 		{
 			EventBus.Publish(new ReadyToGoEvent());
@@ -65,6 +70,16 @@ public class ConfirmButton : MonoBehaviour
 		{
 			image.color = transparentColor;
 			buttonScale.ScaleStop();
+		}
+	}
+	bool enable_confirm = true;
+	public bool EnableConfirm
+	{
+		get { return enable_confirm; }
+		set
+		{
+			enable_confirm = value;
+			OnGridStateChanged();
 		}
 	}
 	public void OnConfirmClicked()

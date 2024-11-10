@@ -89,25 +89,4 @@ public class StoryAnimation : MonoBehaviour
 			}
 		}
 	}
-	public void SetLine(string line)
-	{
-		string[] strings = line.Split('@');
-		if (strings.Length >=2)
-		{
-			LineCanvas.Bottom.Name = strings[0];
-			LineCanvas.Bottom.Line = strings[1];
-		}
-		else
-		{
-			LineCanvas.Bottom.Line = line;
-		}
-	}
-	public void BlackOutBlack(float time)
-	{
-		BlackoutCanvas.Inst.Blackout(time, true);
-	}
-	public void BlackOutWhite(float time)
-	{
-		BlackoutCanvas.Inst.Blackout(time, false);
-	}
 }

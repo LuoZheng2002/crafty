@@ -35,9 +35,6 @@ public class GridMatrix : MonoBehaviour
 	}
 
 	Subscription<GridMatrixDragEvent> dragEvent;
-
-	public int design_index = -1;
-
 	bool Active
 	{
 		get { return active; }
@@ -73,6 +70,7 @@ public class GridMatrix : MonoBehaviour
 	RaycastHit[] hits = new RaycastHit[10];
 	public static GridCell SelectedGrid{get; set;}
 	static Dictionary<Util.WaypointName, GridMatrix> grid_matrices = new();
+	public bool DisableDesign { get; set; } = false;
 	/// <summary>
 	/// The Grid Matrix corresponding to the current level
 	/// </summary>
@@ -87,7 +85,7 @@ public class GridMatrix : MonoBehaviour
 	/// <summary>
 	/// Activate the GridMatrix corresponding to the level num, deactivate other GridMatrices, and update GridMatrix.Current
 	/// </summary>
-	public static void SelectGridMatrix(Util.WaypointName waypoint_name)
+	public static void SelectGridMatrix(Util.WaypointName waypoint_name, bool disable_design)
 	{
 		Debug.Assert(grid_matrices.ContainsKey(waypoint_name));
 		if (current != null)
@@ -96,6 +94,7 @@ public class GridMatrix : MonoBehaviour
 		}
 		current = grid_matrices[waypoint_name];
 		Debug.Assert(current != null);
+		current.DisableDesign = disable_design;
 		current.Active = true;
 	}
 	/// <summary>
@@ -103,8 +102,11 @@ public class GridMatrix : MonoBehaviour
 	/// </summary>
 	public static void DeselectGridMatrix()
 	{
-		current.Active = false;
-		current = null;
+		if (current != null)
+		{
+			current.Active = false;
+			current = null;
+		}
 	}
 
 	public ref CrateComponent GetCrate(Vec3 pos)
@@ -286,7 +288,8 @@ public class GridMatrix : MonoBehaviour
 		}
 		activeLayerIndex = -1;
 		SetAllLayerActive();
-		if (design_index != -1)
+
+		if (!DisableDesign && Util.forced_designs.ContainsKey(waypoint_name))
 		{
 			LoadDesignVisuals();
 			if (waypoint_name != Util.WaypointName.PreStory1)
@@ -365,7 +368,7 @@ public class GridMatrix : MonoBehaviour
 		design_crates = new CrateComponent[height, width, length];
 		design_accessories = new AccessoryComponent[height, width, length];
 		design_loads = new LoadComponent[height, width, length];
-		(var design_crates_type, var design_accessories_type, var design_loads_type) = Util.forced_designs[design_index];
+		(var design_crates_type, var design_accessories_type, var design_loads_type) = Util.forced_designs[waypoint_name];
 		Debug.Assert(design_crates_type.GetLength(0) == height);
 		Debug.Assert(design_crates_type.GetLength(1) == width);
 		Debug.Assert(design_crates_type.GetLength(2) == length);
@@ -385,6 +388,8 @@ public class GridMatrix : MonoBehaviour
 						Debug.Log($"Type: {design_accessories_type[i, j, k]}");
 						design_accessories[i, j, k] = DragImage.DragImages[design_accessories_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as AccessoryComponent;
 						design_accessories[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						design_accessories[i, j, k].GridMatrix = this;
+						design_accessories[i, j, k].Pos = (i, j, k);
 					}
 					if (design_loads_type[i, j, k] != Util.Component.None)
 					{
@@ -394,6 +399,7 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
+		EventBus.Publish(new NeighborChangedEvent());
 	}
 	// two modes: closest to ray, closest to player
 
@@ -428,7 +434,8 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
-		if (design_index >=0)
+		Dump();
+		if (design_crates != null)
 		{
 			for(int i = 0;i < height; i++)
 			{
@@ -825,7 +832,7 @@ public class GridMatrix : MonoBehaviour
 				case Util.CursorMode.Idle:
 					break;
 				case Util.CursorMode.AddComponent:
-					if (design_index < 0)
+					if (DisableDesign || !Util.forced_designs.ContainsKey(waypoint_name))
 					{
 						if (!Occupied(h, w, l))
 							break;

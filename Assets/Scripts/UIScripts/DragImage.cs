@@ -174,9 +174,11 @@ public class DragImage : MonoBehaviour
 		AccessoryComponent accessory = component as AccessoryComponent;
 		if (accessory != null)
 		{
+			accessory.listen_event = false;
 			accessory.GridMatrix = GridMatrix.Current;
 		}
 		component.MoveGlobal(grid.transform.position);
+		component.InitRotation();
 		return component;
 	}
 	public VehicleComponent InstantiateComponent(Vector3 position, bool local, int direction)

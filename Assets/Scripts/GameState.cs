@@ -110,12 +110,12 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		TransitionToStory(Util.StoryName.Crash);
+		// TransitionToStory(Util.StoryName.Crash);
 		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
-		// TransitionToStory(Util.StoryName.TownWaypoint);
+		TransitionToStory(Util.StoryName.TownWaypoint);
 		// town_waypoint_met = true;
 		// TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
 
@@ -153,7 +153,8 @@ public class GameState : MonoBehaviour
 		PiggyCameraPivot.Inst.EndFollow();
 		camera_follow_pig = false;
 		PiggyPermitInvisible = false;
-		TransitionToBuild(retry_waypoint, retry_goal);
+		Util.BuildInfo build_info = last_choice_name == Util.ChoiceName.NeedHelp ? Util.BuildInfo.NeedHelp : Util.BuildInfo.DontNeedHelpButRetry;
+		TransitionToBuild(retry_waypoint, retry_goal, build_info);
 	}
 	private void Update()
 	{
@@ -184,7 +185,20 @@ public class GameState : MonoBehaviour
 	//	}
 	//}
 	
-
+	void DampStart()
+	{
+		foreach (var component in Components)
+		{
+			component.DampStart();
+		}
+	}
+	void DampStop()
+	{
+		foreach (var component in Components)
+		{
+			component.DampStop();
+		}
+	}
 
 	void DestroyComponentsInScene()
 	{
@@ -200,7 +214,8 @@ public class GameState : MonoBehaviour
 		Goal.Deselect();
 		PlayCanvas.Inst.Hide();
 		PiggyCameraPivot.Inst.EndFollow();
-		PiggyPermitInvisible = false;		
+		PiggyPermitInvisible = false;
+		MainCamera.Inst.Stop();
 		EventBus.Publish(new InvisibleStateUpdateEvent());
 		if (story_name != Util.StoryName.Intro && story_name!= Util.StoryName.FallOffCliff
 			&& story_name != Util.StoryName.InTown)
@@ -219,36 +234,74 @@ public class GameState : MonoBehaviour
 				StartCoroutine(TransitionToStoryCliff());
 				break;
 			case Util.StoryName.InTown:
-				TransitionToStoryInTown();
+				StartCoroutine(TransitionToStoryInTown());
 				break;
 			case Util.StoryName.TownWaypoint:
 				StartCoroutine(TransitionToStoryTownWaypoint());
 				break;
 		}
 	}
+	IEnumerator WaitForClick()
+	{
+		while (!Input.GetMouseButtonDown(0)) {
+			yield return null;
+		}
+	}
 	IEnumerator TransitionToStoryTownWaypoint()
 	{
-		yield return BlackoutCanvas.Inst.Blackout(1.0f, true);
-		StoryAnimation.Inst.PlayAnimation(Util.StoryName.TownWaypoint);
-		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
-		{
-			TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
-		});
+		// yield return BlackoutCanvas.Inst.Blackout(1.0f, true);
+		// yield return null;
+		// yield return LineCanvas.Bottom.DisplayLine("Shirley","Arrived!");
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerTownW));
+		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraTownW1), 1.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Congratulations! You found the Waypoint of the town.", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Waypoints are scattered across the world that enables you to rebuild your vehicle.", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "The waypoint in the town opens for free to you, but you will have to complete challenging challenges to unlock some of them in the wild.", Character.Partner);
+		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraTownW2), 1.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Waypoint de New Sorpigal", "As long as you do not lose faith, the world will open to you.", null);
+		Waypoint.Waypoints[Util.WaypointName.Town].ChangeToGreen();
+		yield return WaitForClick();
+		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraTownW1), 1.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Let's try it out!", Character.Partner);
+		LineCanvas.Bottom.Hide();
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
+		TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
 	}
 	IEnumerator TransitionToStoryCrash()
 	{
-		MainCamera.Inst.WarpTo(TransformRef.Get(Util.TransformRefName.CameraPrestory1_1));
+		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory1_1));
 		StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
-		yield return BlackoutCanvas.Inst.Blackout(1.5f, false);
-		yield return BlackoutCanvas.Inst.Blackout(1.5f, true);
-		yield return BlackoutCanvas.Inst.Blackout(1.5f, false);
-		yield return BlackoutCanvas.Inst.Blackout(1.5f, true);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.2f);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, 0.2f, 1.0f);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.4f);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, 0.4f, 1.0f);
 		yield return new WaitForSeconds(1.0f);
-		Character.Partner.WarpTo(TransformRef.Get(Util.TransformRefName.PartnerPrestory1));
-		yield return BlackoutCanvas.Inst.Blackout(2.0f, false);
-		Character.Partner.StartTalking();
-		yield return new WaitForSeconds(2.0f);
-		Character.Partner.StopTalking();
+		yield return BlackoutCanvas.Inst.DisplaySub("You were unconcious for some time", 1.0f, 0.0f, 1.0f);
+		yield return new WaitForSeconds(1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub(null, 1.0f, 1.0f, 0.0f);
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory1));
+		yield return new WaitForSeconds(1.0f);
+		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("???", "Are you all right?", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Who... who are you?", null);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I’m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
+		LineCanvas.Bottom.Hide();
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 0.0f, 1.0f);
+		yield return new WaitForSeconds(1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 1.0f, 0.0f);
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "That sounds terrible! " +
+			"Looks like you are injured. Let’s get down to the town to have a rest first.", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where to look for your girlfriend.", Character.Partner);
+		yield return AtTheSameTime(
+			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory1_1), TRef.Get(Util.TRefName.CameraPrestory1_2), 2.0f),
+			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "There are some scattered parts nearby. Let's take advantage of them for a ride.", Character.Partner)
+			);
+		LineCanvas.Bottom.Hide();
+		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
+		TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1, Util.BuildInfo.NeedHelp);
 		// Character.Piggy.WarpTo(TransformRef.Get(Util.TransformRefName.PigPrestory1));
 
 
@@ -266,6 +319,13 @@ public class GameState : MonoBehaviour
 		// animation end 
 	}
 	public float rise_time = 5.0f;
+
+	public IEnumerator AtTheSameTime(IEnumerator task1, IEnumerator task2)
+	{
+		var coroutine = StartCoroutine(task1);
+		yield return task2;
+		yield return coroutine;
+	}
 	IEnumerator TransitionToStoryIntro()
 	{
 		Goal.Select(Util.GoalName.FallOffCliff);
@@ -291,6 +351,7 @@ public class GameState : MonoBehaviour
 	}
 	public float shake_duration = 2.0f;
 	public float shake_intensity = 1.0f;
+	Util.ChoiceName last_choice_name = Util.ChoiceName.None;
 	IEnumerator TransitionToStoryCliff()
 	{
 		MainCamera.Inst.Stop();
@@ -315,24 +376,72 @@ public class GameState : MonoBehaviour
 		MainCamera.Inst.transform.position = original_position;
 		yield return new WaitForSeconds(2.0f);
 		DestroyComponentsInScene();
-		StoryAnimation.Inst.PlayAnimation(Util.StoryName.FallOffCliff);
-		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
+
+
+		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PigPrestory2));
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory2));
+		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory2_1));
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Awww. That hurts!", Character.Partner);
+		yield return MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_1), TRef.Get(Util.TRefName.CameraPrestory2_2), 1.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Yes.", Character.Piggy);
+		yield return MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_2), TRef.Get(Util.TRefName.CameraPrestory2_1), 1.0f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "A car without control is like the West without Jerusalem.", Character.Partner);
+		yield return AtTheSameTime(
+			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Fortunately, there is a garage nearby that stores what we want.", Character.Partner),
+			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_1), TRef.Get(Util.TRefName.CameraPrestory2_3), 1.5f)
+			);
+		yield return AtTheSameTime(
+			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "The turning wheels and the motor wheels.", Character.Partner),
+			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_3), TRef.Get(Util.TRefName.CameraPrestory2_4), 1.5f)
+			);
+		yield return MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_4), TRef.Get(Util.TRefName.CameraPrestory2_1), 1.5f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "With them, we can steer the car easily.", Character.Partner);
+		
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "This time, would you like to try it yourself?", Character.Partner);
+		ChoiceCanvas.Inst.DisplayChoices(new() { ("Let me try it!", Util.ChoiceName.DontNeedHelp), ("I need help!", Util.ChoiceName.NeedHelp) });
+		Util.ChoiceObj choice_obj = new();
+		last_choice_name = choice_obj.choice_name;
+		yield return WaitForChoice(choice_obj);
+		// choice_name = choice_obj.choice_name;
+		if (choice_obj.choice_name == Util.ChoiceName.DontNeedHelp)
 		{
-			TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
-		});
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I admire your courage. Good luck!", Character.Partner);
+		}
+		else
+		{
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I admire your modesty. Let's figure it out together.", Character.Partner);
+		}
+		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
+		LineCanvas.Bottom.Hide();
+		Util.BuildInfo build_info = choice_obj.choice_name == Util.ChoiceName.DontNeedHelp? Util.BuildInfo.DontNeedHelp: Util.BuildInfo.NeedHelp;
+		TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2, build_info);
 	}
-	void TransitionToStoryInTown()
+	IEnumerator WaitForChoice(Util.ChoiceObj choice_obj)
 	{
-		MainCamera.Inst.Stop();
-		StoryAnimation.Inst.CanSpeedup = false;
-		StoryAnimation.Inst.PlayAnimation(Util.StoryName.InTown);
-		// MainCamera.Inst.FollowStory();
-		StoryAnimation.Inst.RegisterEndAnimationFunc(() =>
+		Action<ChoiceSelectedEvent> handler = (ChoiceSelectedEvent e) => { choice_obj.choice_name = e.choice_name; };
+		var subscription = EventBus.Subscribe<ChoiceSelectedEvent>(handler);
+		while(choice_obj.choice_name == Util.ChoiceName.None)
 		{
-			TransitionToPlay(false);
-			StoryAnimation.Inst.CanSpeedup = true;
-			Goal.Activate(Util.GoalName.Town);
-		});
+			yield return null;
+		}
+		EventBus.Unsubscribe(subscription);
+	}
+	IEnumerator TransitionToStoryInTown()
+	{
+		DampStart();
+		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraInTown1), 1.5f);
+		yield return AtTheSameTime(
+			MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraInTown2), 1.5f),
+			LineCanvas.Bottom.DisplayLine("Shirley", "We've arrived! Let's explore the town."));
+		yield return new WaitForSeconds(1.0f);
+		LineCanvas.Bottom.Hide();
+		DampStop();
+		// MainCamera.Inst.FollowStory();
+		yield return new WaitForSeconds(1.0f);
+		TransitionToPlay(false);
+		Goal.Activate(Util.GoalName.Town);
+
 		//BlackoutCanvas.Inst.Blackout(3.0f, 3.0f, () =>
 		//{
 		//	TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
@@ -351,7 +460,7 @@ public class GameState : MonoBehaviour
 		Util.WaypointName.PreStory1,
 		Util.WaypointName.PreStory2
 	};
-	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name)
+	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name, Util.BuildInfo build_info = Util.BuildInfo.NeedHelp)
 	{
 		current_waypoint = waypoint_name;
 		retry_waypoint = waypoint_name;
@@ -371,7 +480,8 @@ public class GameState : MonoBehaviour
 		// AudioPlayer.Inst.TransitionToBuild();
 		DestroyComponentsInScene();		
 		DragImage.Current = null;
-		GridMatrix.SelectGridMatrix(waypoint_name);
+		GridMatrix.DeselectGridMatrix();
+		GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
 		if (goal_name != Util.GoalName.None)
 		{
 			Goal.Select(goal_name);
@@ -386,7 +496,7 @@ public class GameState : MonoBehaviour
 				StartCoroutine(Prestory1Build());
 				break;
 			case Util.WaypointName.PreStory2:
-				StartCoroutine(Prestory2Build());
+				StartCoroutine(Prestory2Build(build_info));
 				break;
 			case Util.WaypointName.Town:
 				if (!town_waypoint_met)
@@ -398,106 +508,110 @@ public class GameState : MonoBehaviour
 		}
 	}
 	bool town_waypoint_met = false;
-	IEnumerator ShowLineAndContinue(LineCanvas line_canvas, string name, string line, float time)
-	{
-		line_canvas.Name = name;
-		line_canvas.Line = line;
-		yield return new WaitForSeconds(time);
-		line_canvas.ShowContinue();
-		while (!Input.GetMouseButtonDown(0))
-		{
-			yield return null;
-		}
-		line_canvas.HideContinue();
-	}
-	IEnumerator ShowLine(LineCanvas line_canvas, string name, string line, float time)
-	{
-		line_canvas.Name = name;
-		line_canvas.Line = line;
-		yield return new WaitForSeconds(time);
-	}
-
-	IEnumerator ShowLineAndListenForEvent<Event_>(LineCanvas line_canvas, string name, string line, Func<Event_, bool> handler)
-	{
-		if (name != null || line != null)
-		{
-			line_canvas.Name = name;
-			line_canvas.Line = line;
-		}
-		bool criteria_met = false;
-		var subscription = EventBus.Subscribe<Event_>((Event_ e) =>
-		{
-			if (handler(e))
-			{
-				criteria_met = true;
-			}
-		});
-		while (!criteria_met)
-		{
-			yield return null;
-		}
-		EventBus.Unsubscribe(subscription);
-	}
 	IEnumerator Prestory1Build()
 	{
 		yield return new WaitForSeconds(1.5f);
 		Trash.Inst.gameObject.SetActive(false);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Welcome to the grid building system!", 0.2f);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Oh! There is a mess! Let's clean it up using the eraser!", 0.2f);
-		LineCanvas.Top.Line = "Oh! There is a mess! Let's clean it up using the eraser!";
-		LineCanvas.Top.Line = "Start by clicking the eraser.";
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Welcome to the grid building system!", null);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Oh! There is a mess! Let's clean it up using the eraser!", null);
 		EraserImage.Inst.StartScale();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Start by clicking the eraser.", (ToolClickedEvent e) =>
+		//// to do: display line and wait for event
+
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Start by clicking the eraser.", (ToolClickedEvent e) =>
 		{
 			return e.cursor_mode == Util.CursorMode.Erase;
 		});
 		EraserImage.Inst.EndScale();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Good! Hover your mouse on the grid and click to erase a component.",
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Good! Hover your mouse on the grid and click to erase a component.",
 			(ItemErasedEvent e) => true);
 		Trash.Inst.gameObject.SetActive(true);
 		Trash.Inst.StartScale();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Perfect! Now let's use the trashcan to remove all the components at once!",
-			(ResetCountEvent e)=>true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Perfect! Now let's use the trashcan to remove all the components at once!",
+			(ResetCountEvent e) => true);
 		Trash.Inst.EndScale();
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Now we have a clear space to build our vehicle!", 0.2f);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Now we have a clear space to build our vehicle!", null);
 		GridMatrix.Current.ShowDesign();
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "For now, let's adhere to a standard vehicle design", 0.2f);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "For now, let's adhere to a standard vehicle design", null);
 		DragImage.StartScaleAll();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Start by clicking on a component icon.",
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Start by clicking on a component icon.",
 			(DragImageClickedEvent e) => true);
 		DragImage.EndScaleAll();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Perfect! Hover your mouse on the grid and click to place a component.",
-			(ComponentAddedEvent e)=>true);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Let's place the rest of the components.", 0.2f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, null, null, (ReadyToGoEvent e) => true);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "You are learning fast! Now click the confirm button to start our journey!",
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Perfect! Hover your mouse on the grid and click to place a component.",
+			(ComponentAddedEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Let's place the rest of the components.", null);
+		yield return LineCanvas.Top.WaitForEvent((ReadyToGoEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "You are learning fast! Now click the confirm button to start our journey!",
 			(ConfirmSuccessEvent e) => true);
 		LineCanvas.Top.Hide();
 	}
 
-	public IEnumerator Prestory2Build()
+	public IEnumerator Prestory2Build(Util.BuildInfo build_info)
 	{
 		StoryAnimation.Inst.CanSpeedup = false;
 		yield return new WaitForSeconds(1.5f);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "This time, let's build a wider vehicle with a sophisticated control system.", 0.5f);
-		LineCanvas.Top.Hide();
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, null, null, (ReadyToGoEvent e) => true);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Let's roll!",
-			(ConfirmSuccessEvent e) => true);
-		LineCanvas.Top.Hide();
+		switch (build_info)
+		{
+			case Util.BuildInfo.NeedHelp:
+				{
+					ConfirmButton.Inst.EnableConfirm = false;
+					yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Follow the design to build the vehicle.", null);
+					LineCanvas.Top.Hide();
+					ConfirmButton.Inst.EnableConfirm = true;
+					yield return LineCanvas.Top.WaitForEvent((ReadyToGoEvent e) => true);
+					yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Let's roll!",
+						(ConfirmSuccessEvent e) => true);
+					LineCanvas.Top.Hide();
+				}
+				break;
+			case Util.BuildInfo.DontNeedHelp:
+				{
+					ConfirmButton.Inst.EnableConfirm = false;
+					yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Try to build the vehicle yourself!", null);
+					LineCanvas.Top.Hide();
+					ConfirmButton.Inst.EnableConfirm = true;
+					// yield return LineCanvas.Top.WaitForEvent((ConfirmSuccessEvent e) => true);
+				}
+				break;
+			case Util.BuildInfo.DontNeedHelpButRetry:
+				{
+					ConfirmButton.Inst.EnableConfirm = false;
+					yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "It seems you had a rough time. Would you like to get some hint?", null);
+					ChoiceCanvas.Inst.DisplayChoices(new() { ("Ok, I need some help.", Util.ChoiceName.NeedHelp), ("No way. Let me try it myself!", Util.ChoiceName.DontNeedHelp) });
+					Util.ChoiceObj choice_obj = new();
+					last_choice_name = choice_obj.choice_name;
+					yield return WaitForChoice(choice_obj);
+					if (choice_obj.choice_name == Util.ChoiceName.DontNeedHelp)
+					{
+						yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "All right. Good luck!", null);
+						LineCanvas.Top.Hide();
+						ConfirmButton.Inst.EnableConfirm = true;
+					}
+					else
+					{
+						yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Good Choice! Let's figure it out together!", null);
+						LineCanvas.Top.Hide();
+						ConfirmButton.Inst.EnableConfirm = true;
+						TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2, Util.BuildInfo.NeedHelp);
+						yield break;
+					}
+				}
+				break;
+		}
 	}
 	public IEnumerator TownWaypointBuild()
 	{
 		yield return new WaitForSeconds(1.5f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "**Drag the screen to view the grid**", (GridMatrixDragEvent e) => true);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Now there's an **important** feature that you want to learn", 1.0f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "**Press \"Space\" to toggle build layers.**", (SwitchLayerEvent e) => true);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Perfect! Without previous design constraints, it would be hard to locate a cell without specifying layers.", 0.2f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Top, "Shirley", "Now, press \"Space\" a few more times to go back to the full layer mode.", (FullLayerEvent e) => true);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Awesome! And I have got a present for you: the third person view!", 0.2f);
-		yield return ShowLineAndContinue(LineCanvas.Top, "Shirley", "Check it out when you start driving!", 0.2f);
+
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Drag the screen to view the grid**", (GridMatrixDragEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Now there's an **important** feature that you want to learn", null);
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Press \"Space\" to toggle build layers.**", (SwitchLayerEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Without previous design constraints, it would be hard to locate a cell without specifying layers.", null);
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Now, press \"Space\" a few more times to go back to the full layer mode.", (FullLayerEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Awesome! Feel free to explore the world!", null);
 		LineCanvas.Top.Hide();
-		FirstPerson.Inst.Show();
+		Goal.Activate(Util.GoalName.C1S1);
+		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerC1S1));
+		yield break;
 	}
 	void OnGoalReached(GoalReachedEvent e)
 	{
@@ -514,6 +628,12 @@ public class GameState : MonoBehaviour
 				break;
 			case Util.GoalName.Town:
 				TransitionToStory(Util.StoryName.TownWaypoint);
+				break;
+			case Util.GoalName.C1S1:
+				TransitionToStory(Util.StoryName.C1S1);
+				break;
+			case Util.GoalName.C1S2:
+				TransitionToStory(Util.StoryName.C1S2);
 				break;
 		}
 	}
@@ -550,14 +670,7 @@ public class GameState : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1.0f);
 		Retry.Inst.Show();
-		// claustrophobia
-		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Woohoo! We're rolling!", 1.5f);
-		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Hope you don't have claustrophobia in your little crate.", 3.5f);
-		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Actually, you may feel more comfortable if you can look at me. I'm on your left.", 3.5f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Bottom, "Shirley", "**Drag the screen to look around**", (PlayCanvasDraggedEvent e) => true);
-		yield return ShowLine(LineCanvas.Bottom, "Shirley", "Perfect! Now let's start the car.", 2.5f);
-		yield return ShowLineAndListenForEvent(LineCanvas.Bottom, "Shirley", "**Press W/S to move and A/D to turn.", (WASDPressedEvent e) => true);
-		yield return ShowLine(LineCanvas.Bottom, "Shirley", "You're learning fast! Let's see if you can make to the destination.", 3.5f);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Drive straight into the winding valley. That's the shortest path.", null);
 		LineCanvas.Bottom.Hide();
 	}
 }

@@ -43,6 +43,14 @@ public abstract class VehicleComponent : MonoBehaviour
     }
     Rigidbody rb;
     GridMatrix grid_matrix;
+    public void DampStart()
+    {
+        RB.drag = 1;
+    }
+    public void DampStop()
+    {
+        RB.drag = 0;
+    }
     public GridMatrix GridMatrix { 
         get { Debug.Assert(grid_matrix != null, $"{Component}'s grid matrix not set"); return grid_matrix; }
         set { grid_matrix = value; }
@@ -55,17 +63,19 @@ public abstract class VehicleComponent : MonoBehaviour
     }
     public void MoveLocal(Vector3 position)
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
 		Vector3 worldPosition = transform.parent.TransformPoint(position);
-		rb.MovePosition(worldPosition);
+		RB.MovePosition(worldPosition);
         // Debug.Log($"{caller} changed {Content}'s local position");
     }
 	public void MoveGlobal(Vector3 position)
 	{
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.MovePosition(position);
+        RB.MovePosition(position);
 		// Debug.Log($"{caller} changed {Content}'s global position");
 	}
+    public void InitRotation()
+    {
+        RB.MoveRotation(transform.parent.rotation);
+    }
 	public abstract Util.Component Component { get; }
     //void Awake()
     //{
@@ -88,12 +98,13 @@ public abstract class LoadComponent: VehicleComponent
 {
 
 }
-public abstract class AccessoryComponent: VehicleComponent
+public abstract class AccessoryComponent : VehicleComponent
 {
     public abstract List<(Quaternion, RotationInfo)> Rotations { get; }
     public abstract (bool wa, bool sd) GetWASD();
     public abstract void Stick();
     protected bool[] direction_mask;
+    public bool listen_event = true;
     public int Direction
     {
         get { return direction; }
@@ -109,6 +120,7 @@ public abstract class AccessoryComponent: VehicleComponent
     {
         if (!direction_mask[Direction])
         {
+            Debug.Log($"{Component} direction changed");
             ChangeDirection();
         }
     }
@@ -129,7 +141,10 @@ public abstract class AccessoryComponent: VehicleComponent
     {
         direction_mask = new bool[Rotations.Count];
         Array.Fill(direction_mask, true);
-        EventBus.Subscribe<NeighborChangedEvent>(OnNeighborChanged);
+        if (listen_event)
+        {
+            EventBus.Subscribe<NeighborChangedEvent>(OnNeighborChanged);
+        }
     }
     int direction = 0;
     public void ChangeDirection()
