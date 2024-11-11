@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LineCanvas : MonoBehaviour
 {
-	public int frames_per_char = 6;
+	public int frames_per_char = 2;
 	static LineCanvas topCanvas;
 	static LineCanvas bottomCanvas;
 	public bool top;

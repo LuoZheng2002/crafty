@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Eraser : MonoBehaviour
 {
 	Image image;
 	RectTransform rectTransform;
@@ -44,35 +44,6 @@ public class Eraser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 		}
 	}
 	bool dragging = false;
-	public void OnBeginDrag(PointerEventData eventData)
-	{
-		Debug.LogError("Deprecated!");
-		GameState.shown_eraser = true;
-		buttonScale.ScaleStop();
-		// DragImage.OnEraseStart();
-		dragging = true;
-	}
-	public void OnDrag(PointerEventData eventData)
-	{
-		Debug.LogError("Deprecated!");
-		RectTransformUtility.ScreenPointToWorldPointInRectangle(
-			rectTransform,
-			eventData.position,
-			Camera.main,
-			out Vector3 worldPoint
-		);
-
-		// Update the position of the image to follow the mouse
-		rectTransform.position = worldPoint;
-	}
-	public void OnEndDrag(PointerEventData eventData)
-	{
-		Debug.LogError("Deprecated!");
-		transform.localPosition = Vector3.zero;
-		// DragImage.OnEraseEnd();
-		GridMatrix.Current.OnEraseEnd();
-		dragging = false;
-	}
 	public void OnClick()
 	{
 		if (!dragging)

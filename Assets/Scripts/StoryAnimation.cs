@@ -96,7 +96,7 @@ public class StoryAnimation : MonoBehaviour
 			}
 			else if (CanSpeedup)
 			{
-				animator.speed = 10;
+				animator.speed = 4;
 			}
 		}
 	}

@@ -61,6 +61,7 @@ public class BlackoutCanvas : MonoBehaviour
 			SetTextAlpha(y_val);
 			yield return null;
 		}
+		SetTextAlpha(end_alpha);
 	}
     public IEnumerator Blackout(float time, float start_alpha, float end_alpha)
     {
@@ -74,6 +75,7 @@ public class BlackoutCanvas : MonoBehaviour
 			SetImageAlpha(y_val);
 			yield return null;
 		}
+        SetImageAlpha (end_alpha);
         if (end_alpha == 0.0f)
         {
             gameObject.SetActive(false);

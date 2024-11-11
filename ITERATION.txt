@@ -1,10 +1,8 @@
-P3 gold issues:
-static grid -> changed to scrollable grid
-less freedom in vehicle design-> added more components
-awkward component direction system -> now added specific tool to change component direction
-drag convention, layer switch -> using a new click and place system and an optional layer switch mechanism
-level-based design -> open world and storytelling
-refined vehicle physics
-added Blender modeled models
-used Blender to model large terrain
-more considerate (hopefully) guidance and instruction
+1. Add bunch of animation and plot, to adding interesting and lovely juice to the game, alongside with NPCs and characters.
+2. Refine the mechanic of the car much more better, no more turning on one side easily or losing control or slipping. Constantly adding the third-person view for better player experience, setting the first=person view as only an addition.
+3. Modify the color, material and add many more interesting things onto the map, including an important volcano which is important for plot propelling.
+4. Modify the Accessory mechanics to make them function much better, modify the blender model of each accessory, make sensible and nice tutorials.
+5. Largely revise the building system and the game system, making it much more stable and robust while playing, also different options are present to players as they can choose to get some hint or not, they can also regret at any time and re-choice.
+6. Use bunch of time to modify the accessory clinging logic, now the wheels will automatically cling to the side where there are crates, and other directions are no more supportable. So players don't have to click numerous times to get their ideal design. Also the rotation logic is much much better to use.
+7. Add bunch of UIs and screen effects to add immersion to players.
+8. Much more save points are saved so that players won't worry about losing all their work after bunch of time and try. 

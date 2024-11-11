@@ -56,6 +56,11 @@ public class ConfirmButton : MonoBehaviour
 			// to do
 			can_start = GameState.Inst.Piggy != null;
 		}
+		if (DragImage.DragImages[Util.Component.Partner].Count > 0
+			|| DragImage.DragImages[Util.Component.Pig].Count > 0)
+		{
+			can_start = false;
+		}
 		if (!EnableConfirm)
 		{
 			can_start = false;
@@ -88,6 +93,7 @@ public class ConfirmButton : MonoBehaviour
 		{
 			EventBus.Publish(new ConfirmSuccessEvent());
 			GameState.Inst.TransitionToPlay(true);
+			CustomCursor.Inst.SetIdleCursor();
 		}
     }
 }

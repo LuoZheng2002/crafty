@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\CarComponents\Crate\WoodenCrate.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BuildCanvas.cs" />
+    <Compile Include="Assets\Scripts\Lava.cs" />
     <Compile Include="Assets\Scripts\Waypoint.cs" />
     <Compile Include="Assets\Scripts\TestWheel.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ConfirmButton.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\UIScripts\EraserImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
+    <Compile Include="Assets\Scripts\Obsidian.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
     <Compile Include="Assets\Scripts\Goal.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\Umbrella.cs" />

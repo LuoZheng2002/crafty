@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -169,6 +173,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -265,6 +273,10 @@ PrefabInstance:
     - target: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Name
       value: Wheel (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
@@ -461,6 +473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -557,6 +573,10 @@ PrefabInstance:
     - target: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Name
       value: Wheel (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
@@ -828,6 +848,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -925,6 +949,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1021,6 +1049,10 @@ PrefabInstance:
     - target: {fileID: 2930053490791987855, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Name
       value: Wheel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5626722562985179434, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6599311003529120631, guid: df2c5186882ef4c4eb4cba2352b42bfb, type: 3}
       propertyPath: m_Enabled

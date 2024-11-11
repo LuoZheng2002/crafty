@@ -15,3 +15,4 @@ WASD Icon: https://pngtree.com/so/wasd-icon
 Power Wheel 3D model: https://sketchfab.com/3d-models/wheel-37d8c6b9ba5148b6bb7fdcad1cc6f57c
 Low Poly House 3D model: https://sketchfab.com/3d-models/low-poly-house-acca0ee56c8541ffbebcade8ab9f7f08
 Fence 3D model: https://sketchfab.com/3d-models/fence-wood-e530c55db10348a3a547ef92149bdd10
+Groundhog 3D model: https://sketchfab.com/3d-models/marmot-rig-bf70e9fdea114943b0dc5cff336bf3e0

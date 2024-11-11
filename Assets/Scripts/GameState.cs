@@ -110,7 +110,7 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		// TransitionToStory(Util.StoryName.Crash);
+		TransitionToStory(Util.StoryName.Crash);
 		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
@@ -119,7 +119,8 @@ public class GameState : MonoBehaviour
 		// town_waypoint_met = true;
 		// TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.None);
 		// TransitionToStory(Util.StoryName.C1S1);
-		TransitionToBuild(Util.WaypointName.VolcBottom, Util.GoalName.VolcTop);
+		// TransitionToBuild(Util.WaypointName.Volcano, Util.GoalName.VolcBottom);
+		// TransitionToBuild(Util.WaypointName.VolcBottom, Util.GoalName.VolcTop);
 		FirstPerson.Inst.Show();
 		Retry.Inst.Show();
 	}
@@ -133,6 +134,7 @@ public class GameState : MonoBehaviour
 			Init();
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
+		EventBus.Subscribe<TouchLavaEvent>(OnTouchLava);
 
 	}
 	private void OnDestroy()
@@ -212,6 +214,10 @@ public class GameState : MonoBehaviour
 	}
 	public void TransitionToStory(Util.StoryName story_name)
 	{
+		if (story_name != Util.StoryName.Intro)
+		{
+			AudioPlayer.Inst.TransitionToStory();
+		}
 		Goal.Deselect();
 		PlayCanvas.Inst.Hide();
 		PiggyCameraPivot.Inst.EndFollow();
@@ -366,6 +372,9 @@ public class GameState : MonoBehaviour
 	}
 	IEnumerator TransitionToStoryCrash()
 	{
+		yield return BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 1.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 1.5f, 1.0f, 0.0f);
 		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory1_1));
 		StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
 		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.2f);
@@ -559,6 +568,7 @@ public class GameState : MonoBehaviour
 	};
 	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name, Util.BuildInfo build_info = Util.BuildInfo.NeedHelp)
 	{
+		AudioPlayer.Inst.TransitionToStory();
 		current_waypoint = waypoint_name;
 		retry_waypoint = waypoint_name;
 		retry_goal = goal_name;
@@ -725,6 +735,7 @@ public class GameState : MonoBehaviour
 	}
 	public IEnumerator TownWaypointBuild()
 	{
+		ConfirmButton.Inst.EnableConfirm = false;
 		yield return new WaitForSeconds(1.5f);
 
 		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Drag the screen to view the grid**", (GridMatrixDragEvent e) => true);
@@ -736,6 +747,7 @@ public class GameState : MonoBehaviour
 		LineCanvas.Top.Hide();
 		Goal.Activate(Util.GoalName.C1S1);
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerC1S1));
+		ConfirmButton.Inst.EnableConfirm = true;
 		yield break;
 	}
 	void OnGoalReached(GoalReachedEvent e)
@@ -769,14 +781,37 @@ public class GameState : MonoBehaviour
 			case Util.GoalName.VolcTop:
 				TransitionToBuild(Util.WaypointName.VolcTop, Util.GoalName.VolcAfter);
 				break;
+			case Util.GoalName.VolcAfter:
+				StartCoroutine(HandleVolcAfter());
+				break;
 			default:
 				Debug.LogError("Goal reached not handled");
 				break;
 		}
 	}
+	void OnTouchLava(TouchLavaEvent e)
+	{
+		StartCoroutine(TouchLavaHelper());
+	}
+	IEnumerator TouchLavaHelper()
+	{
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You tried to swim in lava.", 0.5f, 0.0f, 1.0f);
+		OnRetry();
+		yield return BlackoutCanvas.Inst.DisplaySub("You tried to swim in lava.", 0.5f, 1.0f, 0.0f);
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
+	}
+	IEnumerator HandleVolcAfter()
+	{
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("Thanks for playing", 1.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("More Contents Coming Soon", 1.5f, 1.0f, 0.0f);
+		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
+	}
 	Util.WaypointName current_waypoint;
 	public void TransitionToPlay(bool build)
 	{
+		AudioPlayer.Inst.TransitionToPlay();
 		BuildCanvas.Inst.Hide();
 		PlayCanvas.Inst.Show();
 		
@@ -807,6 +842,7 @@ public class GameState : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1.0f);
 		Retry.Inst.Show();
+		FirstPerson.Inst.Show();
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Drive straight into the winding valley. That's the shortest path.", null);
 		LineCanvas.Bottom.Hide();
 	}

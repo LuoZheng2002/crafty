@@ -293,10 +293,18 @@ public class DragImage : MonoBehaviour
 			{
 				Destroy(componentInstance.gameObject);
 				componentInstance = null;
+				if (reset_flag)
+				{
+					GridMatrix.Current.CurrentCursorMode = Util.CursorMode.Idle;
+					reset_flag = false;
+					yield break;
+				}
+				reset_flag = true;
 			}
 			GridMatrix.SelectedGrid = null;
 		}
 	}
+	bool reset_flag = false;
 	void OnAddComponentInterrupt(OtherItemSelectedEvent e)
 	{
 		Debug.Log($"{content} gets interrupted!");

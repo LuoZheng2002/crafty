@@ -171,42 +171,7 @@ public class GridMatrix : MonoBehaviour
 	{
 		return accessories[height, width, length] != null;
 	}
-	public void OnEraseEnd()
-	{
-		if (lastSelectedGrid != null)
-		{
-			var load = loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-			if (load != null)
-			{
-				DragImage.DragImages[load.Component].Count++;
-				if (load.Component == Util.Component.Pig)
-				{
-					GameState.Inst.Piggy = null;
-					ConfirmButton.Inst.OnGridStateChanged();
-				}
-				Destroy(load.gameObject);
-				loads[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
-			}
-			else
-			{
-				var accessory = accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-				if (accessory != null)
-				{
-					DragImage.DragImages[accessory.Component].Count++;
-					Destroy(accessory.gameObject);
-					accessories[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
-				}
-				var crate = crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx];
-				if (crate != null)
-				{
-					DragImage.DragImages[crate.Component].Count++;
-					Destroy(crate.gameObject);
-					crates[lastSelectedGrid.heightIdx, lastSelectedGrid.widthIdx, lastSelectedGrid.lengthIdx] = null;
-				}
-			}
-		}
-	}
-
+	
 	void RebuildVehicle()
 	{
 		if (mem_accessories != null)
@@ -604,6 +569,7 @@ public class GridMatrix : MonoBehaviour
 				}
 			}
 		}
+		ConfirmButton.Inst.OnGridStateChanged();
 	}
 	public bool InGrid(Vec3 pos)
 	{
@@ -747,6 +713,7 @@ public class GridMatrix : MonoBehaviour
 					Debug.LogError("An invariant found: selected a grid but cannot erase");
 				}
 				EventBus.Publish(new ItemErasedEvent());
+				ConfirmButton.Inst.OnGridStateChanged();
 			}
 		}
 		else if(CurrentCursorMode == Util.CursorMode.ChangeDirection)

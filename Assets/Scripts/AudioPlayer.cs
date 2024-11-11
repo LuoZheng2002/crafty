@@ -29,6 +29,8 @@ public class AudioPlayer : MonoBehaviour
         var audioSources = GetComponents<AudioSource>();
         musicSource = audioSources[0];
         soundEffectSource = audioSources[1];
+        musicSource.volume = 0.5f;
+        soundEffectSource.volume = 0.2f;
         EventBus.Subscribe<ScreamEvent>(Scream);
         StartCoroutine(Snore());
     }
@@ -84,7 +86,7 @@ public class AudioPlayer : MonoBehaviour
 		musicSource.loop = true;
 		musicSource.Play();
 	}
-    public void TransitionToBuild()
+    public void TransitionToStory()
     {
 		if (musicSource.isPlaying)
 		{
