@@ -70,6 +70,10 @@ public class MainCamera : Warp
     {
         StartCoroutine(MoveAndStickToPigHelper(move_to_pig_time, camera_rotation_time));
     }
+    public void FollowStory()
+    {
+        transformToFollow = StoryAnimation.Inst.StoryCamera.transform;
+    }
     public void Stop()
     {
         transformToFollow = null;

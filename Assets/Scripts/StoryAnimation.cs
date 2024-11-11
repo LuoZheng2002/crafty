@@ -7,6 +7,7 @@ public class StoryAnimation : MonoBehaviour
 {
 	public bool CanSpeedup { get; set; } = true;
 	static StoryAnimation inst;
+	public Camera StoryCamera { get; private set; }
 	public static StoryAnimation Inst
 	{
 		get { Debug.Assert(inst != null, "Story Animation not set"); return inst; }
@@ -19,6 +20,9 @@ public class StoryAnimation : MonoBehaviour
 		animator = GetComponent<Animator>();
 		Debug.Assert(animator != null);
 		animator.enabled = false;
+		StoryCamera = transform.Find("StoryCamera").GetComponent<Camera>();
+		Debug.Assert(StoryCamera != null);
+		gameObject.SetActive(false);
 	}
 	private void OnDestroy()
 	{
@@ -44,6 +48,12 @@ public class StoryAnimation : MonoBehaviour
 			case Util.StoryName.TownWaypoint:
 				animator.Play("townwaypoint");
 				break;
+			case Util.StoryName.C1S2:
+				animator.Play("groundhog");
+				break;
+			default:
+				Debug.LogError("Animation not set!");
+				break;
 		}
 	}
 	public void WaypointChangeToGreen(Util.WaypointName waypoint_name)
@@ -65,6 +75,7 @@ public class StoryAnimation : MonoBehaviour
 			func();
 			func = null;
 		}
+		EventBus.Publish(new AnimationExitEvent());
 	}
 	public void Pause()
 	{

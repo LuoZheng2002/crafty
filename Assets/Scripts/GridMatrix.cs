@@ -35,6 +35,11 @@ public class GridMatrix : MonoBehaviour
 	}
 
 	Subscription<GridMatrixDragEvent> dragEvent;
+	public static GridMatrix Get(Util.WaypointName waypoint_name)
+	{
+		Debug.Assert(grid_matrices.ContainsKey(waypoint_name));
+		return grid_matrices[waypoint_name];
+	}
 	bool Active
 	{
 		get { return active; }
@@ -130,7 +135,7 @@ public class GridMatrix : MonoBehaviour
 		Debug.Assert(cameraPivot != null);
 		Debug.Assert(dummyCamera != null);
 	}
-	private void OnDisable()
+	private void OnDestroy()
 	{
 		grid_matrices.Clear();
 	}

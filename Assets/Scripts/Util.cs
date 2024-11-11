@@ -25,7 +25,8 @@ public class Util
 	{
 		None,
 		DontNeedHelp,
-		NeedHelp
+		NeedHelp,
+		DontCare
 	}
 	public enum BuildInfo
 	{
@@ -74,6 +75,8 @@ public class Util
 		NPC3C1S2,
 		CameraC1S2_1,
 		CameraC1S2_2,
+		CameraC1S2_3,
+		CameraC1S2_4
 	}
 	public enum CharacterName
 	{
@@ -155,6 +158,11 @@ public class Util
 	{
 		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
 		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
+		{WaypointName.C1S1, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2) } },
+		{WaypointName.Volcano, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+		{WaypointName.VolcBottom, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+		{WaypointName.VolcTop, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+
 	};
 
 	public static Dictionary<Component, ComponentType> ContentInfos = new()
@@ -186,6 +194,7 @@ public class Util
 		TownWaypoint,
 		C1S1,
 		C1S2,
+
 	}
 
 	public enum GoalName
@@ -197,6 +206,10 @@ public class Util
 		Town,
 		C1S1,
 		C1S2,
+		Volcano,
+		VolcBottom,
+		VolcTop,
+		VolcAfter
 	}
 
 	public enum WaypointName
@@ -205,9 +218,13 @@ public class Util
 		PreStory1,
 		PreStory2,
 		Town,
+		C1S1,
 		Canyon,
 		Rocket,
 		Wild1,
+		Volcano,
+		VolcBottom,
+		VolcTop,
 	}
 
 	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()

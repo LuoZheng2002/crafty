@@ -30,15 +30,14 @@ public class Umbrella : AccessoryComponent
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            open = !open;
-            
-            cube.SetActive(open);
-        }
         if (built)
         {
-            if (open)
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				open = !open;
+				cube.SetActive(open);
+			}
+				if (open)
             {
                 RB.mass = 20;
                 RB.drag = damp;
