@@ -87,7 +87,7 @@ public class GameState : MonoBehaviour
 	public bool PiggyPermitInvisible { get; set; } = false;
 	public List<VehicleComponent> Components { get; set; } = new();
 
-	public PiggyPreview Piggy { get; set; }
+	// public PiggyPreview Piggy { get; set; }
 
 	static GameState inst;
 	public static GameState Inst
@@ -110,7 +110,7 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		TransitionToStory(Util.StoryName.Crash);
+		// TransitionToStory(Util.StoryName.Crash);
 		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
@@ -118,11 +118,11 @@ public class GameState : MonoBehaviour
 		// TransitionToStory(Util.StoryName.TownWaypoint);
 		// town_waypoint_met = true;
 		// TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.None);
-		// TransitionToStory(Util.StoryName.C1S1);
+		// TransitionToStory(Util.StoryName.C1S2);
 		// TransitionToBuild(Util.WaypointName.Volcano, Util.GoalName.VolcBottom);
 		// TransitionToBuild(Util.WaypointName.VolcBottom, Util.GoalName.VolcTop);
-		FirstPerson.Inst.Show();
-		Retry.Inst.Show();
+		// FirstPerson.Inst.Show();
+		// Retry.Inst.Show();
 	}
 	private void Start()
 	{
@@ -166,28 +166,21 @@ public class GameState : MonoBehaviour
 		{
 			EventBus.Publish(new WASDPressedEvent());
 		}
+		CheatCode();
 	}
-	//void CheatCode()
-	//{
-	//	if (camera_follow_pig)
-	//	{
-	//		Camera.main.transform.position = cameraRefTransform.position;
-	//		Camera.main.transform.rotation = cameraRefTransform.rotation;
-	//	}
-	//	Dictionary<int, KeyCode> keycodes = new() { { 1, KeyCode.Alpha1 }, { 2, KeyCode.Alpha2 },
-	//		{ 3, KeyCode.Alpha3 }, { 4, KeyCode.Alpha4 }, { 5, KeyCode.Alpha5 }, { 6, KeyCode.Alpha6 },
-	//		{ 7, KeyCode.Alpha7 }, { 8, KeyCode.Alpha8 }, { 9, KeyCode.Alpha9 } };
-
-	//	foreach (var pair in keycodes)
-	//	{
-	//		if ( Input.GetKey(KeyCode.LeftShift)&& Input.GetKeyDown(pair.Value))
-	//		{
-	//			current_level_num = pair.Key;
-	//			TransitionToIntro();
-	//		}
-	//	}
-	//}
 	
+	void CheatCode()
+	{
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			GridMatrix.Inst.Scan();
+		}
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			CarCore.Inst.Move();
+		}
+	}
+
 	void DampStart()
 	{
 		foreach (var component in Components)
@@ -203,15 +196,15 @@ public class GameState : MonoBehaviour
 		}
 	}
 
-	void DestroyComponentsInScene()
-	{
-		foreach(var component in Components)
-		{
-			Destroy(component.gameObject);
-		}
-		Components.Clear();
-		Piggy = null;
-	}
+	//void DestroyComponentsInScene()
+	//{
+	//	foreach(var component in Components)
+	//	{
+	//		Destroy(component.gameObject);
+	//	}
+	//	Components.Clear();
+	//	// Piggy = null;
+	//}
 	public void TransitionToStory(Util.StoryName story_name)
 	{
 		if (story_name != Util.StoryName.Intro)
@@ -227,7 +220,7 @@ public class GameState : MonoBehaviour
 		if (story_name != Util.StoryName.Intro && story_name!= Util.StoryName.FallOffCliff
 			&& story_name != Util.StoryName.InTown && story_name != Util.StoryName.C1S2)
 		{
-			DestroyComponentsInScene();
+			// DestroyComponentsInScene();
 		}
 		switch (story_name)
 		{
@@ -285,7 +278,7 @@ public class GameState : MonoBehaviour
 	IEnumerator TransitionToStoryC1S2()
 	{
 		DampStart();
-		GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(false);
+		// GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(false);
 		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PiggyC1S2));
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerC1S2));
 		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
@@ -339,7 +332,7 @@ public class GameState : MonoBehaviour
 		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
 		DampStop();
-		GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(true);
+		// GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(true);
 		TransitionToPlay(false);
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Now let's march towards the volcano.", Character.Partner);
 		Goal.Activate(Util.GoalName.Volcano);
@@ -446,9 +439,9 @@ public class GameState : MonoBehaviour
 		{
 			MainCamera.Inst.transform.position = Vector3.Lerp(initial_position, introCameraTransform.position, (Time.time - start_time) / rise_time);
 			Quaternion target_rotation = Quaternion.Slerp(initial_rotation, introCameraTransform.rotation, (Time.time - start_time) / rise_time);
-			Vector3 look_dir = Piggy.transform.position - MainCamera.Inst.transform.position;
-			Quaternion lookat_rotation = Quaternion.LookRotation(look_dir);
-			MainCamera.Inst.transform.rotation = Quaternion.Slerp(lookat_rotation, target_rotation, (Time.time - start_time) / rise_time);
+			// Vector3 look_dir = Piggy.transform.position - MainCamera.Inst.transform.position;
+			// Quaternion lookat_rotation = Quaternion.LookRotation(look_dir);
+			// MainCamera.Inst.transform.rotation = Quaternion.Slerp(lookat_rotation, target_rotation, (Time.time - start_time) / rise_time);
 			yield return null;
 		}
 		MainCamera.Inst.transform.position = introCameraTransform.position;
@@ -481,7 +474,7 @@ public class GameState : MonoBehaviour
 		// Reset to the original position
 		MainCamera.Inst.transform.position = original_position;
 		yield return new WaitForSeconds(2.0f);
-		DestroyComponentsInScene();
+		// DestroyComponentsInScene();
 
 
 		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PigPrestory2));
@@ -585,10 +578,10 @@ public class GameState : MonoBehaviour
 		BuildCanvas.Inst.Show();
 		PlayCanvas.Inst.Hide();
 		// AudioPlayer.Inst.TransitionToBuild();
-		DestroyComponentsInScene();		
+		// DestroyComponentsInScene();		
 		DragImage.Current = null;
-		GridMatrix.DeselectGridMatrix();
-		GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
+		// GridMatrix.DeselectGridMatrix();
+		// GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
 		if (goal_name != Util.GoalName.None)
 		{
 			Goal.Select(goal_name);
@@ -665,7 +658,7 @@ public class GameState : MonoBehaviour
 			(ResetCountEvent e) => true);
 		Trash.Inst.EndScale();
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Now we have a clear space to build our vehicle!", null);
-		GridMatrix.Current.ShowDesign();
+		// GridMatrix.Current.ShowDesign();
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "For now, let's adhere to a standard vehicle design", null);
 		DragImage.StartScaleAll();
 		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Start by clicking on a component icon.",
@@ -818,10 +811,10 @@ public class GameState : MonoBehaviour
 		// AudioPlayer.Inst.TransitionToPlay();
 		if (build)
 		{
-			GridMatrix.Current.BuildAndDeactivate();
-			GridMatrix.DeselectGridMatrix();
+			// GridMatrix.Current.BuildAndDeactivate();
+			// GridMatrix.DeselectGridMatrix();
 		}
-		PiggyCameraPivot.Inst.StartFollow(Piggy);
+		// PiggyCameraPivot.Inst.StartFollow(Piggy);
 		// coroutine that moves camera to position
 		MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
 		if (build)

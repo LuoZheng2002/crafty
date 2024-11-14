@@ -64,8 +64,10 @@
     <Compile Include="Assets\Scripts\QuitGame.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToolImage.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Crate\WoodenCrate.cs" />
+    <Compile Include="Assets\Scripts\GameSave.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BuildCanvas.cs" />
+    <Compile Include="Assets\Scripts\Probe.cs" />
     <Compile Include="Assets\Scripts\Lava.cs" />
     <Compile Include="Assets\Scripts\Waypoint.cs" />
     <Compile Include="Assets\Scripts\TestWheel.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Assets\Scripts\UIScripts\DragImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Load\PiggyPreview.cs" />
+    <Compile Include="Assets\Scripts\CarCore.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\MotorWheelPreview.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvas.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelPreview.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelMotor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Layers.cs" />
+    <Compile Include="Assets\Scripts\GridMatrixEX.cs" />
     <Compile Include="Assets\Scripts\UIScripts\FirstPerson.cs" />
     <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\TimedDestroy.cs" />

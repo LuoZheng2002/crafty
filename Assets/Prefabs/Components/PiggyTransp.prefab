@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 952300870215091305, guid: 9e7fe0958c863594984ff87607418022, type: 3}
       propertyPath: m_Name
-      value: PiggyDesign
+      value: PiggyTransp
       objectReference: {fileID: 0}
     - target: {fileID: 5326225109282155245, guid: 9e7fe0958c863594984ff87607418022, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -54,6 +54,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6093052704366688337, guid: 9e7fe0958c863594984ff87607418022, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588978745419272046, guid: 9e7fe0958c863594984ff87607418022, type: 3}
+      propertyPath: real_piggy
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7054251333601912091, guid: 9e7fe0958c863594984ff87607418022, type: 3}

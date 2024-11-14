@@ -18,14 +18,20 @@ public class Vec3
 	{
         return new Vec3(pos.h, pos.w, pos.l);
 	}
+	public void Deconstruct(out int h, out int w, out int l)
+	{
+        h = this.h;
+        w = this.w;
+		l = this.l;
+	}
 	public static Vec3 operator+(Vec3 v1, Vec3 v2)
     {
         return new Vec3(v1.h+v2.h, v1.w + v2.w, v1.l +v2.l);
     }
-    public (int h, int w, int l) Unwrap()
-    {
-        return (h, w, l);
-    }
+    //public (int h, int w, int l) Unwrap()
+    //{
+    //    return (h, w, l);
+    //}
 }
 
 public abstract class VehicleComponent : MonoBehaviour
@@ -174,7 +180,7 @@ public abstract class AccessoryComponent : VehicleComponent
 		Vec3 new_pos = Pos + attach_dir;
 		if (GridMatrix.InGrid(new_pos) && GridMatrix.GetCrate(new_pos) != null)
 		{
-			Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), GridMatrix.position_spring, GridMatrix.position_damper);
+			Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), Util.position_spring, Util.position_damper);
 		}
 	}
     protected void StickRocket()
@@ -186,7 +192,7 @@ public abstract class AccessoryComponent : VehicleComponent
 			Vec3 new_pos = Pos + direction;
 			if (GridMatrix.InGrid(new_pos) && GridMatrix.GetCrate(new_pos) != null)
 			{
-				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), GridMatrix.position_spring, GridMatrix.position_damper);
+				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), Util.position_spring, Util.position_damper);
 			}
 		}
 	}

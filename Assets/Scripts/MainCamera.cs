@@ -34,37 +34,38 @@ public class MainCamera : Warp
     }
     IEnumerator MoveAndStickToGridMatrixHelper(float rotate1_time, float move_time, float rotate2_time)
     {
-        Transform target_transform = GridMatrix.Current.DummyCamera;
-        transformToFollow = null;
-        float start_time = Time.time;
-        Quaternion initial_rotation = transform.rotation;
-        Vector3 dir = target_transform.position - transform.position;
-        Quaternion target_rotation = Quaternion.LookRotation(dir);
-        while (Time.time - start_time < rotate1_time)
-        {
-            transform.rotation = Quaternion.Slerp(initial_rotation, target_rotation, (Time.time - start_time) / rotate1_time);
-            yield return null;
-        }
-        transform.rotation = target_rotation;
-        Vector3 initial_position = transform.position;
-        Vector3 target_position = target_transform.position;
-        start_time = Time.time;
-        while(Time.time - start_time < move_time)
-        {
-            transform.position = Vector3.Lerp(initial_position, target_position, (Time.time - start_time) / move_time);
-            yield return null;
-        }
-        transform.position = target_position;
-		initial_rotation = transform.rotation;
-		target_rotation = target_transform.rotation;
-		start_time = Time.time;
-		while (Time.time - start_time < rotate2_time)
-		{
-			transform.rotation = Quaternion.Slerp(initial_rotation, target_rotation, (Time.time - start_time) / rotate2_time);
-			yield return null;
-		}
-		transform.rotation = target_rotation;
-        transformToFollow = target_transform;
+		yield return null;
+  //      Transform target_transform = GridMatrix.Current.DummyCamera;
+  //      transformToFollow = null;
+  //      float start_time = Time.time;
+  //      Quaternion initial_rotation = transform.rotation;
+  //      Vector3 dir = target_transform.position - transform.position;
+  //      Quaternion target_rotation = Quaternion.LookRotation(dir);
+  //      while (Time.time - start_time < rotate1_time)
+  //      {
+  //          transform.rotation = Quaternion.Slerp(initial_rotation, target_rotation, (Time.time - start_time) / rotate1_time);
+  //          yield return null;
+  //      }
+  //      transform.rotation = target_rotation;
+  //      Vector3 initial_position = transform.position;
+  //      Vector3 target_position = target_transform.position;
+  //      start_time = Time.time;
+  //      while(Time.time - start_time < move_time)
+  //      {
+  //          transform.position = Vector3.Lerp(initial_position, target_position, (Time.time - start_time) / move_time);
+  //          yield return null;
+  //      }
+  //      transform.position = target_position;
+		//initial_rotation = transform.rotation;
+		//target_rotation = target_transform.rotation;
+		//start_time = Time.time;
+		//while (Time.time - start_time < rotate2_time)
+		//{
+		//	transform.rotation = Quaternion.Slerp(initial_rotation, target_rotation, (Time.time - start_time) / rotate2_time);
+		//	yield return null;
+		//}
+		//transform.rotation = target_rotation;
+  //      transformToFollow = target_transform;
 	}
     public void MoveAndStickToPig(float move_to_pig_time, float camera_rotation_time)
     {
@@ -81,13 +82,13 @@ public class MainCamera : Warp
     IEnumerator MoveAndStickToPigHelper(float move_to_pig_time, float camera_rotation_time)
     {
         transformToFollow = null;
-		Debug.Assert(GameState.Inst.Piggy != null);
+		Debug.Assert(PiggyPreview.Inst != null);
 		float start_time = Time.time;
 		float end_time = start_time + move_to_pig_time;
 		Vector3 start_position = transform.position;
 		// force pivot to move to place immediately
-		PiggyCameraPivot.Inst.transform.position = GameState.Inst.Piggy.transform.position;
-		PiggyCameraPivot.Inst.transform.rotation = GameState.Inst.Piggy.transform.rotation;
+		PiggyCameraPivot.Inst.transform.position = PiggyPreview.Inst.transform.position;
+		PiggyCameraPivot.Inst.transform.rotation = PiggyPreview.Inst.transform.rotation;
 		while (Time.time < end_time)
 		{
 			if ((Time.time - start_time) / move_to_pig_time > 0.8)

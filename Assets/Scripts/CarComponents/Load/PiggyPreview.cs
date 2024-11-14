@@ -13,6 +13,12 @@ public class ScreamEvent
 
 public class PiggyPreview : LoadComponent
 {
+	public bool real_piggy = true;
+	static PiggyPreview inst;
+	public static PiggyPreview Inst
+	{
+		get { Debug.Assert(inst != null); return inst; }
+	}
 	GameObject mesh;
 	public float scream_velocity = 5.0f;
 	bool screaming = false;
@@ -25,9 +31,26 @@ public class PiggyPreview : LoadComponent
 
 	private void Start()
 	{
+		Debug.Assert(inst == null);
+		inst = this;
 		mesh = transform.GetChild(0).gameObject;
 		Debug.Assert(mesh != null);
 		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnFIrstPersonChanged);
+		ConfirmButton.Inst.OnGridStateChanged();
+	}
+	private void OnDisable()
+	{
+		inst = null;
+	}
+	private void OnEnable()
+	{
+		inst = this;
+	}
+	private void OnDestroy()
+	{
+		inst = null;
+		EventBus.Publish(new PiggyDestroyEvent());
+		ConfirmButton.Inst.OnGridStateChanged();
 	}
 	private void Update()
 	{
@@ -63,8 +86,5 @@ public class PiggyPreview : LoadComponent
 			mesh.SetActive(true);
 		}
 	}
-	private void OnDestroy()
-	{
-		EventBus.Publish(new PiggyDestroyEvent());
-	}
+	
 }
