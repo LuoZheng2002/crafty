@@ -39,23 +39,24 @@ public class ConfirmButton : MonoBehaviour
 	bool can_start = false;
 	public void OnGridStateChanged()
 	{
-		if (!GridMatrix.Current.DisableDesign && Util.forced_designs.ContainsKey(GridMatrix.Current.waypoint_name))
-		{
-			can_start = true;
-			foreach(var dragImage in DragImage.DragImages)
-			{
-				if(dragImage.Value.Count > 0)
-				{
-					can_start = false;
-					break;
-				}
-			}
-		}
-		else
-		{
-			// to do
-			can_start = GameState.Inst.Piggy != null;
-		}
+		//if (GridMatrix.Inst.ForceDesign)
+		//{
+		//	can_start = true;
+		//	foreach(var dragImage in DragImage.DragImages)
+		//	{
+		//		if(dragImage.Value.Count > 0)
+		//		{
+		//			can_start = false;
+		//			break;
+		//		}
+		//	}
+		//}
+		//else
+		//{
+		//	// to do
+		//	can_start = PiggyPreview.Inst != null;
+		//}
+		can_start = PiggyPreview.Inst != null;
 		if (DragImage.DragImages[Util.Component.Partner].Count > 0
 			|| DragImage.DragImages[Util.Component.Pig].Count > 0)
 		{
