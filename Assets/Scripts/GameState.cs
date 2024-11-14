@@ -110,8 +110,8 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		TransitionToStory(Util.StoryName.Crash);
-		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		//TransitionToStory(Util.StoryName.Crash);
+		 TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
@@ -390,7 +390,7 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("???", "Are you all right?", Character.Partner);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Who... who are you?", null);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I’m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Iï¿½m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
 		LineCanvas.Bottom.Hide();
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
 		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 0.0f, 1.0f);
@@ -398,7 +398,7 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 1.0f, 0.0f);
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "That sounds terrible! " +
-			"Looks like you are injured. Let’s get down to the town to have a rest first.", Character.Partner);
+			"Looks like you are injured. Letï¿½s get down to the town to have a rest first.", Character.Partner);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where to look for your girlfriend.", Character.Partner);
 		yield return AtTheSameTime(
 			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory1_1), TRef.Get(Util.TRefName.CameraPrestory1_2), 2.0f),
