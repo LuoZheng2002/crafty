@@ -20,7 +20,7 @@ public class Probe : MonoBehaviour
 	}
 	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("Ontriggerenter!");
+		// Debug.Log("Ontriggerenter!");
 		GridMatrix.Inst.CollisionCount++;
 	}
 	void OnTriggerExit(Collider other)

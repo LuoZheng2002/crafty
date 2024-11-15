@@ -128,12 +128,12 @@ public class DragImage : MonoBehaviour
 			{
 				current.selectionImage.enabled = true;
 				CurrentContentType = current.contentType;
-				Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 			else
 			{
 				CurrentContentType = Util.ComponentType.None;
-				Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
@@ -307,7 +307,7 @@ public class DragImage : MonoBehaviour
 	bool reset_flag = false;
 	void OnAddComponentInterrupt(OtherItemSelectedEvent e)
 	{
-		Debug.Log($"{content} gets interrupted!");
+		// Debug.Log($"{content} gets interrupted!");
 		Current = null;
 		if (coroutine != null)
 		{

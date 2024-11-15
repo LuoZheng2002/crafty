@@ -51,16 +51,7 @@ public class GameState : MonoBehaviour
 	public static bool drag_screen_shown = false;
 	public static List<bool> shown_tutorials = new() { false, false, false, false, false };
 
-	public static Dictionary<Util.Component, int> Inventory { get; set; } = new()
-	{
-		{Util.Component.Pig, 1 },
-		{Util.Component.WoodenCrate, 9 },
-		{Util.Component.Wheel, 4 },
-		{Util.Component.TurnWheel, 4 },
-		{Util.Component.MotorWheel, 4 },
-		{Util.Component.Rocket, 8 },
-		{Util.Component.Umbrella, 8 }
-	};
+	
 
 	public GameObject cameraAnimationPrefab;
 	bool camera_follow_pig = false;
@@ -80,7 +71,7 @@ public class GameState : MonoBehaviour
 		{ 
 			first_person = value;
 			EventBus.Publish(new InvisibleStateUpdateEvent());
-			PiggyCameraPivot.Inst.OnFirstPersonChanged(value);
+			// PiggyCameraPivot.Inst.OnFirstPersonChanged(value);
 		}
 	}
 	private bool first_person = true;
@@ -135,7 +126,77 @@ public class GameState : MonoBehaviour
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 		EventBus.Subscribe<TouchLavaEvent>(OnTouchLava);
+		EventBus.Subscribe<ScanSuccessEvent>(OnScanSuccess);
+		EventBus.Subscribe<ScanFailEvent>(OnScanFail);
 
+		Util.Delay(this, 1, ()=> { MainCamera.Inst.MoveAndStickToCarCore(); });
+	}
+	IEnumerator ScanSuccessHelper()
+	{
+		PlayCanvas.Inst.Hide();
+		Debug.LogWarning($"joints: {CarCore.Inst.joint != null}, {CarCore.Inst.fix_joint != null}");
+		CarCore.Inst.Unfix();
+		yield return null;
+		CarCore.Inst.AlignToGridMatrix();
+		yield return null;
+		yield return null;
+		yield return null;
+		CarCore.Inst.Fix();
+		GridMatrix.Inst.Activate();
+		BuildCanvas.Inst.Show();
+		BuildCanvas.Inst.InitializeItems();
+	}
+	void OnScanSuccess(ScanSuccessEvent e)
+	{
+		StartCoroutine(ScanSuccessHelper());
+	}
+	public void GoBack()
+	{
+		PlayCanvas.Inst.Show();
+		BuildCanvas.Inst.Hide();
+		GridMatrix.Inst.Deactivate();
+		CarCore.Inst.ActivateContainer();
+	}
+	void OnScanFail(ScanFailEvent e)
+	{
+		CarCore.Inst.ActivateContainer();
+	}
+	IEnumerator GoToCheckpointHelper(Util.WaypointName waypoint_name)
+	{
+		MainCamera.Inst.Stop();
+		yield return null;
+		PlayCanvas.Inst.Hide();
+		GridMatrix.Inst.MoveToCheckpoint(waypoint_name);
+		yield return null;
+		if (!GridMatrix.Inst.Active)
+		{
+			CarCore.Inst.DeactivateContainer();
+		}
+		else
+		{
+			CarCore.Inst.Unfix();
+		}
+		yield return null;
+		CarCore.Inst.AlignToGridMatrix();
+		yield return null;
+		yield return null;
+		yield return null;
+		yield return null;
+		yield return null;
+		yield return null;
+		CarCore.Inst.Fix();
+		if (!GridMatrix.Inst.Active)
+		{
+			GridMatrix.Inst.Activate();
+		}
+		CarCore.Inst.ResetPivot();
+		BuildCanvas.Inst.Show();
+		BuildCanvas.Inst.InitializeItems();
+		MainCamera.Inst.MoveAndStickToCarCore();
+	}
+	public void GoToCheckpoint(Util.WaypointName waypoint_name)
+	{
+		StartCoroutine(GoToCheckpointHelper(waypoint_name));
 	}
 	private void OnDestroy()
 	{
@@ -153,7 +214,7 @@ public class GameState : MonoBehaviour
 	//}
 	public void OnRetry()
 	{
-		PiggyCameraPivot.Inst.EndFollow();
+		// PiggyCameraPivot.Inst.EndFollow();
 		camera_follow_pig = false;
 		PiggyPermitInvisible = false;
 		Util.BuildInfo build_info = last_choice_name == Util.ChoiceName.NeedHelp ? Util.BuildInfo.NeedHelp : Util.BuildInfo.DontNeedHelpButRetry;
@@ -173,11 +234,15 @@ public class GameState : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			GridMatrix.Inst.Scan();
+			TryScan();
 		}
 		if (Input.GetKeyDown(KeyCode.E))
 		{
 			CarCore.Inst.Move();
+		}
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			GoToCheckpoint(Util.WaypointName.PreStory1);
 		}
 	}
 
@@ -213,7 +278,7 @@ public class GameState : MonoBehaviour
 		}
 		Goal.Deselect();
 		PlayCanvas.Inst.Hide();
-		PiggyCameraPivot.Inst.EndFollow();
+		// PiggyCameraPivot.Inst.EndFollow();
 		PiggyPermitInvisible = false;
 		MainCamera.Inst.Stop();
 		EventBus.Publish(new InvisibleStateUpdateEvent());
@@ -586,9 +651,9 @@ public class GameState : MonoBehaviour
 		{
 			Goal.Select(goal_name);
 		}
-		MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
+		// MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
 		PiggyPermitInvisible = false;
-		PiggyCameraPivot.Inst.EndFollow();
+		// PiggyCameraPivot.Inst.EndFollow();
 
 		switch(waypoint_name)
 		{
@@ -731,7 +796,7 @@ public class GameState : MonoBehaviour
 		ConfirmButton.Inst.EnableConfirm = false;
 		yield return new WaitForSeconds(1.5f);
 
-		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Drag the screen to view the grid**", (GridMatrixDragEvent e) => true);
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Drag the screen to view the grid**", (CanvasDragEvent e) => true);
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Now there's an **important** feature that you want to learn", null);
 		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "**Press \"Space\" to toggle build layers.**", (SwitchLayerEvent e) => true);
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Perfect! Without previous design constraints, it would be hard to locate a cell without specifying layers.", null);
@@ -802,6 +867,14 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
 	}
 	Util.WaypointName current_waypoint;
+
+
+	public void TryScan()
+	{
+		CarCore.Inst.DeactivateContainer();
+		GridMatrix.Inst.Scan();
+	}
+
 	public void TransitionToPlay(bool build)
 	{
 		AudioPlayer.Inst.TransitionToPlay();
@@ -811,25 +884,24 @@ public class GameState : MonoBehaviour
 		// AudioPlayer.Inst.TransitionToPlay();
 		if (build)
 		{
-			// GridMatrix.Current.BuildAndDeactivate();
-			// GridMatrix.DeselectGridMatrix();
+			GridMatrix.Inst.BuildAndDeactivate();
 		}
 		// PiggyCameraPivot.Inst.StartFollow(Piggy);
 		// coroutine that moves camera to position
-		MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
-		if (build)
-		{
-			switch (current_waypoint)
-			{
-				case Util.WaypointName.PreStory1:
-					FirstPerson.Inst.Hide();
-					Retry.Inst.Hide();
-					break;
-				case Util.WaypointName.PreStory2:
-					StartCoroutine(PlayPreStory2());
-					break;
-			}
-		}
+		// MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
+		//if (build)
+		//{
+		//	switch (current_waypoint)
+		//	{
+		//		case Util.WaypointName.PreStory1:
+		//			FirstPerson.Inst.Hide();
+		//			Retry.Inst.Hide();
+		//			break;
+		//		case Util.WaypointName.PreStory2:
+		//			StartCoroutine(PlayPreStory2());
+		//			break;
+		//	}
+		//}
 	}
 	public IEnumerator PlayPreStory2()
 	{

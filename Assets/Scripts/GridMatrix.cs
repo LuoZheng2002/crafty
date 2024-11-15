@@ -20,7 +20,7 @@ public partial class GridMatrix: MonoBehaviour
 	public GameObject gridPrefab;
 	public int activeLayerIndex = 0;
 	public float drag_rotation_speed = 0.05f;
-	bool active = false;
+	public bool Active { get; private set; } = false;
 	public Probe Probe { get; private set; }
 
 	//Transform cameraPivot;
@@ -110,7 +110,12 @@ public partial class GridMatrix: MonoBehaviour
 	//	}
 	//}
 
-	
+	public void MoveToCheckpoint(Util.WaypointName waypoint_name)
+	{
+		Checkpoint checkpoint = Checkpoint.Get(waypoint_name);
+		transform.position = checkpoint.transform.position;
+		transform.rotation = checkpoint.transform.rotation;
+	}
 	private void Start()
 	{
 		// Debug.Assert(!grid_matrices.ContainsKey(waypoint_name));
@@ -128,6 +133,10 @@ public partial class GridMatrix: MonoBehaviour
 		InitPhantom();
 		ProbeResize();
 		SpawnGrids();
+		Util.Delay(this, () =>
+		{
+			Deactivate();
+		});
 	}
 	private void OnDestroy()
 	{
@@ -168,7 +177,7 @@ public partial class GridMatrix: MonoBehaviour
 					{
 						Debug.Assert(GameSave.MemLoads != null);
 						Util.Component content = GameSave.MemLoads[i, j, k];
-						Debug.Log(content);
+						// Debug.Log(content);
 						var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as LoadComponent;
 						Debug.Assert(loads != null);
 						Debug.Assert(inst != null);
@@ -201,9 +210,9 @@ public partial class GridMatrix: MonoBehaviour
 	// collider 
 	// core disable
 	// activate: space enable, enable build canvas, update selected grid
-	void Activate()
+	public void Activate()
 	{
-		active = true;
+		Active = true;
 		// dragEvent = EventBus.Subscribe<GridMatrixDragEvent>(OnGridMatrixDrag);
 		// dragEulerAngle = new Vector3(32, -90, 0);
 		// cameraPivot.rotation = Quaternion.Euler(dragEulerAngle);
@@ -326,9 +335,9 @@ public partial class GridMatrix: MonoBehaviour
 	// two modes: closest to ray, closest to player
 
 	// called if built
-	void Deactivate()
+	public void Deactivate()
 	{
-		active = false;
+		Active = false;
 		// EventBus.Unsubscribe(dragEvent);
 		// remove all grids
 		//for (int i = 0; i < initial_height; i++)
@@ -368,6 +377,7 @@ public partial class GridMatrix: MonoBehaviour
 				}
 			}
 		}
+		transform.position = Vector3.zero;
 	}
 	public ref Util.Component GetMemCrate(Vec3 pos)
 	{
@@ -470,8 +480,10 @@ public partial class GridMatrix: MonoBehaviour
 			}
 		}
 		AttachToCarCore();
+		ClearComponents(false);
 		// Active = false;
 		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad);
+		Deactivate();
 	}
 
 	public void Dump()
@@ -562,7 +574,7 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	private void Update()
 	{
-		if (!active)
+		if (!Active)
 		{
 			return;
 		}
@@ -629,7 +641,7 @@ public partial class GridMatrix: MonoBehaviour
 				case Util.CursorMode.Idle:
 					break;
 				case Util.CursorMode.AddComponent:
-					if (ForceDesign)
+					if (!ForceDesign)
 					{
 						if (!Occupied(h, w, l))
 							break;
@@ -731,7 +743,7 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	public void Scan()
 	{
-		Debug.Assert(!active);
+		Debug.Assert(!Active);
 		StartCoroutine(ScanHelper());
 	}
 	public float start_scan_height = -2.0f;
@@ -746,7 +758,18 @@ public partial class GridMatrix: MonoBehaviour
 		Vector3 start_position = CarCore.Inst.transform.position + new Vector3(0, start_scan_height, 0);
 		Vector3 end_position = CarCore.Inst.transform.position + new Vector3(0, end_scan_height, 0);
 		transform.position = start_position;
-		transform.rotation = CarCore.Inst.transform.rotation;
+		Vector3 up_vector = CarCore.Inst.transform.up;
+		float y_rotation = CarCore.Inst.transform.rotation.eulerAngles.y;
+		float angle = Vector3.Angle(up_vector, new Vector3(0, 1, 0));
+		Debug.Log($"angle: {angle}");
+		if (angle > 20)
+		{
+			transform.rotation = Quaternion.Euler(0, y_rotation, 0);
+		}
+		else
+		{
+			transform.rotation = CarCore.Inst.transform.rotation;
+		}
 		float start_time = Time.time;
 		yield return new WaitForSeconds(0.2f);
 		while (Time.time - start_time < scan_time)
@@ -759,7 +782,6 @@ public partial class GridMatrix: MonoBehaviour
 				Debug.Log("Success!");
 				EventBus.Publish(new ScanSuccessEvent());
 				HideProbe();
-				CarCore.Inst.Unfix();
 				yield break;
 			}
 			yield return null;

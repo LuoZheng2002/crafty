@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Load\PiggyPreview.cs" />
     <Compile Include="Assets\Scripts\CarCore.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\RebuildButton.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\MotorWheelPreview.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvas.cs" />
     <Compile Include="Assets\Scripts\PiggyNose.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\BackButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToastManager.cs" />
     <Compile Include="Assets\Scripts\Character.cs" />
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Assets\Scripts\UIScripts\Help.cs" />
     <Compile Include="Assets\Scripts\StateMachineBehavior\CameraAnimExit.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\TurnWheelPreview.cs" />
+    <Compile Include="Assets\Scripts\Checkpoint.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ButtonScale.cs" />
     <Compile Include="Assets\Scripts\UIScripts\CanvasSwitch.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\Rocket.cs" />

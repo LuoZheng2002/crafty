@@ -19,8 +19,8 @@ public class RotationInfo
 
 public static class Util
 {
-	public static float position_spring = 1000.0f;
-	public static float position_damper = 1000.0f;
+	public static float position_spring = 500000.0f;
+	public static float position_damper = 50000.0f;
 	// occupied type
 	// update
 	public enum ChoiceName
@@ -367,7 +367,7 @@ public static class Util
 	}
 	public static void CreateJoint(MonoBehaviour a, MonoBehaviour b, float position_spring, float position_damper)
 	{
-		Debug.Log("Added a configurable joint");
+		// Debug.Log("Added a configurable joint");
 		ConfigurableJoint configurableJoint = a.AddComponent<ConfigurableJoint>();
 		configurableJoint.connectedBody = b.GetComponent<Rigidbody>();
 		JointDrive drive = new JointDrive();

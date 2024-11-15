@@ -8,24 +8,59 @@ public class CarCore : MonoBehaviour
 	static CarCore inst;
 	public static CarCore Inst { get { Debug.Assert(inst != null); return inst; } }
 	Rigidbody rb;
-	FixedJoint joint;
-	FixedJoint fix_joint;
+	public FixedJoint joint;
+	public FixedJoint fix_joint;
+	[SerializeField]
+	private Transform camera_pivot;
+	[SerializeField]
+	private Transform camera_end;
+	[SerializeField]
+	Transform container;
+
+	public Transform CameraEnd => camera_end;
+	public Transform Container => container;
+
+	float pivot_distance = 5.0f;
+	public float min_dist = 3.0f;
+	public float max_dist = 7.0f;
+	float PivotDistance
+	{
+		get { return pivot_distance; }
+		set
+		{
+			pivot_distance = value;
+			Vector3 position = CameraEnd.localPosition;
+			position.z = -pivot_distance;
+			CameraEnd.localPosition = position;
+		}
+	}
+	public float zoom_speed = 0.25f;
 	private void Start()
 	{
 		Debug.Assert(inst == null);
 		inst = this;
 		rb = GetComponent<Rigidbody>();
+		EventBus.Subscribe<CanvasDragEvent>(OnCanvasDrag);
+		// joint = transform.AddComponent<FixedJoint>();
 	}
 	private void OnDestroy()
 	{
 		inst = null;
 	}
-	public void AttachPiggy()
+	private void Update()
 	{
-		Debug.Assert(PiggyPreview.Inst != null);
-		joint = transform.AddComponent<FixedJoint>();
-		joint.connectedBody = PiggyPreview.Inst.RB;
+		if (Input.mouseScrollDelta.y != 0)
+		{
+			PivotDistance = Mathf.Clamp(PivotDistance - Input.mouseScrollDelta.y * zoom_speed, min_dist, max_dist);
+		}
+		camera_pivot.rotation = Quaternion.Euler(drag_euler_angle);
 	}
+	//public void AttachPiggy()
+	//{
+	//	Debug.Assert(PiggyPreview.Inst != null);
+	//	joint = transform.AddComponent<FixedJoint>();
+	//	joint.connectedBody = PiggyPreview.Inst.RB;
+	//}
 	public void Fix()
 	{
 		Debug.Assert(fix_joint == null);
@@ -37,9 +72,12 @@ public class CarCore : MonoBehaviour
 		Destroy(fix_joint);
 		fix_joint = null;
 	}
-	public void Show()
+	public void ActivateContainer()
 	{
-		gameObject.SetActive(true);
+		container.gameObject.SetActive(true);
+		Debug.Assert(joint == null);
+		joint = transform.AddComponent<FixedJoint>();
+		joint.connectedBody = PiggyPreview.Inst.RB;
 	}
 	public void Move()
 	{
@@ -47,15 +85,50 @@ public class CarCore : MonoBehaviour
 	}
 	public void Build()
 	{
-		gameObject.SetActive(true);
-		rb.MovePosition(GridMatrix.Inst.Probe.transform.position);
-		foreach (Transform child in transform)
+		foreach (Transform child in container)
 		{
+			Debug.Assert(child.GetComponent<VehicleComponent>() != null);
 			Destroy(child.gameObject);
 		}
+		AlignToGridMatrix();
+		ActivateContainer();
 	}
-	public void Hide()
+	bool HasComponent()
 	{
-		gameObject.SetActive(false);
+		foreach (Transform child in container)
+		{
+			if (child.GetComponent<VehicleComponent>() != null)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	public void DeactivateContainer()
+	{
+		container.gameObject.SetActive(false);
+		Debug.Assert(joint != null);
+		Destroy(joint);
+		joint = null;
+	}
+	public void AlignToGridMatrix()
+	{
+		rb.MovePosition(GridMatrix.Inst.transform.position + GridMatrix.Inst.ProbeTargetPos);
+		rb.MoveRotation(GridMatrix.Inst.transform.rotation);
+	}
+	public float drag_rotation_speed = 1.0f;
+	Vector3 drag_euler_angle = new Vector3(0, 0, 0);
+	void OnCanvasDrag(CanvasDragEvent e)
+	{
+		float rotationX = -e.deltaY * drag_rotation_speed;  // Vertical rotation
+		float rotationY = e.deltaX * drag_rotation_speed;  // Horizontal rotation											   // Rotate the camera accordingly
+		drag_euler_angle += new Vector3(rotationX, rotationY, 0);
+		camera_pivot.rotation = Quaternion.Euler(drag_euler_angle);
+	}
+	public void ResetPivot()
+	{
+		Quaternion reset_rotation = transform.rotation * Quaternion.Euler(10, -90, 0);
+		drag_euler_angle = reset_rotation.eulerAngles;
+		camera_pivot.rotation = Quaternion.Euler(drag_euler_angle);
 	}
 }
