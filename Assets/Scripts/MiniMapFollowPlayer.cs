@@ -15,7 +15,7 @@ public class MiniMapFollowPlayer : MonoBehaviour
         {
             Transform player = GameState.Inst.Piggy.transform;
             Vector3 newPosition = player.position;
-            newPosition.y = transform.position.y;
+            //newPosition.y = transform.position.y;
             transform.position = newPosition;
             //transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
         }

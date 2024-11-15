@@ -111,10 +111,10 @@ public class GameState : MonoBehaviour
 	void Init()
 	{
 		//TransitionToStory(Util.StoryName.Crash);
-		 TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
+		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
-		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
-		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
+		TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+		// TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
 		// TransitionToStory(Util.StoryName.TownWaypoint);
 		// town_waypoint_met = true;
 		// TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.None);
@@ -382,7 +382,7 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.4f);
 		yield return BlackoutCanvas.Inst.Blackout(1.5f, 0.4f, 1.0f);
 		yield return new WaitForSeconds(1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You were unconcious for some time", 1.0f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You were unconscious for some time", 1.0f, 0.0f, 1.0f);
 		yield return new WaitForSeconds(1.0f);
 		yield return BlackoutCanvas.Inst.DisplaySub(null, 1.0f, 1.0f, 0.0f);
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory1));
@@ -390,16 +390,16 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("???", "Are you all right?", Character.Partner);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Who... who are you?", null);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I�m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I'm Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
 		LineCanvas.Bottom.Hide();
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 0.0f, 1.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything that just happened", 0.5f, 0.0f, 1.0f);
 		yield return new WaitForSeconds(1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 1.0f, 0.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything that just happened", 0.5f, 1.0f, 0.0f);
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "That sounds terrible! " +
-			"Looks like you are injured. Let�s get down to the town to have a rest first.", Character.Partner);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where to look for your girlfriend.", Character.Partner);
+			"Looks like you are injured. Let's get down to the town to rest first.", Character.Partner);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where your girlfriend is.", Character.Partner);
 		yield return AtTheSameTime(
 			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory1_1), TRef.Get(Util.TRefName.CameraPrestory1_2), 2.0f),
 			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "There are some scattered parts nearby. Let's take advantage of them for a ride.", Character.Partner)
@@ -493,7 +493,7 @@ public class GameState : MonoBehaviour
 		yield return MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_2), TRef.Get(Util.TRefName.CameraPrestory2_1), 1.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "A car without control is like the West without Jerusalem.", Character.Partner);
 		yield return AtTheSameTime(
-			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Fortunately, there is a garage nearby that stores what we want.", Character.Partner),
+			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Fortunately, there is a garage nearby that has what we need.", Character.Partner),
 			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory2_1), TRef.Get(Util.TRefName.CameraPrestory2_3), 1.5f)
 			);
 		yield return AtTheSameTime(
@@ -710,7 +710,7 @@ public class GameState : MonoBehaviour
 			case Util.BuildInfo.DontNeedHelpButRetry:
 				{
 					ConfirmButton.Inst.EnableConfirm = false;
-					yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "It seems you had a rough time. Would you like to get some hint?", null);
+					yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "It seems like you're having a rough time. Would you like a hint?", null);
 					ChoiceCanvas.Inst.DisplayChoices(new() { ("Ok, I need some help.", Util.ChoiceName.NeedHelp), ("No way. Let me try it myself!", Util.ChoiceName.DontNeedHelp) });
 					Util.ChoiceObj choice_obj = new();
 					last_choice_name = choice_obj.choice_name;
@@ -805,7 +805,7 @@ public class GameState : MonoBehaviour
 	{
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
 		yield return BlackoutCanvas.Inst.DisplaySub("Thanks for playing", 1.5f, 0.0f, 1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("More Contents Coming Soon", 1.5f, 1.0f, 0.0f);
+		yield return BlackoutCanvas.Inst.DisplaySub("More Content Coming Soon", 1.5f, 1.0f, 0.0f);
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
 	}
 	Util.WaypointName current_waypoint;

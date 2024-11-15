@@ -30,7 +30,8 @@ public abstract class BoosterPreview : AccessoryComponent
     void Update()
     {
         if (built)
-        { 
+        {
+            // use rocket only once
             if (Input.GetKey(KeyCode.Q))
             {
                 time = Mathf.Clamp(time + Time.deltaTime, 0, max_time);
