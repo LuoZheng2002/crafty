@@ -14,7 +14,6 @@ public class Retry : MonoBehaviour
 	{
 		Debug.Assert(inst == null);
 		inst = this;
-		gameObject.SetActive(false);
 	}
 	private void OnDestroy()
 	{

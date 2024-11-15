@@ -140,6 +140,7 @@
     <Compile Include="Assets\Scripts\UIScripts\PlayCanvasDrag.cs" />
     <Compile Include="Assets\Scripts\UIScripts\GoalCanvas.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelPreview.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ObtainCanvas.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelMotor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Layers.cs" />
     <Compile Include="Assets\Scripts\GridMatrixEX.cs" />

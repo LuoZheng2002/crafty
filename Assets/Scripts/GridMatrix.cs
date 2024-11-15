@@ -147,10 +147,11 @@ public partial class GridMatrix: MonoBehaviour
 	
 	public void OnGridMatrixSizeChanged(GridMatrixSizeChangedEvent e)
 	{
+		GameSave.ExpandMemory();
 		DestroyGrids();
 		SpawnGrids();
 		InitComponentArray();
-		InitMemory();
+		// InitMemory();
 		InitPhantom();
 		ProbeResize();
 	}

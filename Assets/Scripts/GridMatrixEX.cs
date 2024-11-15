@@ -52,6 +52,7 @@ public partial class GridMatrix: MonoBehaviour
 	{
 		(int h, int w, int l) = GameSave.GridSize;
 		grids = new GridCell[h, w, l];
+		Debug.Log($"Spawn grid: {h}, {w}, {l}");
 		for (int i = 0; i < h; i++)
 		{
 			for (int j = 0; j < w; j++)
@@ -76,7 +77,13 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	void DestroyGrids()
 	{
-
+		foreach(Transform child in transform)
+		{
+			if (child.GetComponent<GridCell>() != null)
+			{
+				Destroy(child.gameObject);
+			}	
+		}
 	}
 	void ClearComponents(bool destroy_object)
 	{
@@ -119,7 +126,7 @@ public partial class GridMatrix: MonoBehaviour
 		if (rebuild)
 		{
 			Debug.LogWarning("Resizing component array and rebuilding vehicle.");
-			Memorize();
+			// Memorize();
 			ClearComponents(true);
 		}
 		crates = new CrateComponent[h, w, l];
@@ -127,50 +134,54 @@ public partial class GridMatrix: MonoBehaviour
 		loads = new LoadComponent[h, w, l];
 		if (rebuild)
 		{
-			RebuildVehicle();
-			ConfirmButton.Inst.OnGridStateChanged();
+			// RebuildVehicle();
+			// ConfirmButton.Inst.OnGridStateChanged();
 		}
 	}
 	void InitMemory()
 	{
 		(int h, int w, int l) = GameSave.GridSize;
-		if (GameSave.MemCrates != null)
-		{
-			Debug.Assert(GameSave.MemAccessories != null);
-			Debug.Assert(GameSave.MemLoads != null);
-			Debug.Assert(GameSave.AccessoryDirections != null);
-			int old_h = GameSave.MemCrates.GetLength(0);
-			int old_w = GameSave.MemCrates.GetLength(1);
-			int old_l = GameSave.MemCrates.GetLength(2);
-			Debug.Assert(old_h <= h);
-			Debug.Assert(old_w <= w);
-			Debug.Assert(old_l <= l);
-			var temp_accessories = GameSave.MemAccessories.Clone() as Util.Component[,,];
-			var temp_loads = GameSave.MemLoads.Clone() as Util.Component[,,];
-			var temp_crates = GameSave.MemCrates.Clone() as Util.Component[,,];
-			var temp_directions = GameSave.AccessoryDirections.Clone() as int[,,];
-			GameSave.MemAccessories = new Util.Component[h, w, l];
-			GameSave.MemLoads = new Util.Component[h, w, l];
-			GameSave.MemCrates = new Util.Component[h, w, l];
-			GameSave.AccessoryDirections = new int[h, w, l];
-			for(int i = 0;i < old_h;i++)
-			{
-				for(int j = 0; j <  old_w;j++)
-				{
-					for(int k = 0;  k < old_l;k++)
-					{
-						GameSave.MemAccessories[i, j, k] = temp_accessories[i, j, k];
-						GameSave.MemLoads[i, j, k] = temp_loads[i, j, k];
-						GameSave.MemCrates[i, j, k] = temp_crates[i, j, k];
-						GameSave.AccessoryDirections[i, j, k] = temp_directions[i, j, k];
-					}
-				}
-			}
-		}
+		Debug.Assert(GameSave.MemCrates == null);
+		//if (GameSave.MemCrates != null)
+		//{
+		//	Debug.Assert(GameSave.MemAccessories != null);
+		//	Debug.Assert(GameSave.MemLoads != null);
+		//	Debug.Assert(GameSave.AccessoryDirections != null);
+		//	int old_h = GameSave.MemCrates.GetLength(0);
+		//	int old_w = GameSave.MemCrates.GetLength(1);
+		//	int old_l = GameSave.MemCrates.GetLength(2);
+		//	Debug.Assert(old_h <= h);
+		//	Debug.Assert(old_w <= w);
+		//	Debug.Assert(old_l <= l);
+		//	var temp_accessories = GameSave.MemAccessories.Clone() as Util.Component[,,];
+		//	var temp_loads = GameSave.MemLoads.Clone() as Util.Component[,,];
+		//	var temp_crates = GameSave.MemCrates.Clone() as Util.Component[,,];
+		//	var temp_directions = GameSave.AccessoryDirections.Clone() as int[,,];
+		//	GameSave.MemAccessories = new Util.Component[h, w, l];
+		//	GameSave.MemLoads = new Util.Component[h, w, l];
+		//	GameSave.MemCrates = new Util.Component[h, w, l];
+		//	GameSave.AccessoryDirections = new int[h, w, l];
+		//	for (int i = 0; i < old_h; i++)
+		//	{
+		//		for (int j = 0; j < old_w; j++)
+		//		{
+		//			for (int k = 0; k < old_l; k++)
+		//			{
+		//				GameSave.MemAccessories[i, j, k] = temp_accessories[i, j, k];
+		//				GameSave.MemLoads[i, j, k] = temp_loads[i, j, k];
+		//				GameSave.MemCrates[i, j, k] = temp_crates[i, j, k];
+		//				GameSave.AccessoryDirections[i, j, k] = temp_directions[i, j, k];
+		//			}
+		//		}
+		//	}
+		//}
+		//else
+		//{
 		GameSave.MemCrates = new Util.Component[h, w, l];
 		GameSave.MemAccessories = new Util.Component[h, w, l];
 		GameSave.MemLoads = new Util.Component[h, w, l];
 		GameSave.AccessoryDirections = new int[h, w, l];
+		// }
 	}
 	void InitPhantom()
 	{
