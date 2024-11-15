@@ -79,6 +79,10 @@ public class BuildCanvas : MonoBehaviour
         {
             DragImage.DragImages[item.Key].SetInitialCount(item.Value);
         }
+        if (GameSave.IsMainStory)
+        {
+            DragImage.DragImages[Util.Component.Partner].SetInitialCount(1);
+        }
         nonzero_images = new();
         foreach (var dragImage in DragImage.DragImages)
         {

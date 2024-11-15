@@ -42,18 +42,27 @@ public class PiggyPreview : LoadComponent
 	}
 	private void OnDisable()
 	{
-		inst = null;
+		if (real_piggy)
+		{
+			inst = null;
+		}
 	}
 	private void OnEnable()
 	{
-		Debug.Assert(inst == null);
-		inst = this;
+		if (real_piggy)
+		{
+			Debug.Assert(inst == null);
+			inst = this;
+		}
 	}
 	private void OnDestroy()
 	{
-		inst = null;
-		EventBus.Publish(new PiggyDestroyEvent());
-		ConfirmButton.Inst.OnGridStateChanged();
+		if (real_piggy)
+		{
+			inst = null;
+			EventBus.Publish(new PiggyDestroyEvent());
+			ConfirmButton.Inst.OnGridStateChanged();
+		}
 	}
 	private void Update()
 	{

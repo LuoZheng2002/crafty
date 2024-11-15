@@ -6,6 +6,7 @@ using UnityEngine;
 public class MainCamera : Warp
 {
     // Start is called before the first frame update
+	public Camera Camera { get; set; }
     public static MainCamera Inst
     {
         get { Debug.Assert(inst != null, "Main Camera Not Set"); return inst; }
@@ -15,7 +16,9 @@ public class MainCamera : Warp
     {
         Debug.Assert(inst == null, "Main Camera Already Set");
         inst = this;
-    }
+		Camera = GetComponent<Camera>();
+		Debug.Assert(Camera != null);
+	}
 
     // Update is called once per frame
 
@@ -28,14 +31,14 @@ public class MainCamera : Warp
             transform.rotation = transformToFollow.rotation;
         }
     }
-	public void MoveAndStickToCarCore()
+	public void MoveAndStickTo(Transform target_transform)
 	{
 		float time = 1.0f;
-		StartCoroutine(MoveAndStickToCarCoreHelper(time));
+		StartCoroutine(MoveAndStickToHelper(time, target_transform));
 	}
-	IEnumerator MoveAndStickToCarCoreHelper(float time)
+	IEnumerator MoveAndStickToHelper(float time, Transform target_transform)
 	{
-		Transform target_transform = CarCore.Inst.CameraEnd;
+		// Transform target_transform = CarCore.Inst.CameraEnd;
 		transformToFollow = null;
 		float start_time = Time.time;
 		Vector3 initial_position = transform.position;

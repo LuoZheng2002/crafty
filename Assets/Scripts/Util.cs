@@ -177,14 +177,6 @@ public static class Util
 		{Component.TurnWheel, ComponentType.Accessory },
 	};
 	// crate, accessory, load
-	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
-	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> CreateForcedDesigns()
-	{
-		Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> designs = new();
-		designs[WaypointName.PreStory1] = CreateForcedDesign0();
-		designs[WaypointName.PreStory2] = CreateForcedDesign1();
-		return designs;
-	}
 
 	public enum StoryName
 	{
@@ -229,7 +221,7 @@ public static class Util
 		VolcTop,
 	}
 
-	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
+	public static (Component[,,], Component[,,], Component[,,]) DesignPrestory1()
 	{
 		Component[,,] crates = new Component[2, 2, 3];
 		Component[,,] loads = new Component[2, 2, 3];
@@ -248,7 +240,7 @@ public static class Util
 		accessories[0, 1, 2] = Component.Wheel;
 		return (crates, accessories, loads);
 	}
-	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign1()
+	public static (Component[,,], Component[,,], Component[,,]) DesignPrestory2()
 	{
 		Component[,,] crates = new Component[2, 3, 3];
 		Component[,,] loads = new Component[2, 3, 3];

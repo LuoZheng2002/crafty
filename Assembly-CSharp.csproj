@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\UIScripts\View.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Load\PiggyPreview.cs" />
     <Compile Include="Assets\Scripts\CarCore.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\MapCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\RebuildButton.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\MotorWheelPreview.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MenuCanvas.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Assets\Scripts\CarComponents\Load\Partner.cs" />
     <Compile Include="Assets\Scripts\GridCell.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ComponentInterfaces.cs" />
+    <Compile Include="Assets\Scripts\BigMapCamera.cs" />
     <Compile Include="Assets\Scripts\MenuGoalReached.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Trash.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BackButton.cs" />
@@ -133,8 +135,10 @@
     <Compile Include="Assets\Scripts\CarComponents\Accessory\BoosterPreview.cs" />
     <Compile Include="Assets\Scripts\EventBus.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayCanvas.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\WaypointButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayCanvasDrag.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\GoalCanvas.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelPreview.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelMotor.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Layers.cs" />

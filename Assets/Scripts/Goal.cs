@@ -22,6 +22,11 @@ public class Goal : MonoBehaviour
 	/// Show the goal specified by level_num and hide the previous goal
 	/// </summary>
 	static Goal current = null;
+	public static Goal Get(Util.GoalName goal_name)
+	{
+		Debug.Assert(goals.ContainsKey(goal_name));
+		return goals[goal_name];
+	}
 	public static void Select(Util.GoalName goal_name)
 	{
 		if (current!=null)

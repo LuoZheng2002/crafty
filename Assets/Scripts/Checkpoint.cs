@@ -6,7 +6,8 @@ public class Checkpoint : MonoBehaviour
 {
 	public Util.WaypointName waypoint_name;
     static Dictionary<Util.WaypointName, Checkpoint> checkpoints = new();
-    public static Checkpoint Get(Util.WaypointName waypoint_name)
+	public static Dictionary<Util.WaypointName, Checkpoint> Checkpoints =>checkpoints;
+	public static Checkpoint Get(Util.WaypointName waypoint_name)
     {
         Debug.Assert(checkpoints.ContainsKey(waypoint_name), $"checkpoint {waypoint_name} not set");
 		return checkpoints[waypoint_name];

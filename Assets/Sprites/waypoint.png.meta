@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8f4e36350e1520f4e91278249bfd7e13
+guid: 6a8855f713299884fa94e44f0c6a8d1d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: star_0
+      name: waypoint_0
       rect:
         serializedVersion: 2
-        x: 184
-        y: 203
-        width: 832
-        height: 794
+        x: 155
+        y: 47
+        width: 461
+        height: 631
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,8 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 027aaafbe250dde45a6f3799f1d4d944
-      internalID: 152859624
+      spriteID: 3b703c0d0cc8cc74dbd2dfc23ae46da4
+      internalID: -1690519811
       vertices: []
       indices: 
       edges: []
@@ -133,7 +133,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 38621c7dd3e929741989db4b76e61f21
     internalID: 0
     vertices: []
     indices: 
@@ -141,7 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      star_0: 152859624
+      waypoint_0: -1690519811
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

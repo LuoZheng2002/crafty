@@ -295,10 +295,10 @@ public partial class GridMatrix: MonoBehaviour
 	//		}
 	//	}
 	//}
-	public void ShowDesign(Util.WaypointName waypoint_name)
+	public void ShowDesign((Util.Component[,,], Util.Component[,,], Util.Component[,,]) design)
 	{
 		Debug.Assert(phantom_crates != null);
-		(var design_crates_type, var design_accessories_type, var design_loads_type) = Util.forced_designs[waypoint_name];
+		(var design_crates_type, var design_accessories_type, var design_loads_type) = design;
 		(int h, int w, int l) = GameSave.GridSize;
 		Debug.Assert(design_crates_type.GetLength(0) == h);
 		Debug.Assert(design_crates_type.GetLength(1) == w);
@@ -312,20 +312,20 @@ public partial class GridMatrix: MonoBehaviour
 					if (design_crates_type[i, j, k] != Util.Component.None)
 					{
 						phantom_crates[i, j, k] = DragImage.DragImages[design_crates_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as CrateComponent;
-						phantom_crates[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_crates[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 					}
 					if (design_accessories_type[i, j, k] != Util.Component.None)
 					{
 						Debug.Log($"Type: {design_accessories_type[i, j, k]}");
 						phantom_accessories[i, j, k] = DragImage.DragImages[design_accessories_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as AccessoryComponent;
-						phantom_accessories[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_accessories[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 						phantom_accessories[i, j, k].GridMatrix = this;
 						phantom_accessories[i, j, k].Pos = (i, j, k);
 					}
 					if (design_loads_type[i, j, k] != Util.Component.None)
 					{
 						phantom_loads[i, j, k] = DragImage.DragImages[design_loads_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as LoadComponent;
-						phantom_loads[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_loads[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 					}
 				}
 			}
