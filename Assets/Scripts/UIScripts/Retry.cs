@@ -31,5 +31,6 @@ public class Retry : MonoBehaviour
     {
 		GameState.Inst.OnRetry();
 		GameState.shown_retry = true;
+		RebuildButton.Inst.CarBroken = false;
     }
 }

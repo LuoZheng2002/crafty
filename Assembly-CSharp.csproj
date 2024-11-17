@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\UIScripts\ConfirmButton.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\WheelTurner.cs" />
     <Compile Include="Assets\Scripts\Starbox.cs" />
+    <Compile Include="Assets\Scripts\JointBreak.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Crate\CrateBase.cs" />
     <Compile Include="Assets\Scripts\AudioPlayer.cs" />
     <Compile Include="Assets\Scripts\Warp.cs" />

@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayCanvas : MonoBehaviour
 {
     static PlayCanvas inst;
-    public static PlayCanvas Inst
+    public GameObject rocket;
+	public GameObject umbrella;
+
+    public float RocketFuel { get; set; } = 1;
+    public float rocket_consumption_speed = 0.2f;
+	public static PlayCanvas Inst
     {
         get { Debug.Assert(inst != null, "Play Canvas not set"); return inst; }
     }
@@ -16,7 +22,26 @@ public class PlayCanvas : MonoBehaviour
         Util.Delay(this, () =>
         {
             gameObject.SetActive(false);
-        });        
+        });
+	}
+	private void OnEnable()
+	{
+		RocketFuel = 1;
+		SetRocketFill(RocketFuel);
+	}
+	public void ShowRocket()
+    {
+        rocket.SetActive(true);
+	}
+    public Image rocket_fuel_image;
+    public void SetRocketFill(float amount)
+    {
+        Debug.Log($"Rocket fill amount: {amount}");
+		rocket_fuel_image.fillAmount = amount;
+	}
+    public void ShowUmbrella()
+    {
+        umbrella.SetActive(true);
 	}
     public void Show()
     {
@@ -26,4 +51,13 @@ public class PlayCanvas : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+	private void Update()
+	{
+		if (Input.GetKey(KeyCode.Q))
+        {
+			RocketFuel -= rocket_consumption_speed * Time.deltaTime;
+			SetRocketFill(RocketFuel);
+
+		}
+	}
 }

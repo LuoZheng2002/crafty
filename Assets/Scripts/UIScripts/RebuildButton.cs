@@ -8,7 +8,30 @@ public class RebuildButton : MonoBehaviour
     static RebuildButton inst;
 	public Image image;
 	ButtonScale button_scale;
-    public static RebuildButton Inst
+	bool car_broken = false;
+	public bool CarBroken
+	{
+		get
+		{
+			return car_broken;
+		}
+		set
+		{
+			car_broken = value;
+			if (car_broken)
+			{
+				SetAlpha(0.3f);
+				can_click = false;
+			}
+			else
+			{
+				SetAlpha(1);
+				can_click = true;
+			}
+		}
+	}
+
+	public static RebuildButton Inst
     {
         get { Debug.Assert(inst != null); return inst; }
     }

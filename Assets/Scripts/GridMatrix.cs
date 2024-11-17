@@ -361,7 +361,7 @@ public partial class GridMatrix: MonoBehaviour
 				Vec3 new_pos = pos + delta;
 				if (InGrid(new_pos) && GetCrate(new_pos)!=null)
 				{
-					Util.CreateJoint(crate, GetCrate(new_pos), Util.position_spring, Util.position_damper);
+					Util.CreateJoint(crate, GetCrate(new_pos), Util.break_force, Util.break_torque);
 				}
 			}
 		}	
@@ -393,7 +393,7 @@ public partial class GridMatrix: MonoBehaviour
 			load.Build();
 			if (crates[h_idx, w_idx, l_idx] != null)
 			{
-				Util.CreateJoint(load, crates[h_idx, w_idx, l_idx], Util.position_spring, Util.position_damper);
+				Util.CreateJoint(load, crates[h_idx, w_idx, l_idx], Util.break_force, Util.break_torque);
 			}
 		}
 	}

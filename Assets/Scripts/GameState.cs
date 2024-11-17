@@ -117,8 +117,16 @@ public class GameState : MonoBehaviour
 		GameSave.MemAccessories[0, 0, 2] = Util.Component.Wheel;
 		GameSave.MemAccessories[0, 1, 0] = Util.Component.Wheel;
 		GameSave.MemAccessories[0, 1, 2] = Util.Component.Wheel;
+		GameSave.IncrementGridSize(1, 1, 0);
+		GameSave.Inventory[Util.Component.MotorWheel] += 2;
+		GameSave.Inventory[Util.Component.TurnWheel] += 2;
+		GameSave.Inventory[Util.Component.WoodenCrate] = 9;
+		GameSave.Inventory[Util.Component.Rocket] = 9;
+		GameSave.Inventory[Util.Component.Umbrella] = 9;
 
-		TransitionToStory(Util.StoryName.FallOffCliff);
+		// TransitionToStory(Util.StoryName.FallOffCliff);
+		GoToCheckpointAsync(Util.WaypointName.Whirl, true);
+
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
 		// TransitionToStory(Util.StoryName.TownWaypoint);
@@ -182,6 +190,33 @@ public class GameState : MonoBehaviour
 				Checkpoint.Get(WaypointName.TownWaypoint).Activate();
 				GoalCanvas.Inst.CheckpointToFollow = WaypointName.TownWaypoint;
 				break;
+			case WaypointName.TownWaypoint:
+				Checkpoint.Get(WaypointName.Gate).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Gate;
+				break;
+			case WaypointName.Gate:
+				Checkpoint.Get(WaypointName.Cliff2).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Cliff2;
+				break;
+			case WaypointName.Cliff2:
+				Checkpoint.Get(WaypointName.Whirl).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Whirl;
+				GameSave.Inventory[Util.Component.Umbrella] = 4;
+				PlayCanvas.Inst.ShowUmbrella();
+				ObtainCanvas.Inst.Show(Util.Component.Umbrella);
+				// GameSave.IncrementGridSize(1, 0, 0);
+				Retry.Inst.Show();
+				RebuildButton.Inst.StartScale();
+				break;
+			case WaypointName.Whirl:
+				Checkpoint.Get(WaypointName.VolcanoGate).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcanoGate;
+				GameSave.Inventory[Util.Component.Rocket] = 6;
+				ObtainCanvas.Inst.Show(Util.Component.Rocket);
+				PlayCanvas.Inst.ShowRocket();
+				Retry.Inst.Show();
+				RebuildButton.Inst.StartScale();
+				break;
 		}
 	}
 	private void Start()
@@ -225,6 +260,7 @@ public class GameState : MonoBehaviour
 		PlayCanvas.Inst.Show();
 		BuildCanvas.Inst.Hide();
 		GridMatrix.Inst.Deactivate();
+		CarCore.Inst.Unfix();
 		CarCore.Inst.ActivateContainer();
 	}
 	void OnScanFail(ScanFailEvent e)
@@ -412,7 +448,7 @@ public class GameState : MonoBehaviour
 		Character.GetCharacter(Util.CharacterName.NPC1).WarpTo(TRef.Get(Util.TRefName.NPC1C1S2));
 		Character.GetCharacter(Util.CharacterName.NPC2).WarpTo(TRef.Get(Util.TRefName.NPC2C1S2));
 		Character.GetCharacter(Util.CharacterName.NPC3).WarpTo(TRef.Get(Util.TRefName.NPC3C1S2));
-		TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.C1S2);
+		// TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.C1S2);
 	}
 	//void ShowVehicle()
 	//{
@@ -508,13 +544,13 @@ public class GameState : MonoBehaviour
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "The waypoint in the town opens for free to you, but you will have to complete challenging challenges to unlock some of them in the wild.", Character.Partner);
 		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraTownW2), 1.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Waypoint de New Sorpigal", "As long as you do not lose faith, the world will open to you.", null);
-		Waypoint.Waypoints[Util.WaypointName.Town].ChangeToGreen();
+		// Waypoint.Waypoints[Util.WaypointName.Town].ChangeToGreen();
 		yield return WaitForClick();
 		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraTownW1), 1.0f);
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Let's try it out!", Character.Partner);
 		LineCanvas.Bottom.Hide();
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
-		TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
+		// TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
 	}
 	IEnumerator TransitionToStoryCrash()
 	{
@@ -731,7 +767,7 @@ public class GameState : MonoBehaviour
 	static HashSet<Util.WaypointName> can_retry_waypoints = new()
 	{
 		Util.WaypointName.PreStory1,
-		Util.WaypointName.PreStory2
+		// Util.WaypointName.PreStory2
 	};
 
 	void TransitionToFirstBuild()
@@ -798,25 +834,25 @@ public class GameState : MonoBehaviour
 			case Util.WaypointName.PreStory1:
 				StartCoroutine(Prestory1Build());
 				break;
-			case Util.WaypointName.PreStory2:
-				StartCoroutine(Prestory2Build(build_info));
-				break;
-			case Util.WaypointName.Town:
-				if (!town_waypoint_met)
-				{
-					town_waypoint_met = true;
-					StartCoroutine(TownWaypointBuild());
-				}
-				break;
-			case Util.WaypointName.Volcano:
-				StartCoroutine(VolcanoBuild());
-				break;
-			case Util.WaypointName.VolcBottom:
-				StartCoroutine(VolcBottomBuild());
-				break;
-			case Util.WaypointName.VolcTop:
-				StartCoroutine(VolcTopBuild());
-				break;
+			//case Util.WaypointName.PreStory2:
+			//	StartCoroutine(Prestory2Build(build_info));
+			//	break;
+			//case Util.WaypointName.Town:
+			//	if (!town_waypoint_met)
+			//	{
+			//		town_waypoint_met = true;
+			//		StartCoroutine(TownWaypointBuild());
+			//	}
+			//	break;
+			//case Util.WaypointName.Volcano:
+			//	StartCoroutine(VolcanoBuild());
+			//	break;
+			//case Util.WaypointName.VolcBottom:
+			//	StartCoroutine(VolcBottomBuild());
+			//	break;
+			//case Util.WaypointName.VolcTop:
+			//	StartCoroutine(VolcTopBuild());
+			//	break;
 		}
 	}
 	IEnumerator VolcanoBuild()
@@ -926,7 +962,7 @@ public class GameState : MonoBehaviour
 						yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Good Choice! Let's figure it out together!", null);
 						LineCanvas.Top.Hide();
 						ConfirmButton.Inst.EnableConfirm = true;
-						TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2, Util.BuildInfo.NeedHelp);
+						// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2, Util.BuildInfo.NeedHelp);
 						yield break;
 					}
 				}
