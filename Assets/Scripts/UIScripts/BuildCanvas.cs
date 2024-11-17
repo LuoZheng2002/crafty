@@ -73,6 +73,16 @@ public class BuildCanvas : MonoBehaviour
     }
 	public void InitializeItems()
     {
+        DragImage.ClearCountAll();
+        var items = GameSave.Inventory;
+        foreach (var item in items)
+        {
+            DragImage.DragImages[item.Key].SetInitialCount(item.Value);
+        }
+        if (GameSave.IsMainStory)
+        {
+            DragImage.DragImages[Util.Component.Partner].SetInitialCount(1);
+        }
         nonzero_images = new();
         foreach (var dragImage in DragImage.DragImages)
         {

@@ -17,8 +17,10 @@ public class RotationInfo
     }
 }
 
-public class Util
+public static class Util
 {
+	public static float position_spring = 500000.0f;
+	public static float position_damper = 50000.0f;
 	// occupied type
 	// update
 	public enum ChoiceName
@@ -157,11 +159,11 @@ public class Util
     public static Dictionary<WaypointName, List<(Component,int)>> WaypointItems = new()
 	{
 		{WaypointName.PreStory1, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 6), (Component.Wheel, 4)} },
-		{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
-		{WaypointName.C1S1, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2) } },
-		{WaypointName.Volcano, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
-		{WaypointName.VolcBottom, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
-		{WaypointName.VolcTop, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+		//{WaypointName.PreStory2, new(){(Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2)} },
+		//{WaypointName.C1S1, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2) } },
+		//{WaypointName.Volcano, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+		//{WaypointName.VolcBottom, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
+		//{WaypointName.VolcTop, new(){ (Component.Pig, 1), (Component.Partner, 1), (Component.WoodenCrate, 9), (Component.TurnWheel, 2), (Component.MotorWheel, 2), (Component.Umbrella, 4), (Component.Rocket, 6) } },
 
 	};
 
@@ -175,14 +177,6 @@ public class Util
 		{Component.TurnWheel, ComponentType.Accessory },
 	};
 	// crate, accessory, load
-	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> forced_designs = CreateForcedDesigns();
-	public static Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> CreateForcedDesigns()
-	{
-		Dictionary<WaypointName, (Component[,,], Component[,,], Component[,,])> designs = new();
-		designs[WaypointName.PreStory1] = CreateForcedDesign0();
-		designs[WaypointName.PreStory2] = CreateForcedDesign1();
-		return designs;
-	}
 
 	public enum StoryName
 	{
@@ -202,7 +196,10 @@ public class Util
 		None,
 		PreStory1,
 		FallOffCliff,
+		TurnWheel,
 		PreStory2,
+		Umbrella,
+		Rocket,
 		Town,
 		C1S1,
 		C1S2,
@@ -216,18 +213,23 @@ public class Util
 	{
 		None,
 		PreStory1,
-		PreStory2,
-		Town,
-		C1S1,
-		Canyon,
-		Rocket,
-		Wild1,
-		Volcano,
-		VolcBottom,
-		VolcTop,
+		Cliff,
+		MotorWheel,
+		TurnWheel,
+		Turn1,
+		Turn2,
+		Turn3,
+		Lake,
+		Island,
+		TownEntrance,
+		TownWaypoint,
+		Gate,
+		Cliff2,
+		Whirl,
+		VolcanoGate,
 	}
 
-	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign0()
+	public static (Component[,,], Component[,,], Component[,,]) DesignPrestory1()
 	{
 		Component[,,] crates = new Component[2, 2, 3];
 		Component[,,] loads = new Component[2, 2, 3];
@@ -246,7 +248,7 @@ public class Util
 		accessories[0, 1, 2] = Component.Wheel;
 		return (crates, accessories, loads);
 	}
-	static (Component[,,], Component[,,], Component[,,]) CreateForcedDesign1()
+	public static (Component[,,], Component[,,], Component[,,]) DesignPrestory2()
 	{
 		Component[,,] crates = new Component[2, 3, 3];
 		Component[,,] loads = new Component[2, 3, 3];
@@ -363,22 +365,41 @@ public class Util
 		float distance = Vector3.Distance(closestPointOnRay, point);
 		return distance;
 	}
-	public static void CreateJoint(MonoBehaviour a, MonoBehaviour b, float position_spring, float position_damper)
+	public static void CreateJoint(MonoBehaviour a, MonoBehaviour b, float break_force, float break_torque)
 	{
-		Debug.Log("Added a configurable joint");
+		// Debug.Log("Added a configurable joint");
 		ConfigurableJoint configurableJoint = a.AddComponent<ConfigurableJoint>();
 		configurableJoint.connectedBody = b.GetComponent<Rigidbody>();
 		JointDrive drive = new JointDrive();
 		drive.positionSpring = position_spring;
 		drive.positionDamper = position_damper;
 		drive.maximumForce = Mathf.Infinity;
+		configurableJoint.xMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.yMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.zMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.angularXMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.angularYMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.angularZMotion = ConfigurableJointMotion.Limited;
+		configurableJoint.linearLimit = new SoftJointLimit { limit = 0.1f };
+		configurableJoint.highAngularXLimit = new SoftJointLimit { limit = 0.1f };
+		configurableJoint.lowAngularXLimit = new SoftJointLimit { limit = 0.1f };
+		configurableJoint.angularYLimit = new SoftJointLimit { limit = 0.1f };
+		configurableJoint.angularZLimit = new SoftJointLimit { limit = 0.1f };
+		//configurableJoint.linearLimitSpring = new SoftJointLimitSpring { spring = position_spring, damper = position_damper };
+		//configurableJoint.angularXLimitSpring = new SoftJointLimitSpring { spring = position_spring, damper = position_damper };
+		//configurableJoint.angularYZLimitSpring = new SoftJointLimitSpring { spring = position_spring, damper = position_damper };
 		configurableJoint.xDrive = drive;
 		configurableJoint.yDrive = drive;
 		configurableJoint.zDrive = drive;
 		configurableJoint.rotationDriveMode = RotationDriveMode.XYAndZ;
 		configurableJoint.angularXDrive = drive;
 		configurableJoint.angularYZDrive = drive;
+
+		configurableJoint.breakForce = break_force;
+		configurableJoint.breakTorque = break_torque;
 	}
+	public static float break_force = 10000.0f;
+	public static float break_torque = 10000.0f;
 
 	public static Quaternion QuaternionSmoothDamp(Quaternion current, Quaternion target, ref Quaternion velocity, float smoothTime, float deltaTime)
 	{

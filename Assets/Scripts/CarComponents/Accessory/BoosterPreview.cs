@@ -22,26 +22,49 @@ public abstract class BoosterPreview : AccessoryComponent
         c = GetComponent<Collider>();
         
         Init();
-    }
+        particle_system1.Stop();
+		particle_system2.Stop();
+		particle_system3.Stop();
+	}
 
     // Update is called once per frame
     public float max_time = 1.0f;
     float time = 0.0f;
-    void Update()
+    public ParticleSystem particle_system1;
+	public ParticleSystem particle_system2;
+	public ParticleSystem particle_system3;
+    bool exhausted = false;
+	void Update()
     {
         if (built)
         {
             // use rocket only once
             if (Input.GetKey(KeyCode.Q))
             {
-                time = Mathf.Clamp(time + Time.deltaTime, 0, max_time);
-                RB.AddForce(transform.up * thrust * time / max_time);
-                fuel -= fuel_usage;
-            }
-            else
+                if (PlayCanvas.Inst.RocketFuel >0.0f)
+                {
+					RB.AddForce(transform.up * thrust);
+					if (Input.GetKeyDown(KeyCode.Q))
+					{
+						particle_system1.Play();
+						particle_system2.Play();
+						particle_system3.Play();
+					}
+				}				
+			}
+            if (!exhausted && PlayCanvas.Inst.RocketFuel <=0.0f)
             {
-                time = Mathf.Clamp(time - 2 * Time.deltaTime, 0, max_time);
-            }
+                exhausted = true;
+				particle_system1.Stop();
+				particle_system2.Stop();
+				particle_system3.Stop();
+			}
+            if (Input.GetKeyUp(KeyCode.Q))
+			{
+				particle_system1.Stop();
+				particle_system2.Stop();
+				particle_system3.Stop();
+			}
         }
     }
     public override (bool wa, bool sd) GetWASD()

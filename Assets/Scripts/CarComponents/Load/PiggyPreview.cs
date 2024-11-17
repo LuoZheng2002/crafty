@@ -13,6 +13,12 @@ public class ScreamEvent
 
 public class PiggyPreview : LoadComponent
 {
+	public bool real_piggy = true;
+	static PiggyPreview inst;
+	public static PiggyPreview Inst
+	{
+		get { return inst; }
+	}
 	GameObject mesh;
 	public float scream_velocity = 5.0f;
 	bool screaming = false;
@@ -25,9 +31,38 @@ public class PiggyPreview : LoadComponent
 
 	private void Start()
 	{
+		// Debug.Log("Piggy started");
 		mesh = transform.GetChild(0).gameObject;
 		Debug.Assert(mesh != null);
-		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnFIrstPersonChanged);
+		EventBus.Subscribe<InvisibleStateUpdateEvent>(OnFirstPersonChanged);
+		Util.Delay(this, () =>
+		{
+			ConfirmButton.Inst.OnGridStateChanged();
+		});		
+	}
+	private void OnDisable()
+	{
+		if (real_piggy)
+		{
+			inst = null;
+		}
+	}
+	private void OnEnable()
+	{
+		if (real_piggy)
+		{
+			Debug.Assert(inst == null);
+			inst = this;
+		}
+	}
+	private void OnDestroy()
+	{
+		if (real_piggy)
+		{
+			inst = null;
+			EventBus.Publish(new PiggyDestroyEvent());
+			ConfirmButton.Inst.OnGridStateChanged();
+		}
 	}
 	private void Update()
 	{
@@ -52,7 +87,7 @@ public class PiggyPreview : LoadComponent
 		RB.useGravity = true;
 		c.enabled = true;
 	}
-	void OnFIrstPersonChanged(InvisibleStateUpdateEvent e)
+	void OnFirstPersonChanged(InvisibleStateUpdateEvent e)
 	{
 		if (GameState.Inst.IsFirstPerson && GameState.Inst.PiggyPermitInvisible)
 		{
@@ -63,8 +98,5 @@ public class PiggyPreview : LoadComponent
 			mesh.SetActive(true);
 		}
 	}
-	private void OnDestroy()
-	{
-		EventBus.Publish(new PiggyDestroyEvent());
-	}
+	
 }
