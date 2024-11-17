@@ -211,65 +211,20 @@ public partial class GridMatrix: MonoBehaviour
 	// collider 
 	// core disable
 	// activate: space enable, enable build canvas, update selected grid
-	public void Activate()
+	public IEnumerator Activate()
 	{
 		Active = true;
-		// dragEvent = EventBus.Subscribe<GridMatrixDragEvent>(OnGridMatrixDrag);
-		// dragEulerAngle = new Vector3(32, -90, 0);
-		// cameraPivot.rotation = Quaternion.Euler(dragEulerAngle);
-
 		ResetActiveLayer();
-
-		//if (!DisableDesign && Util.forced_designs.ContainsKey(waypoint_name))
-		//{
-		//	LoadDesignVisuals();
-		//	if (waypoint_name != Util.WaypointName.PreStory1)
-		//	{
-		//		ShowDesign();
-		//	}
-		//}
-		// reset counts
-
-
-		//if (Util.WaypointItems.ContainsKey(waypoint_name))
-		//{
-		//	DragImage.ClearCountAll();
-		//	var items = Util.WaypointItems[waypoint_name];
-		//	foreach (var item in items)
-		//	{
-		//		DragImage.DragImages[item.Item1].SetInitialCount(item.Item2);
-		//	}
-		//}
-		//else
-		//{
-		//	DragImage.ClearCountAll();
-		//	var items = GameState.Inventory;
-		//	foreach (var item in items)
-		//	{
-		//		DragImage.DragImages[item.Key].SetInitialCount(item.Value);
-		//	}
-		//}
-
-		// BuildCanvas.Inst.InitializeItems();
-		
-		
-		//if (waypoint_name == Util.WaypointName.PreStory1)
-		//{
-		//	mem_crates = new Util.Component[initial_height, initial_width,initial_length];
-		//	mem_loads = new Util.Component[initial_height, initial_width,initial_length];
-		//	mem_accessories = new Util.Component[initial_height, initial_width,initial_length];
-		//	accessory_directions = new int[initial_height, initial_width,initial_length];
-		//	mem_crates[0, 0, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 0, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 1, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 1, 1] = Util.Component.WoodenCrate;
-		//	mem_accessories[1, 0, 1] = Util.Component.Wheel;
-		//	mem_accessories[1, 1, 2] = Util.Component.Wheel;
-		//	accessory_directions[1, 0, 1] = 1;
-		//	accessory_directions[1, 1, 2] = 2;
-		//}
-
-		Util.Delay(this, 5, RebuildVehicle);
+		for (int i = 0; i < 5; i++)
+		{
+			yield return null;
+		}
+		RebuildVehicle();
+		yield return null;
+	}
+	public void ActivateAsync()
+	{
+		StartCoroutine(Activate());
 	}
 	//public void ShowDesign()
 	//{
@@ -317,7 +272,7 @@ public partial class GridMatrix: MonoBehaviour
 					}
 					if (design_accessories_type[i, j, k] != Util.Component.None)
 					{
-						Debug.Log($"Type: {design_accessories_type[i, j, k]}");
+						// Debug.Log($"Type: {design_accessories_type[i, j, k]}");
 						phantom_accessories[i, j, k] = DragImage.DragImages[design_accessories_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as AccessoryComponent;
 						phantom_accessories[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 						phantom_accessories[i, j, k].GridMatrix = this;
@@ -378,7 +333,7 @@ public partial class GridMatrix: MonoBehaviour
 				}
 			}
 		}
-		transform.position = Vector3.zero;
+		transform.position = new Vector3(0, -1000, 0);
 	}
 	public ref Util.Component GetMemCrate(Vec3 pos)
 	{
@@ -750,11 +705,16 @@ public partial class GridMatrix: MonoBehaviour
 	public float start_scan_height = -2.0f;
 	public float end_scan_height = 3.0f;
 	public float scan_time = 2.0f;
+	public void MoveProbeToGrid()
+	{
+		Probe.MovePosition(transform.position + transform.rotation*ProbeTargetPos);
+		Probe.MoveRotation(transform.rotation);
+	}
 	IEnumerator ScanHelper()
 	{
 		CarCore.Inst.Fix();
 		ShowProbe();
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 		Probe.MoveRotation(transform.rotation);
 		Vector3 start_position = CarCore.Inst.transform.position + new Vector3(0, start_scan_height, 0);
 		Vector3 end_position = CarCore.Inst.transform.position + new Vector3(0, end_scan_height, 0);
@@ -762,7 +722,7 @@ public partial class GridMatrix: MonoBehaviour
 		Vector3 up_vector = CarCore.Inst.transform.up;
 		float y_rotation = CarCore.Inst.transform.rotation.eulerAngles.y;
 		float angle = Vector3.Angle(up_vector, new Vector3(0, 1, 0));
-		Debug.Log($"angle: {angle}");
+		// Debug.Log($"angle: {angle}");
 		if (angle > 20)
 		{
 			transform.rotation = Quaternion.Euler(0, y_rotation, 0);
@@ -776,19 +736,31 @@ public partial class GridMatrix: MonoBehaviour
 		while (Time.time - start_time < scan_time)
 		{
 			transform.position = Vector3.Lerp(start_position, end_position, (Time.time - start_time) / scan_time);
-			Probe.MovePosition(transform.position + ProbeTargetPos);
+			Probe.MovePosition(new Vector3(0, - 100, 0));
+			yield return null;
+			yield return null;
+			yield return null;
+			CollisionFlag = false;
+			yield return null;
+			MoveProbeToGrid();
+			yield return null;
+			yield return null;
+			yield return null;
+
 			// Debug.Log($"Collision count: {CollisionCount}");
-			if (CollisionCount <=0)
+			if (!CollisionFlag)
 			{
-				Debug.Log("Success!");
+				Debug.Log($"Success!");
 				EventBus.Publish(new ScanSuccessEvent());
 				HideProbe();
 				yield break;
 			}
 			yield return null;
 		}
+		Debug.Log($"Fail!");
+		transform.position = new Vector3(0, -100, 0);
 		EventBus.Publish(new ScanFailEvent());
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 		HideProbe();
 		CarCore.Inst.Unfix();
 	}

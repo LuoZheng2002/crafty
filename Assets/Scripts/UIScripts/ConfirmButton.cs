@@ -92,9 +92,13 @@ public class ConfirmButton : MonoBehaviour
     {
 		if (can_start)
 		{
-			EventBus.Publish(new ConfirmSuccessEvent());
-			GameState.Inst.TransitionToPlay(true);
-			CustomCursor.Inst.SetIdleCursor();
+			ForceConfirmClicked();
 		}
     }
+	public void ForceConfirmClicked()
+	{
+		EventBus.Publish(new ConfirmSuccessEvent());
+		GameState.Inst.TransitionToPlay(true);
+		CustomCursor.Inst.SetIdleCursor();
+	}
 }

@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\UIScripts\BackButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ToastManager.cs" />
     <Compile Include="Assets\Scripts\Character.cs" />
+    <Compile Include="Assets\Scripts\CheckpointGoal.cs" />
     <Compile Include="Assets\Scripts\PiggyCameraPivot.cs" />
     <Compile Include="Assets\Scripts\UIScripts\EraserImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />

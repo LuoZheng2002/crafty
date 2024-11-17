@@ -15,22 +15,22 @@ public class GoalCanvas : MonoBehaviour
 	{
 		get { Debug.Assert(inst != null, "Goal Canvas Not Set"); return inst; }
 	}
-	Util.GoalName goal_name_to_follow = Util.GoalName.None;
-	Goal goal_to_follow = null;
-	public Util.GoalName GoalToFollow
+	Util.WaypointName checkpoint_name_to_follow = Util.WaypointName.None;
+	Checkpoint checkpoint_to_follow = null;
+	public Util.WaypointName CheckpointToFollow
 	{
-		get { return goal_name_to_follow; }
+		get { return checkpoint_name_to_follow; }
 		set
 		{
-			goal_name_to_follow = value;
-			if (goal_name_to_follow != Util.GoalName.None)
+			checkpoint_name_to_follow = value;
+			if (checkpoint_name_to_follow != Util.WaypointName.None)
 			{
-				goal_to_follow = Goal.Get(goal_name_to_follow);
+				checkpoint_to_follow = Checkpoint.Get(checkpoint_name_to_follow);
 				goal_icon.gameObject.SetActive(true);
 			}
 			else
 			{
-				goal_to_follow = null;
+				checkpoint_to_follow = null;
 				goal_icon.gameObject.SetActive(false);
 			}
 		}
@@ -47,12 +47,12 @@ public class GoalCanvas : MonoBehaviour
 	}
 	void Update()
 	{
-		if (goal_to_follow == null)
+		if (checkpoint_to_follow == null)
 		{
 			return;
 		}
 		// World position of the object
-		Vector3 worldPosition = goal_to_follow.transform.position;
+		Vector3 worldPosition = checkpoint_to_follow.transform.position;
 
 		// Convert to screen space
 		Vector3 screenPosition = MainCamera.Inst.Camera.WorldToScreenPoint(worldPosition);

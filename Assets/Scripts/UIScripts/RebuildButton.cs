@@ -7,6 +7,7 @@ public class RebuildButton : MonoBehaviour
 {
     static RebuildButton inst;
 	public Image image;
+	ButtonScale button_scale;
     public static RebuildButton Inst
     {
         get { Debug.Assert(inst != null); return inst; }
@@ -17,6 +18,7 @@ public class RebuildButton : MonoBehaviour
 		inst = this;
 		EventBus.Subscribe<ScanFailEvent>(OnScanFail);
 		EventBus.Subscribe<ScanSuccessEvent>(OnScanSuccess);
+		button_scale = GetComponent<ButtonScale>();
 	}
 	private void OnDestroy()
 	{
@@ -29,8 +31,13 @@ public class RebuildButton : MonoBehaviour
 		image.color = c;
 	}
 	bool can_click = true;
+	public void StartScale()
+	{
+		button_scale.ScaleStart();
+	}
 	public void OnClick()
 	{
+		button_scale.ScaleStop();
 		if (can_click)
 		{
 			GameState.Inst.TryScan();

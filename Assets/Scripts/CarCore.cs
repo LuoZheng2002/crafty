@@ -113,7 +113,7 @@ public class CarCore : MonoBehaviour
 	}
 	public void AlignToGridMatrix()
 	{
-		rb.MovePosition(GridMatrix.Inst.transform.position + GridMatrix.Inst.ProbeTargetPos);
+		rb.MovePosition(GridMatrix.Inst.transform.position + GridMatrix.Inst.transform.rotation* GridMatrix.Inst.ProbeTargetPos);
 		rb.MoveRotation(GridMatrix.Inst.transform.rotation);
 	}
 	public float drag_rotation_speed = 1.0f;
@@ -127,7 +127,9 @@ public class CarCore : MonoBehaviour
 	}
 	public void ResetPivot()
 	{
-		Quaternion reset_rotation = transform.rotation * Quaternion.Euler(10, -90, 0);
+		Vector3 temp_rotation = transform.rotation.eulerAngles;
+		temp_rotation.z = 0;
+		Quaternion reset_rotation = Quaternion.Euler(temp_rotation) * Quaternion.Euler(10, -90, 0);
 		drag_euler_angle = reset_rotation.eulerAngles;
 		camera_pivot.rotation = Quaternion.Euler(drag_euler_angle);
 	}

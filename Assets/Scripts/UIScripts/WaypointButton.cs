@@ -18,7 +18,7 @@ public class WaypointButton : MonoBehaviour
 	{
 		MapCanvas.Inst.Deactivate();
 		BigMapCamera.Inst.Deactivate();
-		GameState.Inst.GoToCheckpoint(WaypointName);
+		GameState.Inst.GoToCheckpointAsync(WaypointName);
 	}
 	private void Update()
 	{

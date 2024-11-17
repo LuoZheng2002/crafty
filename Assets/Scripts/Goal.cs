@@ -70,7 +70,7 @@ public class Goal : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("You win!");
+		// Debug.Log("You win!");
 		EventBus.Publish(new GoalReachedEvent(goal_name));
 		meshRenderer.enabled = false;
 		c.enabled = false;

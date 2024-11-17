@@ -166,7 +166,7 @@ public class DragImage : MonoBehaviour
 	public VehicleComponent InstantiateDesignComponent(GridCell grid)
 	{
 		Debug.Assert(componentDesignPrefab != null);
-		Debug.Log($"Instantiated a design component {content}");
+		// Debug.Log($"Instantiated a design component {content}");
 		GameObject inst = Instantiate(componentDesignPrefab.gameObject, GridMatrix.Inst.transform);
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();

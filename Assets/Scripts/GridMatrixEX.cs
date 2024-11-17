@@ -138,7 +138,7 @@ public partial class GridMatrix: MonoBehaviour
 			// ConfirmButton.Inst.OnGridStateChanged();
 		}
 	}
-	void InitMemory()
+	public void InitMemory()
 	{
 		(int h, int w, int l) = GameSave.GridSize;
 		Debug.Assert(GameSave.MemCrates == null);
@@ -338,9 +338,9 @@ public partial class GridMatrix: MonoBehaviour
 		(int h, int w, int l) = GameSave.GridSize;
 		Probe.transform.localScale = new Vector3(w, h, l);
 		ProbeTargetPos = new Vector3(0, ((float)h - 1.0f) / 2.0f, 0);
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 	}
-	public int CollisionCount { get; set; } = 0;
+	public bool CollisionFlag { get; set; } = false;
 	
 	public MeshRenderer mesh_renderer;
 	void ShowProbe()
