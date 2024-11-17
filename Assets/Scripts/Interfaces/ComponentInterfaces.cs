@@ -18,20 +18,14 @@ public class Vec3
 	{
         return new Vec3(pos.h, pos.w, pos.l);
 	}
-	public void Deconstruct(out int h, out int w, out int l)
-	{
-        h = this.h;
-        w = this.w;
-		l = this.l;
-	}
 	public static Vec3 operator+(Vec3 v1, Vec3 v2)
     {
         return new Vec3(v1.h+v2.h, v1.w + v2.w, v1.l +v2.l);
     }
-    //public (int h, int w, int l) Unwrap()
-    //{
-    //    return (h, w, l);
-    //}
+    public (int h, int w, int l) Unwrap()
+    {
+        return (h, w, l);
+    }
 }
 
 public abstract class VehicleComponent : MonoBehaviour
@@ -174,20 +168,13 @@ public abstract class AccessoryComponent : VehicleComponent
         Debug.Assert(GridMatrix != null);
 		RB.MoveRotation(GridMatrix.transform.rotation * Rotations[direction].Item1);
 	}
-    protected void StickUmbrellaOrWheel(bool is_wheel)
+    protected void StickUmbrellaOrWheel()
     {
 		Vec3 attach_dir = Rotations[Direction].Item2.attach_dir;
 		Vec3 new_pos = Pos + attach_dir;
 		if (GridMatrix.InGrid(new_pos) && GridMatrix.GetCrate(new_pos) != null)
 		{
-            if (is_wheel)
-			{
-				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), Util.break_force, Util.break_torque);
-			}
-			else
-			{
-				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), Util.break_force, Util.break_torque);
-			}
+			Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), GridMatrix.position_spring, GridMatrix.position_damper);
 		}
 	}
     protected void StickRocket()
@@ -199,7 +186,7 @@ public abstract class AccessoryComponent : VehicleComponent
 			Vec3 new_pos = Pos + direction;
 			if (GridMatrix.InGrid(new_pos) && GridMatrix.GetCrate(new_pos) != null)
 			{
-				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), Util.break_force*3, Util.break_torque*3);
+				Util.CreateJoint(this, GridMatrix.GetCrate(new_pos), GridMatrix.position_spring, GridMatrix.position_damper);
 			}
 		}
 	}

@@ -60,7 +60,7 @@ public class Umbrella : AccessoryComponent
     }
 	public override void Stick()
 	{
-        StickUmbrellaOrWheel(false);
+        StickUmbrellaOrWheel();
 	}
     public override List<(Quaternion, RotationInfo)> Rotations => Util.UmbrellaRotations;
 	public override bool[] GetDirectionMask()

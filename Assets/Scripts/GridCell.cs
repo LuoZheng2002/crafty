@@ -7,7 +7,9 @@ public class GridCell : MonoBehaviour
     public Material idleMaterial;
     public Material activeMaterial;
     public Material selectedMaterial;
-    public Vec3 Pos { get; set; }
+    public int heightIdx;
+    public int widthIdx;
+    public int lengthIdx;
     Renderer rr;
     Renderer RR { get { if (rr == null) rr = GetComponent<Renderer>(); return rr; } }
     bool active;

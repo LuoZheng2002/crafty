@@ -39,12 +39,12 @@ public class ConfirmButton : MonoBehaviour
 	bool can_start = false;
 	public void OnGridStateChanged()
 	{
-		if (GridMatrix.Inst.ForceDesign)
+		if (!GridMatrix.Current.DisableDesign && Util.forced_designs.ContainsKey(GridMatrix.Current.waypoint_name))
 		{
 			can_start = true;
-			foreach (var dragImage in DragImage.DragImages)
+			foreach(var dragImage in DragImage.DragImages)
 			{
-				if (dragImage.Value.Count > 0)
+				if(dragImage.Value.Count > 0)
 				{
 					can_start = false;
 					break;
@@ -53,19 +53,18 @@ public class ConfirmButton : MonoBehaviour
 		}
 		else
 		{
-			can_start = PiggyPreview.Inst != null;
-			if (DragImage.DragImages[Util.Component.Partner].Count > 0
-				|| DragImage.DragImages[Util.Component.Pig].Count > 0)
-			{
-				can_start = false;
-			}
-
-			if (!EnableConfirm)
-			{
-				can_start = false;
-			}
+			// to do
+			can_start = GameState.Inst.Piggy != null;
 		}
-
+		if (DragImage.DragImages[Util.Component.Partner].Count > 0
+			|| DragImage.DragImages[Util.Component.Pig].Count > 0)
+		{
+			can_start = false;
+		}
+		if (!EnableConfirm)
+		{
+			can_start = false;
+		}
 		if (can_start)
 		{
 			EventBus.Publish(new ReadyToGoEvent());
@@ -92,13 +91,9 @@ public class ConfirmButton : MonoBehaviour
     {
 		if (can_start)
 		{
-			ForceConfirmClicked();
+			EventBus.Publish(new ConfirmSuccessEvent());
+			GameState.Inst.TransitionToPlay(true);
+			CustomCursor.Inst.SetIdleCursor();
 		}
     }
-	public void ForceConfirmClicked()
-	{
-		EventBus.Publish(new ConfirmSuccessEvent());
-		GameState.Inst.TransitionToPlay(true);
-		CustomCursor.Inst.SetIdleCursor();
-	}
 }

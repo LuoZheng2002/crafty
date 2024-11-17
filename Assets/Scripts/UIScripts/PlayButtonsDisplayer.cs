@@ -66,14 +66,14 @@ public class PlayButtonsDisplayer : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
             {
-                // ToastManager.Toast("No components controlled by W/S");
+                ToastManager.Toast("No components controlled by W/S");
             }
         }
         if (!ad)
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
             {
-                // ToastManager.Toast("No components controlled by A/D");
+                ToastManager.Toast("No components controlled by A/D");
             }
         }
     }

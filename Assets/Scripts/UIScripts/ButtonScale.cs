@@ -19,7 +19,7 @@ public class ButtonScale : MonoBehaviour
 	}
 	public void ScaleStart()
 	{
-		if (coroutine == null && gameObject.activeInHierarchy)
+		if (coroutine == null)
 		{
 			coroutine = Scale();
 			StartCoroutine(coroutine);
@@ -27,7 +27,7 @@ public class ButtonScale : MonoBehaviour
 	}
 	public void ScaleStop()
 	{
-		if (coroutine != null && gameObject.activeInHierarchy)
+		if (coroutine != null)
 		{
 			StopCoroutine(coroutine);
 			coroutine = null;

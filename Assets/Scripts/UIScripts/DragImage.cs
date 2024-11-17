@@ -128,12 +128,12 @@ public class DragImage : MonoBehaviour
 			{
 				current.selectionImage.enabled = true;
 				CurrentContentType = current.contentType;
-				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 			else
 			{
 				CurrentContentType = Util.ComponentType.None;
-				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
@@ -166,8 +166,8 @@ public class DragImage : MonoBehaviour
 	public VehicleComponent InstantiateDesignComponent(GridCell grid)
 	{
 		Debug.Assert(componentDesignPrefab != null);
-		// Debug.Log($"Instantiated a design component {content}");
-		GameObject inst = Instantiate(componentDesignPrefab.gameObject, GridMatrix.Inst.transform);
+		Debug.Log($"Instantiated a design component {content}");
+		GameObject inst = Instantiate(componentDesignPrefab.gameObject, GridMatrix.Current.transform);
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();
 		Debug.Assert(component != null);
@@ -175,7 +175,7 @@ public class DragImage : MonoBehaviour
 		if (accessory != null)
 		{
 			accessory.listen_event = false;
-			accessory.GridMatrix = GridMatrix.Inst;
+			accessory.GridMatrix = GridMatrix.Current;
 		}
 		component.MoveGlobal(grid.transform.position);
 		component.InitRotation();
@@ -184,7 +184,7 @@ public class DragImage : MonoBehaviour
 	public VehicleComponent InstantiateComponent(Vector3 position, bool local, int direction)
 	{
 		Debug.Assert(componentPrefab != null);
-		GameObject inst= Instantiate(componentPrefab.gameObject, GridMatrix.Inst.transform);
+		GameObject inst= Instantiate(componentPrefab.gameObject, GridMatrix.Current.transform);
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();
 		Debug.Assert(component != null);
@@ -199,8 +199,8 @@ public class DragImage : MonoBehaviour
 		AccessoryComponent accessory = component as AccessoryComponent;
 		if (accessory != null)
 		{
-			Debug.Assert(GridMatrix.Inst != null);
-			accessory.GridMatrix = GridMatrix.Inst;
+			Debug.Assert(GridMatrix.Current != null);
+			accessory.GridMatrix = GridMatrix.Current;
 			accessory.Direction = direction;
 		}
 		return component;
@@ -268,9 +268,9 @@ public class DragImage : MonoBehaviour
 				ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				// Get the direction of the ray
 				rayDirection = ray.direction;
-				if (GridMatrix.Inst.SelectedGrid != null)
+				if (GridMatrix.SelectedGrid != null)
 				{
-					componentInstance.MoveGlobal(GridMatrix.Inst.SelectedGrid.transform.position);
+					componentInstance.MoveGlobal(GridMatrix.SelectedGrid.transform.position);
 				}
 				else
 				{
@@ -283,10 +283,10 @@ public class DragImage : MonoBehaviour
 			mouse_click_flag = false;
 			// handle post click event
 			Debug.Assert(componentInstance != null);
-			if (GridMatrix.Inst.SelectedGrid != null)
+			if (GridMatrix.SelectedGrid != null)
 			{
 				Count--;
-				GridMatrix.Inst.AddComponent(GridMatrix.Inst.SelectedGrid, contentType, componentInstance);
+				GridMatrix.Current.AddComponent(GridMatrix.SelectedGrid, contentType, componentInstance);
 				componentInstance = null;
 			}
 			else
@@ -295,19 +295,19 @@ public class DragImage : MonoBehaviour
 				componentInstance = null;
 				if (reset_flag)
 				{
-					GridMatrix.Inst.CurrentCursorMode = Util.CursorMode.Idle;
+					GridMatrix.Current.CurrentCursorMode = Util.CursorMode.Idle;
 					reset_flag = false;
 					yield break;
 				}
 				reset_flag = true;
 			}
-			GridMatrix.Inst.SelectedGrid = null;
+			GridMatrix.SelectedGrid = null;
 		}
 	}
 	bool reset_flag = false;
 	void OnAddComponentInterrupt(OtherItemSelectedEvent e)
 	{
-		// Debug.Log($"{content} gets interrupted!");
+		Debug.Log($"{content} gets interrupted!");
 		Current = null;
 		if (coroutine != null)
 		{
@@ -326,7 +326,7 @@ public class DragImage : MonoBehaviour
 		EventBus.Publish(new DragImageClickedEvent());
 		EventBus.Publish(new OtherItemSelectedEvent());
 		CustomCursor.Inst.SetIdleCursor();
-		GridMatrix.Inst.CurrentCursorMode = Util.CursorMode.AddComponent;
+		GridMatrix.Current.CurrentCursorMode = Util.CursorMode.AddComponent;
 		Current = this;
 		if (count > 0)
 		{

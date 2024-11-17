@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,31 +12,24 @@ public class IntroCanvas : MonoBehaviour
     {
         get { Debug.Assert(inst != null); return inst; }
     }
-    private void Start()
-    {
+	private void Start()
+	{
         Debug.Assert(inst == null);
         inst = this;
         gameObject.SetActive(false);
         crafty_text = transform.Find("CraftyPiggies").GetComponent<Text>();
-        _3d_text = transform.Find("3D").GetComponent<Text>();
+        _3d_text = transform.Find("3D").GetComponent <Text>();
         Debug.Assert(crafty_text != null);
         Debug.Assert(_3d_text != null);
-		UnityEngine.Color color = crafty_text.color;
-		color.a = 0;
-		crafty_text.color = color;
-		color = _3d_text.color;
-		color.a = 0;
-		_3d_text.color = color;
 	}
-    public void Play(float delay)
+    public void Play()
     {
         gameObject.SetActive(true);
-        StartCoroutine(PlayHelper(delay));
+        StartCoroutine(PlayHelper());
     }
-    IEnumerator PlayHelper(float delay)
+    IEnumerator PlayHelper()
     {
-        yield return new WaitForSeconds(delay);
-		UnityEngine.Color color = crafty_text.color;
+		Color color = crafty_text.color;
 		color.a = 0;
 		crafty_text.color = color;
         color = _3d_text.color;

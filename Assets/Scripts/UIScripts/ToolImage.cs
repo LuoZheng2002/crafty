@@ -40,7 +40,7 @@ public class ToolImage : MonoBehaviour
 	{
 		EventBus.Publish(new OtherItemSelectedEvent());
 		EventBus.Publish(new ToolClickedEvent(cursor_mode));
-		GridMatrix.Inst.CurrentCursorMode = cursor_mode;
+		GridMatrix.Current.CurrentCursorMode = cursor_mode;
 		selectionImage.enabled = true;
 		switch (cursor_mode)
 		{
