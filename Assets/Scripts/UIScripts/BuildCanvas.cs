@@ -20,7 +20,7 @@ public class BuildCanvas : MonoBehaviour
         Util.Delay(this, () =>
         {
             DragImage.DetachAll();
-            //gameObject.SetActive(false);
+            gameObject.SetActive(false);
         });
         itemBar = transform.Find("ItemBar");
         rightButton = itemBar.Find("Right");

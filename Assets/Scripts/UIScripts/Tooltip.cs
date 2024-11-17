@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Tooltip : MonoBehaviour
+public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string message;
 
-    private void OnMouseEnter()
+    // Called when the pointer enters the UI element
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        print("OnMouseEnter");
         TooltipManager._instance.SetAndShowToolTip(message);
     }
 
-    public void OnMouseExit()
+    // Called when the pointer exits the UI element
+    public void OnPointerExit(PointerEventData eventData)
     {
         TooltipManager._instance.HideToolTip();
     }

@@ -110,10 +110,10 @@ public class GameState : MonoBehaviour
 	//}
 	void Init()
 	{
-		//TransitionToStory(Util.StoryName.Crash);
+		TransitionToStory(Util.StoryName.Crash);
 		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1);
 		// TransitionToStory(Util.StoryName.FallOffCliff);
-		TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+		//TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		// TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
 		// TransitionToStory(Util.StoryName.TownWaypoint);
 		// town_waypoint_met = true;
