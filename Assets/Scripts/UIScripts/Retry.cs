@@ -14,7 +14,6 @@ public class Retry : MonoBehaviour
 	{
 		Debug.Assert(inst == null);
 		inst = this;
-		gameObject.SetActive(false);
 	}
 	private void OnDestroy()
 	{
@@ -32,5 +31,6 @@ public class Retry : MonoBehaviour
     {
 		GameState.Inst.OnRetry();
 		GameState.shown_retry = true;
+		RebuildButton.Inst.CarBroken = false;
     }
 }

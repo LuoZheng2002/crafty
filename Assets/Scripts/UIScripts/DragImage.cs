@@ -128,12 +128,12 @@ public class DragImage : MonoBehaviour
 			{
 				current.selectionImage.enabled = true;
 				CurrentContentType = current.contentType;
-				Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 			else
 			{
 				CurrentContentType = Util.ComponentType.None;
-				Debug.Log($"CurrentContentType set to {CurrentContentType}");
+				// Debug.Log($"CurrentContentType set to {CurrentContentType}");
 			}
 		}
 	}
@@ -166,7 +166,7 @@ public class DragImage : MonoBehaviour
 	public VehicleComponent InstantiateDesignComponent(GridCell grid)
 	{
 		Debug.Assert(componentDesignPrefab != null);
-		Debug.Log($"Instantiated a design component {content}");
+		// Debug.Log($"Instantiated a design component {content}");
 		GameObject inst = Instantiate(componentDesignPrefab.gameObject, GridMatrix.Inst.transform);
 		Debug.Assert(inst != null);
 		VehicleComponent component = inst.GetComponent<VehicleComponent>();
@@ -307,7 +307,7 @@ public class DragImage : MonoBehaviour
 	bool reset_flag = false;
 	void OnAddComponentInterrupt(OtherItemSelectedEvent e)
 	{
-		Debug.Log($"{content} gets interrupted!");
+		// Debug.Log($"{content} gets interrupted!");
 		Current = null;
 		if (coroutine != null)
 		{

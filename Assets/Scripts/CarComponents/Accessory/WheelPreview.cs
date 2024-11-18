@@ -46,7 +46,7 @@ public class WheelPreview : AccessoryComponent
 	}
 	public override void Stick()
 	{
-		StickUmbrellaOrWheel();
+		StickUmbrellaOrWheel(true);
 	}
 	public override List<(Quaternion, RotationInfo)> Rotations => Util.WheelRotations;
 	public override bool[] GetDirectionMask()

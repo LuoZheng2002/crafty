@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,6 +52,7 @@ public partial class GridMatrix: MonoBehaviour
 	{
 		(int h, int w, int l) = GameSave.GridSize;
 		grids = new GridCell[h, w, l];
+		Debug.Log($"Spawn grid: {h}, {w}, {l}");
 		for (int i = 0; i < h; i++)
 		{
 			for (int j = 0; j < w; j++)
@@ -75,9 +77,15 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	void DestroyGrids()
 	{
-
+		foreach(Transform child in transform)
+		{
+			if (child.GetComponent<GridCell>() != null)
+			{
+				Destroy(child.gameObject);
+			}	
+		}
 	}
-	void ClearComponents()
+	void ClearComponents(bool destroy_object)
 	{
 		for (int i = 0; i < crates.GetLength(0); i++)
 		{
@@ -85,17 +93,26 @@ public partial class GridMatrix: MonoBehaviour
 			{
 				for (int k = 0; k < crates.GetLength(2); k++)
 				{
-					if (crates[i, j, k] != null)
+					if (destroy_object)
 					{
-						Destroy(crates[i, j, k].gameObject);
+						if (crates[i, j, k] != null)
+						{
+							Destroy(crates[i, j, k].gameObject);
+						}
+						if (accessories[i, j, k] != null)
+						{
+							Destroy(accessories[i, j, k].gameObject);
+						}
+						if (loads[i, j, k] != null)
+						{
+							Destroy(loads[i, j, k].gameObject);
+						}
 					}
-					if (accessories[i, j, k] != null)
+					else
 					{
-						Destroy(accessories[i, j, k].gameObject);
-					}
-					if (loads[i, j, k] != null)
-					{
-						Destroy(loads[i, j, k].gameObject);
+						crates[i, j, k] = null;
+						accessories[i, j, k] = null;
+						loads[i, j, k] = null;
 					}
 				}
 			}
@@ -109,58 +126,62 @@ public partial class GridMatrix: MonoBehaviour
 		if (rebuild)
 		{
 			Debug.LogWarning("Resizing component array and rebuilding vehicle.");
-			Memorize();
-			ClearComponents();
+			// Memorize();
+			ClearComponents(true);
 		}
 		crates = new CrateComponent[h, w, l];
 		accessories = new AccessoryComponent[h, w, l];
 		loads = new LoadComponent[h, w, l];
 		if (rebuild)
 		{
-			RebuildVehicle();
-			ConfirmButton.Inst.OnGridStateChanged();
+			// RebuildVehicle();
+			// ConfirmButton.Inst.OnGridStateChanged();
 		}
 	}
-	void InitMemory()
+	public void InitMemory()
 	{
 		(int h, int w, int l) = GameSave.GridSize;
-		if (GameSave.MemCrates != null)
-		{
-			Debug.Assert(GameSave.MemAccessories != null);
-			Debug.Assert(GameSave.MemLoads != null);
-			Debug.Assert(GameSave.AccessoryDirections != null);
-			int old_h = GameSave.MemCrates.GetLength(0);
-			int old_w = GameSave.MemCrates.GetLength(1);
-			int old_l = GameSave.MemCrates.GetLength(2);
-			Debug.Assert(old_h <= h);
-			Debug.Assert(old_w <= w);
-			Debug.Assert(old_l <= l);
-			var temp_accessories = GameSave.MemAccessories.Clone() as Util.Component[,,];
-			var temp_loads = GameSave.MemLoads.Clone() as Util.Component[,,];
-			var temp_crates = GameSave.MemCrates.Clone() as Util.Component[,,];
-			var temp_directions = GameSave.AccessoryDirections.Clone() as int[,,];
-			GameSave.MemAccessories = new Util.Component[h, w, l];
-			GameSave.MemLoads = new Util.Component[h, w, l];
-			GameSave.MemCrates = new Util.Component[h, w, l];
-			GameSave.AccessoryDirections = new int[h, w, l];
-			for(int i = 0;i < old_h;i++)
-			{
-				for(int j = 0; j <  old_w;j++)
-				{
-					for(int k = 0;  k < old_l;k++)
-					{
-						GameSave.MemAccessories[i, j, k] = temp_accessories[i, j, k];
-						GameSave.MemLoads[i, j, k] = temp_loads[i, j, k];
-						GameSave.MemCrates[i, j, k] = temp_crates[i, j, k];
-						GameSave.AccessoryDirections[i, j, k] = temp_directions[i, j, k];
-					}
-				}
-			}
-		}
+		Debug.Assert(GameSave.MemCrates == null);
+		//if (GameSave.MemCrates != null)
+		//{
+		//	Debug.Assert(GameSave.MemAccessories != null);
+		//	Debug.Assert(GameSave.MemLoads != null);
+		//	Debug.Assert(GameSave.AccessoryDirections != null);
+		//	int old_h = GameSave.MemCrates.GetLength(0);
+		//	int old_w = GameSave.MemCrates.GetLength(1);
+		//	int old_l = GameSave.MemCrates.GetLength(2);
+		//	Debug.Assert(old_h <= h);
+		//	Debug.Assert(old_w <= w);
+		//	Debug.Assert(old_l <= l);
+		//	var temp_accessories = GameSave.MemAccessories.Clone() as Util.Component[,,];
+		//	var temp_loads = GameSave.MemLoads.Clone() as Util.Component[,,];
+		//	var temp_crates = GameSave.MemCrates.Clone() as Util.Component[,,];
+		//	var temp_directions = GameSave.AccessoryDirections.Clone() as int[,,];
+		//	GameSave.MemAccessories = new Util.Component[h, w, l];
+		//	GameSave.MemLoads = new Util.Component[h, w, l];
+		//	GameSave.MemCrates = new Util.Component[h, w, l];
+		//	GameSave.AccessoryDirections = new int[h, w, l];
+		//	for (int i = 0; i < old_h; i++)
+		//	{
+		//		for (int j = 0; j < old_w; j++)
+		//		{
+		//			for (int k = 0; k < old_l; k++)
+		//			{
+		//				GameSave.MemAccessories[i, j, k] = temp_accessories[i, j, k];
+		//				GameSave.MemLoads[i, j, k] = temp_loads[i, j, k];
+		//				GameSave.MemCrates[i, j, k] = temp_crates[i, j, k];
+		//				GameSave.AccessoryDirections[i, j, k] = temp_directions[i, j, k];
+		//			}
+		//		}
+		//	}
+		//}
+		//else
+		//{
 		GameSave.MemCrates = new Util.Component[h, w, l];
 		GameSave.MemAccessories = new Util.Component[h, w, l];
 		GameSave.MemLoads = new Util.Component[h, w, l];
 		GameSave.AccessoryDirections = new int[h, w, l];
+		// }
 	}
 	void InitPhantom()
 	{
@@ -226,10 +247,31 @@ public partial class GridMatrix: MonoBehaviour
 			{
 				for(int k = 0; k < l;k++)
 				{
-					GameSave.MemCrates[i, j, k] = crates[i, j, k].Component;
-					GameSave.MemAccessories[i, j, k] = accessories[i, j, k].Component;
-					GameSave.MemLoads[i, j, k] = loads[i, j, k].Component;
-					GameSave.AccessoryDirections[i, j, k] = accessories[i, j, k].Direction;
+					if (crates[i, j, k] != null)
+					{
+						GameSave.MemCrates[i, j, k] = crates[i, j, k].Component;
+					}
+					else
+					{
+						GameSave.MemCrates[i, j, k] = Util.Component.None;
+					}
+					if (accessories[i, j, k] != null)
+					{
+						GameSave.MemAccessories[i, j, k] = accessories[i, j, k].Component;
+						GameSave.AccessoryDirections[i, j, k] = accessories[i, j, k].Direction;
+					}
+					else
+					{
+						GameSave.MemAccessories[i, j, k] = Util.Component.None;
+					}
+					if (loads[i, j, k] != null)
+					{
+						GameSave.MemLoads[i, j, k] = loads[i, j, k].Component;
+					}
+					else
+					{
+						GameSave.MemLoads[i, j, k] = Util.Component.None;
+					}
 				}
 			}
 		}
@@ -274,20 +316,21 @@ public partial class GridMatrix: MonoBehaviour
 				{
 					if (crates[i, j, k] != null)
 					{
-						crates[i, j, k].transform.parent = CarCore.Inst.transform;
+						crates[i, j, k].transform.parent = CarCore.Inst.Container.transform;
 					}
 					if (accessories[i, j, k] != null)
 					{
-						accessories[i, j, k].transform.parent = CarCore.Inst.transform;
+						accessories[i, j, k].transform.parent = CarCore.Inst.Container.transform;
 					}
 					if (loads[i, j, k] != null)
 					{
-						loads[i, j, k].transform.parent = CarCore.Inst.transform;
+						loads[i, j, k].transform.parent = CarCore.Inst.Container.transform;
 					}
 				}
 			}
 		}
-		CarCore.Inst.AttachPiggy();
+		// CarCore.Inst.AttachPiggy();
+		CarCore.Inst.Unfix();
 	}
 	public Vector3 ProbeTargetPos { get; private set; }
 	void ProbeResize()
@@ -295,9 +338,9 @@ public partial class GridMatrix: MonoBehaviour
 		(int h, int w, int l) = GameSave.GridSize;
 		Probe.transform.localScale = new Vector3(w, h, l);
 		ProbeTargetPos = new Vector3(0, ((float)h - 1.0f) / 2.0f, 0);
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 	}
-	public int CollisionCount { get; set; } = 0;
+	public bool CollisionFlag { get; set; } = false;
 	
 	public MeshRenderer mesh_renderer;
 	void ShowProbe()

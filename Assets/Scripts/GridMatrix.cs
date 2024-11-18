@@ -20,7 +20,7 @@ public partial class GridMatrix: MonoBehaviour
 	public GameObject gridPrefab;
 	public int activeLayerIndex = 0;
 	public float drag_rotation_speed = 0.05f;
-	bool active = false;
+	public bool Active { get; private set; } = false;
 	public Probe Probe { get; private set; }
 
 	//Transform cameraPivot;
@@ -110,7 +110,12 @@ public partial class GridMatrix: MonoBehaviour
 	//	}
 	//}
 
-	
+	public void MoveToCheckpoint(Util.WaypointName waypoint_name)
+	{
+		Checkpoint checkpoint = Checkpoint.Get(waypoint_name);
+		transform.position = checkpoint.transform.position;
+		transform.rotation = checkpoint.transform.rotation;
+	}
 	private void Start()
 	{
 		// Debug.Assert(!grid_matrices.ContainsKey(waypoint_name));
@@ -128,6 +133,10 @@ public partial class GridMatrix: MonoBehaviour
 		InitPhantom();
 		ProbeResize();
 		SpawnGrids();
+		Util.Delay(this, () =>
+		{
+			Deactivate();
+		});
 	}
 	private void OnDestroy()
 	{
@@ -138,10 +147,11 @@ public partial class GridMatrix: MonoBehaviour
 	
 	public void OnGridMatrixSizeChanged(GridMatrixSizeChangedEvent e)
 	{
+		GameSave.ExpandMemory();
 		DestroyGrids();
 		SpawnGrids();
 		InitComponentArray();
-		InitMemory();
+		// InitMemory();
 		InitPhantom();
 		ProbeResize();
 	}
@@ -168,7 +178,7 @@ public partial class GridMatrix: MonoBehaviour
 					{
 						Debug.Assert(GameSave.MemLoads != null);
 						Util.Component content = GameSave.MemLoads[i, j, k];
-						Debug.Log(content);
+						// Debug.Log(content);
 						var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as LoadComponent;
 						Debug.Assert(loads != null);
 						Debug.Assert(inst != null);
@@ -187,6 +197,10 @@ public partial class GridMatrix: MonoBehaviour
 			}
 		}
 		ConfirmButton.Inst.OnGridStateChanged();
+		Util.Delay(this, 5, () =>
+		{
+			EventBus.Publish(new NeighborChangedEvent());
+		});		
 	}
 	// Vector3 dragEulerAngle = Vector3.zero;
 	//void OnGridMatrixDrag(GridMatrixDragEvent e)
@@ -201,65 +215,20 @@ public partial class GridMatrix: MonoBehaviour
 	// collider 
 	// core disable
 	// activate: space enable, enable build canvas, update selected grid
-	void Activate()
+	public IEnumerator Activate()
 	{
-		active = true;
-		// dragEvent = EventBus.Subscribe<GridMatrixDragEvent>(OnGridMatrixDrag);
-		// dragEulerAngle = new Vector3(32, -90, 0);
-		// cameraPivot.rotation = Quaternion.Euler(dragEulerAngle);
-
+		Active = true;
 		ResetActiveLayer();
-
-		//if (!DisableDesign && Util.forced_designs.ContainsKey(waypoint_name))
-		//{
-		//	LoadDesignVisuals();
-		//	if (waypoint_name != Util.WaypointName.PreStory1)
-		//	{
-		//		ShowDesign();
-		//	}
-		//}
-		// reset counts
-
-
-		//if (Util.WaypointItems.ContainsKey(waypoint_name))
-		//{
-		//	DragImage.ClearCountAll();
-		//	var items = Util.WaypointItems[waypoint_name];
-		//	foreach (var item in items)
-		//	{
-		//		DragImage.DragImages[item.Item1].SetInitialCount(item.Item2);
-		//	}
-		//}
-		//else
-		//{
-		//	DragImage.ClearCountAll();
-		//	var items = GameState.Inventory;
-		//	foreach (var item in items)
-		//	{
-		//		DragImage.DragImages[item.Key].SetInitialCount(item.Value);
-		//	}
-		//}
-
-		// BuildCanvas.Inst.InitializeItems();
-		
-		
-		//if (waypoint_name == Util.WaypointName.PreStory1)
-		//{
-		//	mem_crates = new Util.Component[initial_height, initial_width,initial_length];
-		//	mem_loads = new Util.Component[initial_height, initial_width,initial_length];
-		//	mem_accessories = new Util.Component[initial_height, initial_width,initial_length];
-		//	accessory_directions = new int[initial_height, initial_width,initial_length];
-		//	mem_crates[0, 0, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 0, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 1, 0] = Util.Component.WoodenCrate;
-		//	mem_crates[1, 1, 1] = Util.Component.WoodenCrate;
-		//	mem_accessories[1, 0, 1] = Util.Component.Wheel;
-		//	mem_accessories[1, 1, 2] = Util.Component.Wheel;
-		//	accessory_directions[1, 0, 1] = 1;
-		//	accessory_directions[1, 1, 2] = 2;
-		//}
-
-		Util.Delay(this, 5, RebuildVehicle);
+		for (int i = 0; i < 5; i++)
+		{
+			yield return null;
+		}
+		RebuildVehicle();
+		yield return null;
+	}
+	public void ActivateAsync()
+	{
+		StartCoroutine(Activate());
 	}
 	//public void ShowDesign()
 	//{
@@ -286,10 +255,10 @@ public partial class GridMatrix: MonoBehaviour
 	//		}
 	//	}
 	//}
-	public void ShowDesign(Util.WaypointName waypoint_name)
+	public void ShowDesign((Util.Component[,,], Util.Component[,,], Util.Component[,,]) design)
 	{
 		Debug.Assert(phantom_crates != null);
-		(var design_crates_type, var design_accessories_type, var design_loads_type) = Util.forced_designs[waypoint_name];
+		(var design_crates_type, var design_accessories_type, var design_loads_type) = design;
 		(int h, int w, int l) = GameSave.GridSize;
 		Debug.Assert(design_crates_type.GetLength(0) == h);
 		Debug.Assert(design_crates_type.GetLength(1) == w);
@@ -303,20 +272,20 @@ public partial class GridMatrix: MonoBehaviour
 					if (design_crates_type[i, j, k] != Util.Component.None)
 					{
 						phantom_crates[i, j, k] = DragImage.DragImages[design_crates_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as CrateComponent;
-						phantom_crates[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_crates[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 					}
 					if (design_accessories_type[i, j, k] != Util.Component.None)
 					{
-						Debug.Log($"Type: {design_accessories_type[i, j, k]}");
+						// Debug.Log($"Type: {design_accessories_type[i, j, k]}");
 						phantom_accessories[i, j, k] = DragImage.DragImages[design_accessories_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as AccessoryComponent;
-						phantom_accessories[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_accessories[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 						phantom_accessories[i, j, k].GridMatrix = this;
 						phantom_accessories[i, j, k].Pos = (i, j, k);
 					}
 					if (design_loads_type[i, j, k] != Util.Component.None)
 					{
 						phantom_loads[i, j, k] = DragImage.DragImages[design_loads_type[i, j, k]].InstantiateDesignComponent(grids[i, j, k]) as LoadComponent;
-						phantom_loads[i, j, k].MoveGlobal(new Vector3(0, 0, 0));
+						phantom_loads[i, j, k].MoveGlobal(grids[i, j, k].transform.position);
 					}
 				}
 			}
@@ -326,9 +295,9 @@ public partial class GridMatrix: MonoBehaviour
 	// two modes: closest to ray, closest to player
 
 	// called if built
-	void Deactivate()
+	public void Deactivate()
 	{
-		active = false;
+		Active = false;
 		// EventBus.Unsubscribe(dragEvent);
 		// remove all grids
 		//for (int i = 0; i < initial_height; i++)
@@ -368,6 +337,7 @@ public partial class GridMatrix: MonoBehaviour
 				}
 			}
 		}
+		transform.position = new Vector3(0, -1000, 0);
 	}
 	public ref Util.Component GetMemCrate(Vec3 pos)
 	{
@@ -395,7 +365,7 @@ public partial class GridMatrix: MonoBehaviour
 				Vec3 new_pos = pos + delta;
 				if (InGrid(new_pos) && GetCrate(new_pos)!=null)
 				{
-					Util.CreateJoint(crate, GetCrate(new_pos), Util.position_spring, Util.position_damper);
+					Util.CreateJoint(crate, GetCrate(new_pos), Util.break_force, Util.break_torque);
 				}
 			}
 		}	
@@ -427,7 +397,7 @@ public partial class GridMatrix: MonoBehaviour
 			load.Build();
 			if (crates[h_idx, w_idx, l_idx] != null)
 			{
-				Util.CreateJoint(load, crates[h_idx, w_idx, l_idx], Util.position_spring, Util.position_damper);
+				Util.CreateJoint(load, crates[h_idx, w_idx, l_idx], Util.break_force, Util.break_torque);
 			}
 		}
 	}
@@ -470,8 +440,10 @@ public partial class GridMatrix: MonoBehaviour
 			}
 		}
 		AttachToCarCore();
+		ClearComponents(false);
 		// Active = false;
 		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad);
+		Deactivate();
 	}
 
 	public void Dump()
@@ -562,7 +534,7 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	private void Update()
 	{
-		if (!active)
+		if (!Active)
 		{
 			return;
 		}
@@ -629,7 +601,7 @@ public partial class GridMatrix: MonoBehaviour
 				case Util.CursorMode.Idle:
 					break;
 				case Util.CursorMode.AddComponent:
-					if (ForceDesign)
+					if (!ForceDesign)
 					{
 						if (!Occupied(h, w, l))
 							break;
@@ -731,41 +703,68 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	public void Scan()
 	{
-		Debug.Assert(!active);
+		Debug.Assert(!Active);
 		StartCoroutine(ScanHelper());
 	}
 	public float start_scan_height = -2.0f;
 	public float end_scan_height = 3.0f;
 	public float scan_time = 2.0f;
+	public void MoveProbeToGrid()
+	{
+		Probe.MovePosition(transform.position + transform.rotation*ProbeTargetPos);
+		Probe.MoveRotation(transform.rotation);
+	}
 	IEnumerator ScanHelper()
 	{
 		CarCore.Inst.Fix();
 		ShowProbe();
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 		Probe.MoveRotation(transform.rotation);
 		Vector3 start_position = CarCore.Inst.transform.position + new Vector3(0, start_scan_height, 0);
 		Vector3 end_position = CarCore.Inst.transform.position + new Vector3(0, end_scan_height, 0);
 		transform.position = start_position;
-		transform.rotation = CarCore.Inst.transform.rotation;
+		Vector3 up_vector = CarCore.Inst.transform.up;
+		float y_rotation = CarCore.Inst.transform.rotation.eulerAngles.y;
+		float angle = Vector3.Angle(up_vector, new Vector3(0, 1, 0));
+		// Debug.Log($"angle: {angle}");
+		if (angle > 20)
+		{
+			transform.rotation = Quaternion.Euler(0, y_rotation, 0);
+		}
+		else
+		{
+			transform.rotation = CarCore.Inst.transform.rotation;
+		}
 		float start_time = Time.time;
 		yield return new WaitForSeconds(0.2f);
 		while (Time.time - start_time < scan_time)
 		{
 			transform.position = Vector3.Lerp(start_position, end_position, (Time.time - start_time) / scan_time);
-			Probe.MovePosition(transform.position + ProbeTargetPos);
+			Probe.MovePosition(new Vector3(0, - 100, 0));
+			yield return null;
+			yield return null;
+			yield return null;
+			CollisionFlag = false;
+			yield return null;
+			MoveProbeToGrid();
+			yield return null;
+			yield return null;
+			yield return null;
+
 			// Debug.Log($"Collision count: {CollisionCount}");
-			if (CollisionCount <=0)
+			if (!CollisionFlag)
 			{
-				Debug.Log("Success!");
+				Debug.Log($"Success!");
 				EventBus.Publish(new ScanSuccessEvent());
 				HideProbe();
-				CarCore.Inst.Unfix();
 				yield break;
 			}
 			yield return null;
 		}
+		Debug.Log($"Fail!");
+		transform.position = new Vector3(0, -100, 0);
 		EventBus.Publish(new ScanFailEvent());
-		Probe.MovePosition(transform.position + ProbeTargetPos);
+		MoveProbeToGrid();
 		HideProbe();
 		CarCore.Inst.Unfix();
 	}

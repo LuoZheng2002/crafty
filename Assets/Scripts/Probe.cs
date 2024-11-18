@@ -18,13 +18,8 @@ public class Probe : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 
 	}
-	void OnTriggerEnter(Collider other)
+	private void OnTriggerStay(Collider other)
 	{
-		Debug.Log("Ontriggerenter!");
-		GridMatrix.Inst.CollisionCount++;
-	}
-	void OnTriggerExit(Collider other)
-	{
-		GridMatrix.Inst.CollisionCount--;
+		GridMatrix.Inst.CollisionFlag = true;
 	}
 }
