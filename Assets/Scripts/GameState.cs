@@ -102,6 +102,7 @@ public class GameState : MonoBehaviour
 	//}
 	void Yikai()
 	{
+		Util.unbreakable = true;
 		TransitionToStory(Util.StoryName.Crash);
 		// TransitionToFirstBuild();
 		//GridMatrix.Inst.InitMemory();
@@ -162,6 +163,7 @@ public class GameState : MonoBehaviour
 				RebuildButton.Inst.StartScale();
 				break;
 			case WaypointName.TurnWheel:
+				Util.unbreakable = false;
 				Checkpoint.Get(WaypointName.Turn1).Activate();
 				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn1;
 				GameSave.Inventory[Util.Component.TurnWheel] = 2;
@@ -475,7 +477,7 @@ public class GameState : MonoBehaviour
 				StartCoroutine(TransitionToStoryC1S1());
 				break;
 			case Util.StoryName.C1S2:
-				StartCoroutine(TransitionToStoryC1S2());
+				// StartCoroutine(TransitionToStoryC1S2());
 				break;
 		}
 	}
@@ -507,68 +509,68 @@ public class GameState : MonoBehaviour
 	//		component.gameObject.SetActive(false);
 	//	}
 	//}
-	IEnumerator TransitionToStoryC1S2()
-	{
-		DampStart();
-		GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(false);
-		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PiggyC1S2));
-		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerC1S2));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
+	//IEnumerator TransitionToStoryC1S2()
+	//{
+	//	DampStart();
+	//	GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(false);
+	//	Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PiggyC1S2));
+	//	Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerC1S2));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
 
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "The Groundhog. It's attacking the town again.", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "What should we do?", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "According to my experience, there will soon be a guy falling from the sky to save us.", Character.GetCharacter(Util.CharacterName.NPC3));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Hi, excuse me, have you seen a monster kidnapping a girl walking by?", Character.Partner);
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "Nope. What about you, Tom?", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Nope. What about you, Spike?", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Nope.", Character.GetCharacter(Util.CharacterName.NPC3));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Ah, that's disappointing.", Character.Partner);
-		LineCanvas.Bottom.Hide();
-		MainCamera.Inst.FollowStory();
-		StoryAnimation.Inst.PlayAnimation(Util.StoryName.C1S2);
-		yield return LineCanvas.Bottom.WaitForEvent((AnimationExitEvent e) => true);
-		MainCamera.Inst.Stop();
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Oh no! Something terrible just happened!", Character.Partner);
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "Please, outlander, please kill that groundhog and save our town!", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "I know you can do it!", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "You are the chosen one!", Character.GetCharacter(Util.CharacterName.NPC3));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "All right, all right. I know this is happening.", Character.Piggy);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "But how is it possible to beat such a giant guy?", Character.Piggy);
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "There is a myth saying that the only way to beat the ground hog is...", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Is...", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return AtTheSameTime(
-			LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Is to obtain the enchanted obsidian lying in the heart of the volcano.", Character.GetCharacter(Util.CharacterName.NPC3)),
-			MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_3), 4.0f));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "And the prophecy says that there will be a hero driving through the lava, and eventually...", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Eventually...", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return AtTheSameTime(
-			LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Eventually he flew out from the top of the volcano!", Character.GetCharacter(Util.CharacterName.NPC3)),
-			MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_4), 2.0f));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 2.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Yeah, look how poor they are! Let's help them!", Character.Partner);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "All right, all right. I'll try my best.", Character.Piggy);
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "The journey will be dangerous. So, take my umbrellas.", Character.GetCharacter(Util.CharacterName.NPC1));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Take my rockets.", Character.GetCharacter(Util.CharacterName.NPC2));
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Take care.", Character.GetCharacter(Util.CharacterName.NPC3));
-		yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Thank you guys.", Character.Piggy);
-		LineCanvas.Bottom.Hide();
-		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
-		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
-		DampStop();
-		GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(true);
-		TransitionToPlay(false);
-		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Now let's march towards the volcano.", Character.Partner);
-		Goal.Activate(Util.GoalName.Volcano);
-	}
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "The Groundhog. It's attacking the town again.", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "What should we do?", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "According to my experience, there will soon be a guy falling from the sky to save us.", Character.GetCharacter(Util.CharacterName.NPC3));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Hi, excuse me, have you seen a monster kidnapping a girl walking by?", Character.Partner);
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "Nope. What about you, Tom?", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Nope. What about you, Spike?", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Nope.", Character.GetCharacter(Util.CharacterName.NPC3));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Ah, that's disappointing.", Character.Partner);
+	//	LineCanvas.Bottom.Hide();
+	//	MainCamera.Inst.FollowStory();
+	//	StoryAnimation.Inst.PlayAnimation(Util.StoryName.C1S2);
+	//	yield return LineCanvas.Bottom.WaitForEvent((AnimationExitEvent e) => true);
+	//	MainCamera.Inst.Stop();
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Oh no! Something terrible just happened!", Character.Partner);
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "Please, outlander, please kill that groundhog and save our town!", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "I know you can do it!", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "You are the chosen one!", Character.GetCharacter(Util.CharacterName.NPC3));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "All right, all right. I know this is happening.", Character.Piggy);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "But how is it possible to beat such a giant guy?", Character.Piggy);
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "There is a myth saying that the only way to beat the ground hog is...", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Is...", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return AtTheSameTime(
+	//		LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Is to obtain the enchanted obsidian lying in the heart of the volcano.", Character.GetCharacter(Util.CharacterName.NPC3)),
+	//		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_3), 4.0f));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "And the prophecy says that there will be a hero driving through the lava, and eventually...", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Eventually...", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return AtTheSameTime(
+	//		LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Eventually he flew out from the top of the volcano!", Character.GetCharacter(Util.CharacterName.NPC3)),
+	//		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_4), 2.0f));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 2.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Yeah, look how poor they are! Let's help them!", Character.Partner);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "All right, all right. I'll try my best.", Character.Piggy);
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_1), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Jerry", "The journey will be dangerous. So, take my umbrellas.", Character.GetCharacter(Util.CharacterName.NPC1));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Tom", "Take my rockets.", Character.GetCharacter(Util.CharacterName.NPC2));
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Spike", "Take care.", Character.GetCharacter(Util.CharacterName.NPC3));
+	//	yield return MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraC1S2_2), 1.0f);
+	//	yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Thank you guys.", Character.Piggy);
+	//	LineCanvas.Bottom.Hide();
+	//	Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
+	//	Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
+	//	DampStop();
+	//	GridMatrix.Get(Util.WaypointName.C1S1).gameObject.SetActive(true);
+	//	TransitionToPlay(false);
+	//	yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Now let's march towards the volcano.", Character.Partner);
+	//	Goal.Activate(Util.GoalName.Volcano);
+	//}
 	IEnumerator WaitForClick()
 	{
 		while (!Input.GetMouseButtonDown(0)) {
@@ -838,66 +840,66 @@ public class GameState : MonoBehaviour
 		StartCoroutine(Prestory1Build());
 
 	}
-	void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name, Util.BuildInfo build_info = Util.BuildInfo.NeedHelp)
-	{
-		AudioPlayer.Inst.TransitionToStory();
-		current_waypoint = waypoint_name;
-		retry_waypoint = waypoint_name;
-		retry_goal = goal_name;
-		//if (can_retry_waypoints.Contains(waypoint_name))
-		//{
+	//void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name, Util.BuildInfo build_info = Util.BuildInfo.NeedHelp)
+	//{
+	//	AudioPlayer.Inst.TransitionToStory();
+	//	current_waypoint = waypoint_name;
+	//	retry_waypoint = waypoint_name;
+	//	retry_goal = goal_name;
+	//	//if (can_retry_waypoints.Contains(waypoint_name))
+	//	//{
 			
-		//}
-		//else
-		//{
-		//	// waypoint_name = Util.WaypointName.None;
-		//	retry_waypoint = Util.WaypointName.None;
-		//	retry_goal = Util.GoalName.None;
-		//}
-		BuildCanvas.Inst.Show();
-		BuildCanvas.Inst.InitializeItems();
-		GridMatrix.Inst.ActivateAsync();
-		GridMatrix.Inst.MoveToCheckpoint(Util.WaypointName.PreStory1);
-		PlayCanvas.Inst.Hide();
-		// AudioPlayer.Inst.TransitionToBuild();
-		DestroyComponentsInScene();		
-		DragImage.Current = null;
-		GridMatrix.DeselectGridMatrix();
-		GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
-		if (goal_name != Util.GoalName.None)
-		{
-			Goal.Select(goal_name);
-		}
-		// MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
-		PiggyPermitInvisible = false;
-		// PiggyCameraPivot.Inst.EndFollow();
+	//	//}
+	//	//else
+	//	//{
+	//	//	// waypoint_name = Util.WaypointName.None;
+	//	//	retry_waypoint = Util.WaypointName.None;
+	//	//	retry_goal = Util.GoalName.None;
+	//	//}
+	//	BuildCanvas.Inst.Show();
+	//	BuildCanvas.Inst.InitializeItems();
+	//	GridMatrix.Inst.ActivateAsync();
+	//	GridMatrix.Inst.MoveToCheckpoint(Util.WaypointName.PreStory1);
+	//	PlayCanvas.Inst.Hide();
+	//	// AudioPlayer.Inst.TransitionToBuild();
+	//	DestroyComponentsInScene();		
+	//	DragImage.Current = null;
+	//	GridMatrix.DeselectGridMatrix();
+	//	GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
+	//	if (goal_name != Util.GoalName.None)
+	//	{
+	//		Goal.Select(goal_name);
+	//	}
+	//	// MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
+	//	PiggyPermitInvisible = false;
+	//	// PiggyCameraPivot.Inst.EndFollow();
 
-		switch(waypoint_name)
-		{
-			case Util.WaypointName.PreStory1:
-				StartCoroutine(Prestory1Build());
-				break;
-			//case Util.WaypointName.PreStory2:
-			//	StartCoroutine(Prestory2Build(build_info));
-			//	break;
-			//case Util.WaypointName.Town:
-			//	if (!town_waypoint_met)
-			//	{
-			//		town_waypoint_met = true;
-			//		StartCoroutine(TownWaypointBuild());
-			//	}
-			//	break;
-			//case Util.WaypointName.Volcano:
-			//	StartCoroutine(VolcanoBuild());
-			//	break;
-			//case Util.WaypointName.VolcBottom:
-			//	StartCoroutine(VolcBottomBuild());
-			//	break;
-			//case Util.WaypointName.VolcTop:
-			//	StartCoroutine(VolcTopBuild());
-			//	break;
-		}
-	}
+	//	switch(waypoint_name)
+	//	{
+	//		case Util.WaypointName.PreStory1:
+	//			StartCoroutine(Prestory1Build());
+	//			break;
+	//		//case Util.WaypointName.PreStory2:
+	//		//	StartCoroutine(Prestory2Build(build_info));
+	//		//	break;
+	//		//case Util.WaypointName.Town:
+	//		//	if (!town_waypoint_met)
+	//		//	{
+	//		//		town_waypoint_met = true;
+	//		//		StartCoroutine(TownWaypointBuild());
+	//		//	}
+	//		//	break;
+	//		//case Util.WaypointName.Volcano:
+	//		//	StartCoroutine(VolcanoBuild());
+	//		//	break;
+	//		//case Util.WaypointName.VolcBottom:
+	//		//	StartCoroutine(VolcBottomBuild());
+	//		//	break;
+	//		//case Util.WaypointName.VolcTop:
+	//		//	StartCoroutine(VolcTopBuild());
+	//		//	break;
+	//	}
+	//}
 	IEnumerator VolcanoBuild()
 	{
 		yield return new WaitForSeconds(1.5f);
@@ -1124,7 +1126,7 @@ public class GameState : MonoBehaviour
 		{
 			GridMatrix.Inst.BuildAndDeactivate();
 		}
-		PiggyCameraPivot.Inst.StartFollow(Piggy);
+		// PiggyCameraPivot.Inst.StartFollow(Piggy);
 		// coroutine that moves camera to position
 		// MainCamera.Inst.MoveAndStickToPig(move_to_pig_time, camera_rotation_time);
 		//if (build)

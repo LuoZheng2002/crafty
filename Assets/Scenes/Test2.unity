@@ -7220,6 +7220,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 97946255908145861, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: componentDesignPrefab
+      value: 
+      objectReference: {fileID: 7430232153015806799, guid: 6d32ce1a2d6cce34ba4ae67afb730fac, type: 3}
     - target: {fileID: 405382181262800415, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -7240,6 +7244,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 828818880453683415, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: componentDesignPrefab
+      value: 
+      objectReference: {fileID: 5184445184715894536, guid: 2f2b7ac70ad060d438ad37c06f8dd160, type: 3}
+    - target: {fileID: 1497855097830855560, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: componentDesignPrefab
+      value: 
+      objectReference: {fileID: 8809836351908763045, guid: 6e916579bd2cd7a4cb0db8e6b8095b16, type: 3}
+    - target: {fileID: 2295472201136610910, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: componentDesignPrefab
+      value: 
+      objectReference: {fileID: 2766653600790631274, guid: 1e511c71b327ec641b0354ae02d0358e, type: 3}
     - target: {fileID: 2725505165882072165, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -7300,6 +7316,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5632404732649149876, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: componentDesignPrefab
+      value: 
+      objectReference: {fileID: 4498618525123872402, guid: a678d23d393ea7f4093c86bc81f7b6ae, type: 3}
     - target: {fileID: 5870684545474856302, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_Name
       value: BuildCanvas
