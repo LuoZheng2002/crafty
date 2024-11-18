@@ -13,6 +13,7 @@ public class CheckpointReachedEvent
 
 public class Checkpoint : MonoBehaviour
 {
+	public bool permanent = false;
 	public Util.WaypointName waypoint_name;
     static Dictionary<Util.WaypointName, Checkpoint> checkpoints = new();
 	public static Dictionary<Util.WaypointName, Checkpoint> Checkpoints =>checkpoints;
@@ -52,13 +53,19 @@ public class Checkpoint : MonoBehaviour
 		green_mesh.SetActive(false);
 		checkpoint_goal.SetActive(true);
 	}
+	public ParticleSystem particle_system;
 	public void OnCheckpointGoalReached()
 	{
 		EventBus.Publish(new CheckpointReachedEvent(waypoint_name));
 		red_mesh.SetActive(false);
 		green_mesh.SetActive(true);
 		GameSave.CurrentCheckpoint = waypoint_name;
-	}
+        if (permanent)
+        {
+			MapCanvas.Inst.PermWaypoints.Add(waypoint_name);
+        }
+		particle_system.Play();
+    }
 	// on checkpoint goal reached
 
 }

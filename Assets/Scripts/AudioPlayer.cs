@@ -11,6 +11,8 @@ public class AudioPlayer : MonoBehaviour
     public AudioClip snore;
     public AudioClip scream;
     public AudioClip wilhelm;
+    public AudioClip motor;
+    public AudioClip rocket;
     AudioSource musicSource;
     AudioSource soundEffectSource;
     public float min_snore_interval = 10.0f;
@@ -58,6 +60,33 @@ public class AudioPlayer : MonoBehaviour
 		soundEffectSource.loop = false;
 		soundEffectSource.Play();
 	}
+    public void MotorStart()
+    {
+		if (soundEffectSource.isPlaying)
+		{
+			soundEffectSource.Stop();
+		}
+		soundEffectSource.clip = motor;
+        soundEffectSource.volume = 0.5f;
+		soundEffectSource.loop = true;
+		soundEffectSource.Play();
+	}
+    public void RocketStart()
+    {
+		if (soundEffectSource.isPlaying)
+		{
+			soundEffectSource.Stop();
+		}
+		soundEffectSource.clip = rocket;
+        soundEffectSource.volume = 0.5f;
+		soundEffectSource.loop = false;
+		soundEffectSource.Play();
+	}
+    public void StopSoundEffect()
+    {
+        soundEffectSource.Stop();
+        soundEffectSource.volume = 0.2f;
+    }
     IEnumerator Snore()
     {
         while(true)

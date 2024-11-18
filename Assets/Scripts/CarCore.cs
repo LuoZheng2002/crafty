@@ -64,12 +64,20 @@ public class CarCore : MonoBehaviour
 	public void Fix()
 	{
 		Debug.Assert(fix_joint == null);
+		if (fix_joint != null)
+		{
+			Destroy(fix_joint);
+		}
+		fix_joint = null;
 		fix_joint = transform.AddComponent<FixedJoint>();
 	}
 	public void Unfix()
 	{
 		Debug.Assert(fix_joint != null);
-		Destroy(fix_joint);
+		if (fix_joint != null)
+		{
+			Destroy(fix_joint);
+		}
 		fix_joint = null;
 	}
 	public void ActivateContainer()
@@ -82,6 +90,14 @@ public class CarCore : MonoBehaviour
 	public void Move()
 	{
 		rb.velocity = new Vector3(0.5f, 0.0f, 0.0f);
+	}
+	public void DestroyComponents()
+	{
+		foreach (Transform child in container)
+		{
+			Debug.Assert(child.GetComponent<VehicleComponent>() != null);
+			Destroy(child.gameObject);
+		}
 	}
 	public void Build()
 	{

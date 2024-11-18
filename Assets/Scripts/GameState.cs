@@ -128,8 +128,7 @@ public class GameState : MonoBehaviour
 		//GameSave.Inventory[Util.Component.Rocket] = 9;
 		//GameSave.Inventory[Util.Component.Umbrella] = 9;
 
-		//// TransitionToStory(Util.StoryName.FallOffCliff);
-		//// GoToCheckpointAsync(Util.WaypointName.Whirl, true);
+		// GoToCheckpointAsync(Util.WaypointName.TownEntrance, true);
 		//GoToCheckpointAsync(Util.WaypointName.VolcRoom4, true);
 
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
@@ -146,123 +145,138 @@ public class GameState : MonoBehaviour
 		{
 			// GoalCanvas.Inst.GoalToFollow = Util.GoalName.PreStory1;
 			// Goal.Activate(Util.GoalName.PreStory1);
-			
+			PlayCanvas.Inst.HideUmbrella();
+			PlayCanvas.Inst.HideRocket();
 		});
+	}
+	IEnumerator AtTownWaypoint()
+	{
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "You've reached a permanent waypoint!", null);
+		MapImage.Inst.Show();
+		MapImage.Inst.StartScale();
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Click on the map to see the whole region!", (MapImageClickedEvent e) => true);
+		LineCanvas.Top.Hide();
 	}
 
 	public void OnCheckpointReached(CheckpointReachedEvent e)
 	{
-		switch(e.waypoint_name)
+		Util.Delay(this, 1, () =>
 		{
-			case WaypointName.MotorWheel:
-				Checkpoint.Get(WaypointName.TurnWheel).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.TurnWheel;
-				GameSave.Inventory[Util.Component.MotorWheel] = 2;
-				ObtainCanvas.Inst.Show(Util.Component.MotorWheel);
-				Retry.Inst.Show();
-				RebuildButton.Inst.StartScale();
-				break;
-			case WaypointName.TurnWheel:
-				Util.unbreakable = false;
-				Checkpoint.Get(WaypointName.Turn1).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn1;
-				GameSave.Inventory[Util.Component.TurnWheel] = 2;
-				GameSave.Inventory[Util.Component.WoodenCrate] += 3;
-				ObtainCanvas.Inst.Show(Util.Component.TurnWheel);
-				RebuildButton.Inst.StartScale();
-				GameSave.IncrementGridSize(0, 1, 0);
-				break;
-			case WaypointName.Turn1:
-				Checkpoint.Get(WaypointName.Turn2).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn2;
-				break;
-			case WaypointName.Turn2:
-				Checkpoint.Get(WaypointName.Turn3).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn3;
-				break;
-			case WaypointName.Turn3:
-				Checkpoint.Get(WaypointName.Lake).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Lake;
-				break;
-			case WaypointName.Lake:
-				Checkpoint.Get(WaypointName.Island).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Island;
-				break;
-			case WaypointName.Island:
-				Checkpoint.Get(WaypointName.TownEntrance).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.TownEntrance;
-				break;
-			case WaypointName.TownEntrance:
-				Checkpoint.Get(WaypointName.TownWaypoint).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.TownWaypoint;
-				break;
-			case WaypointName.TownWaypoint:
-				Checkpoint.Get(WaypointName.Gate).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Gate;
-				break;
-			case WaypointName.Gate:
-				Checkpoint.Get(WaypointName.Cliff2).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Cliff2;
-				break;
-			case WaypointName.Cliff2:
-				Checkpoint.Get(WaypointName.Whirl).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.Whirl;
-				GameSave.Inventory[Util.Component.Umbrella] = 4;
-				PlayCanvas.Inst.ShowUmbrella();
-				ObtainCanvas.Inst.Show(Util.Component.Umbrella);
-				// GameSave.IncrementGridSize(1, 0, 0);
-				Retry.Inst.Show();
-				RebuildButton.Inst.StartScale();
-				break;
-			case WaypointName.Whirl:
-				Checkpoint.Get(WaypointName.VolcanoGate).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcanoGate;
-				GameSave.Inventory[Util.Component.Rocket] = 6;
-				ObtainCanvas.Inst.Show(Util.Component.Rocket);
-				PlayCanvas.Inst.ShowRocket();
-				Retry.Inst.Show();
-				RebuildButton.Inst.StartScale();
-				break;
-			case WaypointName.VolcanoGate:
-				Checkpoint.Get(WaypointName.VolcRoom1_1).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_1;
-				break;
-			case WaypointName.VolcRoom1_1:
-				Checkpoint.Get(WaypointName.VolcRoom1_2).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_2;
-				break;
-			case WaypointName.VolcRoom1_2:
-				Checkpoint.Get(WaypointName.VolcRoom1_3).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_3;
-				break;
-			case WaypointName.VolcRoom1_3:
-				Checkpoint.Get(WaypointName.VolcRoom2_1).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom2_1;
-				break;
-			case WaypointName.VolcRoom2_1:
-				Checkpoint.Get(WaypointName.VolcRoom3).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom3;
-				break;
-			case WaypointName.VolcRoom3:
-				Checkpoint.Get(WaypointName.VolcRoom4).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom4;
-				break;
-			case WaypointName.VolcRoom4:
-				Checkpoint.Get(WaypointName.VolcTop).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcTop;
-				break;
-			case WaypointName.VolcTop:
-				Checkpoint.Get(WaypointName.VolcPlatform).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform;
-				break;
-			case WaypointName.VolcPlatform:
-				Checkpoint.Get(WaypointName.VolcPlatform2).Activate();
-				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform2;
-				break;
-			case WaypointName.VolcPlatform2:
-				Util.unbreakable = true;
-				break;
-		}
+			switch (e.waypoint_name)
+			{
+				case WaypointName.MotorWheel:
+					Checkpoint.Get(WaypointName.TurnWheel).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.TurnWheel;
+					GameSave.Inventory[Util.Component.MotorWheel] = 2;
+					ObtainCanvas.Inst.Show(Util.Component.MotorWheel);
+					Retry.Inst.Show();
+					RebuildButton.Inst.Show();
+					RebuildButton.Inst.StartScale();
+					BackButton.Inst.Show();
+					break;
+				case WaypointName.TurnWheel:
+					Util.unbreakable = false;
+					Checkpoint.Get(WaypointName.Turn1).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn1;
+					GameSave.Inventory[Util.Component.TurnWheel] = 2;
+					GameSave.Inventory[Util.Component.WoodenCrate] += 3;
+					ObtainCanvas.Inst.Show(Util.Component.TurnWheel);
+					RebuildButton.Inst.StartScale();
+					GameSave.IncrementGridSize(0, 1, 0);
+					break;
+				case WaypointName.Turn1:
+					Checkpoint.Get(WaypointName.Turn2).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn2;
+					break;
+				case WaypointName.Turn2:
+					Checkpoint.Get(WaypointName.Turn3).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Turn3;
+					break;
+				case WaypointName.Turn3:
+					Checkpoint.Get(WaypointName.Lake).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Lake;
+					break;
+				case WaypointName.Lake:
+					Checkpoint.Get(WaypointName.Island).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Island;
+					break;
+				case WaypointName.Island:
+					Checkpoint.Get(WaypointName.TownEntrance).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.TownEntrance;
+					break;
+				case WaypointName.TownEntrance:
+					Checkpoint.Get(WaypointName.TownWaypoint).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.TownWaypoint;
+					break;
+				case WaypointName.TownWaypoint:
+					Checkpoint.Get(WaypointName.Gate).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Gate;
+					StartCoroutine(AtTownWaypoint());
+					break;
+				case WaypointName.Gate:
+					Checkpoint.Get(WaypointName.Cliff2).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Cliff2;
+					break;
+				case WaypointName.Cliff2:
+					Checkpoint.Get(WaypointName.Whirl).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.Whirl;
+					GameSave.Inventory[Util.Component.Umbrella] = 4;
+					PlayCanvas.Inst.ShowUmbrella();
+					ObtainCanvas.Inst.Show(Util.Component.Umbrella);
+					GameSave.IncrementGridSize(1, 0, 0);
+					Retry.Inst.Show();
+					RebuildButton.Inst.StartScale();
+					break;
+				case WaypointName.Whirl:
+					Checkpoint.Get(WaypointName.VolcanoGate).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcanoGate;
+					GameSave.Inventory[Util.Component.Rocket] = 6;
+					ObtainCanvas.Inst.Show(Util.Component.Rocket);
+					PlayCanvas.Inst.ShowRocket();
+					Retry.Inst.Show();
+					RebuildButton.Inst.StartScale();
+					break;
+				case WaypointName.VolcanoGate:
+					Checkpoint.Get(WaypointName.VolcRoom1_1).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_1;
+					break;
+				case WaypointName.VolcRoom1_1:
+					Checkpoint.Get(WaypointName.VolcRoom1_2).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_2;
+					break;
+				case WaypointName.VolcRoom1_2:
+					Checkpoint.Get(WaypointName.VolcRoom1_3).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_3;
+					break;
+				case WaypointName.VolcRoom1_3:
+					Checkpoint.Get(WaypointName.VolcRoom2_1).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom2_1;
+					break;
+				case WaypointName.VolcRoom2_1:
+					Checkpoint.Get(WaypointName.VolcRoom3).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom3;
+					break;
+				case WaypointName.VolcRoom3:
+					Checkpoint.Get(WaypointName.VolcRoom4).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom4;
+					break;
+				case WaypointName.VolcRoom4:
+					Checkpoint.Get(WaypointName.VolcTop).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcTop;
+					break;
+				case WaypointName.VolcTop:
+					Checkpoint.Get(WaypointName.VolcPlatform).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform;
+					break;
+				case WaypointName.VolcPlatform:
+					Checkpoint.Get(WaypointName.VolcPlatform2).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform2;
+					break;
+				case WaypointName.VolcPlatform2:
+					Util.unbreakable = true;
+					break;
+			}
+		});
 	}
 	private void Start()
 	{
@@ -279,7 +293,7 @@ public class GameState : MonoBehaviour
 		EventBus.Subscribe<ScanFailEvent>(OnScanFail);
 		EventBus.Subscribe<CheckpointReachedEvent>(OnCheckpointReached);
 
-		// Util.Delay(this, 1, ()=> { MainCamera.Inst.MoveAndStickTo(CarCore.Inst.CameraEnd); });
+		Util.Delay(this, 1, ()=> { MapCanvas.Inst.Deactivate(); });
 	}
 	IEnumerator ScanSuccessHelper()
 	{
@@ -292,7 +306,7 @@ public class GameState : MonoBehaviour
 		yield return null;
 		yield return null;
 		CarCore.Inst.Fix();
-		GridMatrix.Inst.ActivateAsync();
+		GridMatrix.Inst.ActivateAsync(true);
 		BuildCanvas.Inst.Show();
 		BuildCanvas.Inst.InitializeItems();
 	}
@@ -314,27 +328,22 @@ public class GameState : MonoBehaviour
 	}
 	public IEnumerator GoToCheckpoint(Util.WaypointName waypoint_name, bool camera_follow)
 	{
+		yield return null;
 		if (camera_follow)
 		{
 			MainCamera.Inst.Stop();
 		}
 		yield return null;
+
+		AudioPlayer.Inst.StopSoundEffect();
 		PlayCanvas.Inst.Hide();
 		GridMatrix.Inst.MoveToCheckpoint(waypoint_name);
 		yield return null;
-		if (!GridMatrix.Inst.Active)
-		{
-			CarCore.Inst.DeactivateContainer();
-		}
-		else
-		{
-			CarCore.Inst.Unfix();
-		}
+		Debug.Assert(!GridMatrix.Inst.Active);
+		CarCore.Inst.DeactivateContainer();
+		CarCore.Inst.DestroyComponents();
 		yield return null;
 		CarCore.Inst.AlignToGridMatrix();
-		yield return null;
-		yield return null;
-		yield return null;
 		yield return null;
 		yield return null;
 		yield return null;
@@ -343,7 +352,7 @@ public class GameState : MonoBehaviour
 		BuildCanvas.Inst.InitializeItems();
 		if (!GridMatrix.Inst.Active)
 		{
-			yield return GridMatrix.Inst.Activate();
+			yield return GridMatrix.Inst.Activate(false);
 		}
 		CarCore.Inst.ResetPivot();
 		
@@ -391,22 +400,22 @@ public class GameState : MonoBehaviour
 	
 	void CheatCode()
 	{
-		if (Input.GetKeyDown(KeyCode.Y))
-		{
-			TryScan();
-		}
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			CarCore.Inst.Move();
-		}
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			GoToCheckpointAsync(Util.WaypointName.PreStory1);
-		}
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			GoToMap();
-		}
+		//if (Input.GetKeyDown(KeyCode.Y))
+		//{
+		//	TryScan();
+		//}
+		//if (Input.GetKeyDown(KeyCode.E))
+		//{
+		//	CarCore.Inst.Move();
+		//}
+		//if (Input.GetKeyDown(KeyCode.R))
+		//{
+		//	GoToCheckpointAsync(Util.WaypointName.PreStory1);
+		//}
+		//if (Input.GetKeyDown(KeyCode.T))
+		//{
+		//	GoToMap();
+		//}
 	}
 	public void GoToMap()
 	{
@@ -414,6 +423,7 @@ public class GameState : MonoBehaviour
 		MainCamera.Inst.MoveAndStickTo(BigMapCamera.Inst.transform);
 		MapCanvas.Inst.Activate();
 		BigMapCamera.Inst.Activate();
+		PlayCanvas.Inst.Hide();
 	}
 	void DampStart()
 	{
@@ -597,13 +607,29 @@ public class GameState : MonoBehaviour
 		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
 		// TransitionToBuild(Util.WaypointName.Town, Util.GoalName.None);
 	}
+
+	public void Test(Action func)
+	{
+		try
+		{
+			func();
+		}
+		catch (Exception e)
+		{
+			ToastManager.Toast($"{e.Message}");
+		}
+	}
 	IEnumerator TransitionToStoryCrash()
 	{
+		
 		yield return BlackoutCanvas.Inst.Blackout(1.0f, 1.0f, 1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 1.5f, 0.0f, 1.0f);
-		yield return WaitForClick();
-		yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 0.5f, 1.0f, 0.0f);
-		MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory1_1));
+			yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 1.5f, 0.0f, 1.0f);
+			yield return WaitForClick();
+			yield return BlackoutCanvas.Inst.DisplaySub("You and your girlfriend's spaceship crashed to this planet because of an attack.", 0.5f, 1.0f, 0.0f);
+		Test(() =>
+		{
+			MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory1_1));
+		});
 		// StoryAnimation.Inst.PlayAnimation(Util.StoryName.Crash);
 		//yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.2f);
 		//yield return BlackoutCanvas.Inst.Blackout(1.5f, 0.2f, 1.0f);
@@ -613,30 +639,52 @@ public class GameState : MonoBehaviour
 		// yield return BlackoutCanvas.Inst.DisplaySub("You were unconcious for some time", 1.0f, 0.0f, 1.0f);
 		// yield return new WaitForSeconds(1.0f);
 		// yield return BlackoutCanvas.Inst.DisplaySub(null, 1.0f, 1.0f, 0.0f);
-		Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory1));
-		// yield return new WaitForSeconds(1.0f);
-		yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("???", "Are you all right?", Character.Partner);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Who... who are you?", null);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I�m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
-		LineCanvas.Bottom.Hide();
-		yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 0.0f, 1.0f);
-		yield return new WaitForSeconds(1.0f);
-		yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 1.0f, 0.0f);
-		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "That sounds terrible! " +
-			"Looks like you are injured. Let�s get down to the town to have a rest first.", Character.Partner);
-		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where to look for your girlfriend.", Character.Partner);
-		yield return AtTheSameTime(
-			MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory1_1), TRef.Get(Util.TRefName.CameraPrestory1_2), 2.0f),
-			LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "There are some scattered parts nearby. Let's take advantage of them for a ride.", Character.Partner)
-			);
-		LineCanvas.Bottom.Hide();
-		Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
-		Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
-		// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1, Util.BuildInfo.NeedHelp);
-		TransitionToFirstBuild();
+		Test(() =>
+		{
+			Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory1));
+		});
+			
+			// yield return new WaitForSeconds(1.0f);
+			yield return BlackoutCanvas.Inst.Blackout(1.5f, 1.0f, 0.0f);
+		Test(() =>
+		{
+			BackButton.Inst.Hide();
+		});
+			
+
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("???", "Are you all right?", Character.Partner);
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("You", "Who... who are you?", null);
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "I�m Shirley, Outrider for the New Sorpigal. Anything I can help?", Character.Partner);
+
+		Test(() =>
+		{
+			LineCanvas.Bottom.Hide();
+		});
+		
+
+
+			yield return BlackoutCanvas.Inst.Blackout(0.5f, 0.0f, 1.0f);
+			yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 0.0f, 1.0f);
+			yield return new WaitForSeconds(1.0f);
+			yield return BlackoutCanvas.Inst.DisplaySub("You told the stranger everything just happened", 0.5f, 1.0f, 0.0f);
+			yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "That sounds terrible! " +
+				"Looks like you are injured. Let�s get down to the town to have a rest first.", Character.Partner);
+			yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Maybe someone in the town knows where to look for your girlfriend.", Character.Partner);
+			yield return AtTheSameTime(
+				MainCamera.Inst.Transition(TRef.Get(Util.TRefName.CameraPrestory1_1), TRef.Get(Util.TRefName.CameraPrestory1_2), 2.0f),
+				LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "There are some scattered parts nearby. Let's take advantage of them for a ride.", Character.Partner)
+				);
+		Test(() =>
+		{
+			LineCanvas.Bottom.Hide();
+			Character.Piggy.WarpTo(TRef.Get(Util.TRefName.Origin));
+			Character.Partner.WarpTo(TRef.Get(Util.TRefName.Origin));
+		});
+			yield return null;
+			// TransitionToBuild(Util.WaypointName.PreStory1, Util.GoalName.PreStory1, Util.BuildInfo.NeedHelp);
+			yield return TransitionToFirstBuild();
+		
 		// Character.Piggy.WarpTo(TransformRef.Get(Util.TransformRefName.PigPrestory1));
 
 
@@ -732,6 +780,12 @@ public class GameState : MonoBehaviour
 		// GoToCheckpointAsync(Util.WaypointName.PreStory2);
 		
 		BackButton.Inst.Hide();
+		yield return new WaitForSeconds(2.0f);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Oh, no! We turned over!", null);
+		RebuildButton.Inst.Show();
+		RebuildButton.Inst.StartScale();
+		yield return LineCanvas.Top.DisplayLineAndWaitForEvent("Shirley", "Press the wrench icon to rebuild.", (RebuildButtonClickedEvent e) => true);
+		LineCanvas.Top.Hide();
 		//Character.Piggy.WarpTo(TRef.Get(Util.TRefName.PigPrestory2));
 		//Character.Partner.WarpTo(TRef.Get(Util.TRefName.PartnerPrestory2));
 		//MainCamera.Inst.WarpTo(TRef.Get(Util.TRefName.CameraPrestory2_1));
@@ -815,30 +869,37 @@ public class GameState : MonoBehaviour
 		// Util.WaypointName.PreStory2
 	};
 
-	void TransitionToFirstBuild()
+	IEnumerator TransitionToFirstBuild()
 	{
-		Debug.Assert(GameSave.MemCrates.GetLength(0) == 2);
-		Debug.Assert(GameSave.MemCrates.GetLength(1) == 2);
-		Debug.Assert(GameSave.MemCrates.GetLength(2) == 3);
-		GameSave.ClearMemory();
-		GameSave.MemCrates[0, 0, 0] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 1, 0] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
-		GameSave.MemAccessories[1, 0, 1] = Util.Component.Wheel;
-		GameSave.MemAccessories[1, 1, 2] = Util.Component.Wheel;
-		GameSave.AccessoryDirections[1, 0, 1] = 1;
-		GameSave.AccessoryDirections[1, 1, 2] = 2;
+		Test(() =>
+		{
+			Debug.Assert(GameSave.MemCrates.GetLength(0) == 2);
+			Debug.Assert(GameSave.MemCrates.GetLength(1) == 2);
+			Debug.Assert(GameSave.MemCrates.GetLength(2) == 3);
+			GameSave.ClearMemory();
+			GameSave.MemCrates[0, 0, 0] = Util.Component.WoodenCrate;
+			GameSave.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
+			GameSave.MemCrates[1, 1, 0] = Util.Component.WoodenCrate;
+			GameSave.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
+			GameSave.MemAccessories[1, 0, 1] = Util.Component.Wheel;
+			GameSave.MemAccessories[1, 1, 2] = Util.Component.Wheel;
+			GameSave.AccessoryDirections[1, 0, 1] = 1;
+			GameSave.AccessoryDirections[1, 1, 2] = 2;
+		});
+		
+		yield return null;
 
-		GoToCheckpointAsync(Util.WaypointName.PreStory1);
-		DragImage.Current = null;
-		// GridMatrix.DeselectGridMatrix();
-		// GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
-		Goal.Activate(Util.GoalName.PreStory1);
-		// MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
-		PiggyPermitInvisible = false;
-		StartCoroutine(Prestory1Build());
-
+		yield return GoToCheckpoint(Util.WaypointName.PreStory1, true);
+		Test(() =>
+		{
+			DragImage.Current = null;
+			// GridMatrix.DeselectGridMatrix();
+			// GridMatrix.SelectGridMatrix(waypoint_name, build_info != Util.BuildInfo.NeedHelp);
+			Goal.Activate(Util.GoalName.PreStory1);
+			// MainCamera.Inst.MoveAndStickToGridMatrix(0.5f, 0.5f, 0.5f);
+			PiggyPermitInvisible = false;
+			StartCoroutine(Prestory1Build());
+		});
 	}
 	//void TransitionToBuild(Util.WaypointName waypoint_name, Util.GoalName goal_name, Util.BuildInfo build_info = Util.BuildInfo.NeedHelp)
 	//{
@@ -923,6 +984,11 @@ public class GameState : MonoBehaviour
 	IEnumerator Prestory1Build()
 	{
 		yield return new WaitForSeconds(1.5f);
+
+		MapImage.Inst.Hide();
+		RebuildButton.Inst.Hide();
+		Retry.Inst.Hide();
+
 		Trash.Inst.gameObject.SetActive(false);
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Welcome to the grid building system!", null);
 		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Oh! There is a mess! Let's clean it up using the eraser!", null);

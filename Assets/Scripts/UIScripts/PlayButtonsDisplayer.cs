@@ -32,10 +32,12 @@ public class PlayButtonsDisplayer : MonoBehaviour
 	}
 	bool ws = false;
     bool ad = false;
-    public void UpdateWASD(bool ws, bool ad)
+    bool q = false;
+    public void UpdateWASD(bool ws, bool ad, bool q)
     {
         this.ws = ws;
         this.ad = ad;
+        this.q = q;
         // ToastManager.Toast($"WASD: {e.wa}, {e.sd}");
         if (ws)
         {
@@ -69,6 +71,22 @@ public class PlayButtonsDisplayer : MonoBehaviour
                 // ToastManager.Toast("No components controlled by W/S");
             }
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.S))
+            {
+                AudioPlayer.Inst.MotorStart();
+            }
+        }
+        if (q && Input.GetKeyDown(KeyCode.Q))
+        {
+            AudioPlayer.Inst.RocketStart();
+        }
+        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.Q))
+        {
+            AudioPlayer.Inst.StopSoundEffect();
+        }
+
         if (!ad)
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))

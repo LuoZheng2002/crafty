@@ -22,13 +22,16 @@ public abstract class BoosterPreview : AccessoryComponent
         c = GetComponent<Collider>();
         
         Init();
-        particle_system1.Stop();
+	}
+	private void OnEnable()
+	{
+		particle_system1.Stop();
 		particle_system2.Stop();
 		particle_system3.Stop();
 	}
 
-    // Update is called once per frame
-    public float max_time = 1.0f;
+	// Update is called once per frame
+	public float max_time = 1.0f;
     float time = 0.0f;
     public ParticleSystem particle_system1;
 	public ParticleSystem particle_system2;

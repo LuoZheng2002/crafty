@@ -71,5 +71,6 @@ public static class GameSave
 		{Util.Component.Umbrella, 0 }
 	};
 	public static bool IsMainStory { get; set; } = true;
-	public static Util.WaypointName CurrentCheckpoint { get; set; } = Util.WaypointName.None;
+	public  static Util.WaypointName CurrentCheckpoint { get; set; } = Util.WaypointName.None;
+	public static bool BreakTutorialWatched { get; set; } = false;
 }

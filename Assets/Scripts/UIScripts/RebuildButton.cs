@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class RebuildButtonClickedEvent
+{
+
+}
 public class RebuildButton : MonoBehaviour
 {
     static RebuildButton inst;
@@ -67,6 +71,7 @@ public class RebuildButton : MonoBehaviour
 			SetAlpha(0.3f);
 			can_click = false;
 		}
+		EventBus.Publish(new RebuildButtonClickedEvent());
 	}
 	void OnScanFail(ScanFailEvent e)
 	{
@@ -77,5 +82,13 @@ public class RebuildButton : MonoBehaviour
 	{
 		can_click = true;
 		SetAlpha(1);
+	}
+	public void Show()
+	{
+		gameObject.SetActive(true);
+	}
+	public void Hide()
+	{
+		gameObject.SetActive(false);
 	}
 }

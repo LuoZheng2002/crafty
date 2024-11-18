@@ -33,6 +33,10 @@ public class PlayCanvas : MonoBehaviour
     {
         rocket.SetActive(true);
 	}
+    public void HideRocket()
+    {
+        rocket.SetActive(false);
+	}
     public Image rocket_fuel_image;
     public void SetRocketFill(float amount)
     {
@@ -42,6 +46,10 @@ public class PlayCanvas : MonoBehaviour
     public void ShowUmbrella()
     {
         umbrella.SetActive(true);
+	}
+    public void HideUmbrella()
+    {
+        umbrella.SetActive(false);
 	}
     public void Show()
     {

@@ -124,18 +124,26 @@ public partial class GridMatrix: MonoBehaviour
 		// dummyCamera = cameraPivot.Find("DummyCamera");
 		// Debug.Assert(cameraPivot != null);
 		// Debug.Assert(dummyCamera != null);
-		Debug.Assert(inst == null);
-		inst = this;
-		Probe = transform.Find("Probe").GetComponent<Probe>();
-		EventBus.Subscribe<GridMatrixSizeChangedEvent>(OnGridMatrixSizeChanged);
-		InitMemory();
-		InitComponentArray();
-		InitPhantom();
-		ProbeResize();
-		SpawnGrids();
+		
 		Util.Delay(this, () =>
 		{
+			Probe = transform.Find("Probe").GetComponent<Probe>();
+			(int h, int w, int l) = GameSave.GridSize;
+			Probe.transform.localScale = new Vector3(w, h, l);
+			ProbeTargetPos = new Vector3(0, ((float)h - 1.0f) / 2.0f, 0);
+
+
+			Debug.Assert(inst == null);
+			inst = this;
+			
+			EventBus.Subscribe<GridMatrixSizeChangedEvent>(OnGridMatrixSizeChanged);
+			InitMemory();
+			InitComponentArray();
+			InitPhantom();
+			ProbeResize();
+			SpawnGrids();
 			Deactivate();
+
 		});
 	}
 	private void OnDestroy()
@@ -215,8 +223,16 @@ public partial class GridMatrix: MonoBehaviour
 	// collider 
 	// core disable
 	// activate: space enable, enable build canvas, update selected grid
-	public IEnumerator Activate()
+	public IEnumerator Activate(bool show_back)
 	{
+		if (show_back)
+		{
+			BackButton.Inst.Show();
+		}
+		else
+		{
+			BackButton.Inst.Hide();
+		}
 		Active = true;
 		ResetActiveLayer();
 		for (int i = 0; i < 5; i++)
@@ -226,9 +242,9 @@ public partial class GridMatrix: MonoBehaviour
 		RebuildVehicle();
 		yield return null;
 	}
-	public void ActivateAsync()
+	public void ActivateAsync(bool show_back)
 	{
-		StartCoroutine(Activate());
+		StartCoroutine(Activate(show_back));
 	}
 	//public void ShowDesign()
 	//{
@@ -377,6 +393,15 @@ public partial class GridMatrix: MonoBehaviour
 		AccessoryComponent accessory = accessories[h_idx, w_idx, l_idx];
 		if (accessory != null)
 		{
+			if (accessory.GetComponent<Umbrella>() != null)
+			{
+				PlayCanvas.Inst.ShowUmbrella();
+			}
+			if (accessory.GetComponent<Rocket>() != null)
+			{
+				PlayCanvas.Inst.ShowRocket();
+				q = true;
+			}
 			GameState.Inst.Components.Add(accessory);
 			// mem_accessories[h_idx, w_idx, l_idx] = accessory.Component;
 			// accessory_directions[h_idx, w_idx, l_idx] = accessory.Direction;
@@ -401,11 +426,16 @@ public partial class GridMatrix: MonoBehaviour
 			}
 		}
 	}
+	bool q = false;
 	public void BuildAndDeactivate()
 	{
+		PlayCanvas.Inst.HideUmbrella();
+		PlayCanvas.Inst.HideRocket();
+
 		// GameState.Inst.Components.Clear();
 		ws = false;
 		ad = false;
+		q = false;
 
 		Memorize();
 		(int h, int w, int l) = GameSave.GridSize;
@@ -442,7 +472,7 @@ public partial class GridMatrix: MonoBehaviour
 		AttachToCarCore();
 		ClearComponents(false);
 		// Active = false;
-		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad);
+		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad, q);
 		Deactivate();
 	}
 
@@ -718,8 +748,6 @@ public partial class GridMatrix: MonoBehaviour
 	{
 		CarCore.Inst.Fix();
 		ShowProbe();
-		MoveProbeToGrid();
-		Probe.MoveRotation(transform.rotation);
 		Vector3 start_position = CarCore.Inst.transform.position + new Vector3(0, start_scan_height, 0);
 		Vector3 end_position = CarCore.Inst.transform.position + new Vector3(0, end_scan_height, 0);
 		transform.position = start_position;
@@ -735,6 +763,10 @@ public partial class GridMatrix: MonoBehaviour
 		{
 			transform.rotation = CarCore.Inst.transform.rotation;
 		}
+		yield return null;
+		MoveProbeToGrid();
+		// Probe.MoveRotation(transform.rotation);
+
 		float start_time = Time.time;
 		yield return new WaitForSeconds(0.2f);
 		while (Time.time - start_time < scan_time)
@@ -744,14 +776,17 @@ public partial class GridMatrix: MonoBehaviour
 			yield return null;
 			yield return null;
 			yield return null;
+			yield return null;
+			MoveProbeToGrid();			
+			yield return null;
+			yield return null;
+			yield return null;
+			yield return null;
 			CollisionFlag = false;
 			yield return null;
-			MoveProbeToGrid();
 			yield return null;
 			yield return null;
 			yield return null;
-
-			// Debug.Log($"Collision count: {CollisionCount}");
 			if (!CollisionFlag)
 			{
 				Debug.Log($"Success!");

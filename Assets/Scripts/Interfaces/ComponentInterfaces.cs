@@ -95,7 +95,29 @@ public abstract class VehicleComponent : MonoBehaviour
     //    }
     //}
     public abstract void Build();
+	private void OnJointBreak(float breakForce)
+	{
+		if (!GameSave.BreakTutorialWatched)
+        {
+            GameSave.BreakTutorialWatched = true;
+            GameState.Inst.StartCoroutine(JointBreakTutorial());
+		}
+        if (particle_system != null)
+        {
+            particle_system.gameObject.SetActive(true);
+            particle_system.Play();
+        }
+	}
+	public ParticleSystem particle_system;
+	IEnumerator JointBreakTutorial()
+	{
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "Oh no! Our car breaks! We cannot rebuild our vehicle in place anymore.", null);
+		yield return LineCanvas.Top.DisplayLineAndWaitForClick("Shirley", "However, we can still go back to the latest checkpoint.", null);
+        LineCanvas.Top.Hide();
+        Retry.Inst.StartScale();
+	}
 }
+
 public abstract class CrateComponent: VehicleComponent
 {
 

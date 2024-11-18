@@ -5,8 +5,21 @@ using UnityEngine.UI;
 
 public class WaypointButton : MonoBehaviour
 {
-    public Util.WaypointName WaypointName { get; set; }
+	Util.WaypointName waypoint_name;
+    public Util.WaypointName WaypointName
+	{
+		get
+		{
+			return waypoint_name;
+		}
+		set
+		{
+			waypoint_name = value;
+			text.text = waypoint_name.ToString();
+		}
+	}
 	public Checkpoint Checkpoint { get; set; }
+	public Text text;
 	Image image;
 	private void Start()
 	{

@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\CarComponents\Crate\WoodenCrate.cs" />
     <Compile Include="Assets\Scripts\GameSave.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\MiniMapFollowPlayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BuildCanvas.cs" />
     <Compile Include="Assets\Scripts\Probe.cs" />
     <Compile Include="Assets\Scripts\Lava.cs" />
@@ -104,11 +105,11 @@
     <Compile Include="Assets\Scripts\UIScripts\Eraser.cs" />
     <Compile Include="Assets\Scripts\Obsidian.cs" />
     <Compile Include="Assets\Scripts\GridMatrix.cs" />
-    <Compile Include="Assets\Scripts\MiniMapFollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Goal.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\Umbrella.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ImageContainer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LineCanvas.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\Tooltip.cs" />
     <Compile Include="Assets\Scripts\Level.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayButtonsDisplayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\IntroCanvas.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Assets\Scripts\UIScripts\CanvasDrag.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
     <Compile Include="Assets\Scripts\CustomCursor.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\MapImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
     <Compile Include="Assets\Scripts\StoryAnimation.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Assets\Scripts\UIScripts\ChoiceCanvas.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Accessory\BoosterPreview.cs" />
     <Compile Include="Assets\Scripts\EventBus.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\TooltipManager.cs" />
     <Compile Include="Assets\Scripts\UIScripts\PlayCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\WaypointButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelButton.cs" />
@@ -158,6 +161,29 @@
     <Compile Include="Assets\Scripts\CarComponents\Crate\SteelCrate.cs" />
     <Compile Include="Assets\Scripts\Hammer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Menu.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

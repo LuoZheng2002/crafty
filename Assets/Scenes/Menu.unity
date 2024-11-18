@@ -1035,6 +1035,7 @@ GameObject:
   - component: {fileID: 1519809489}
   - component: {fileID: 1519809492}
   - component: {fileID: 1519809493}
+  - component: {fileID: 1519809494}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1233,6 +1234,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!45 &1519809494
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519809488}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: c9ff48405e385594095c7c28cf3504a3, type: 2}
 --- !u!850595691 &1533021078
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1716,7 +1726,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1939741877}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4396,6 +4406,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MenuGoal
       objectReference: {fileID: 0}
+    - target: {fileID: 4626311992660617543, guid: 17b44e0ddc93ecf48802b073a4cc3722, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4495,6 +4509,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2188073254631831515, guid: a6a9f8ff55e4721449abb75458428abb, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205460347085700113, guid: a6a9f8ff55e4721449abb75458428abb, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205460347085700113, guid: a6a9f8ff55e4721449abb75458428abb, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205460347085700113, guid: a6a9f8ff55e4721449abb75458428abb, type: 3}
+      propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7336822829773608412, guid: a6a9f8ff55e4721449abb75458428abb, type: 3}
