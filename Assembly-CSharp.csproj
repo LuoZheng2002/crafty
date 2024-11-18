@@ -154,6 +154,7 @@
     <Compile Include="Assets\Scripts\UIScripts\BlackoutCanvas.cs" />
     <Compile Include="Assets\Scripts\GameState.cs" />
     <Compile Include="Assets\Scripts\CarComponents\Crate\SteelCrate.cs" />
+    <Compile Include="Assets\Scripts\Hammer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Menu.cs" />
   </ItemGroup>
   <ItemGroup>

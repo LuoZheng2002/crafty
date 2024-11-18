@@ -227,6 +227,16 @@ public static class Util
 		Cliff2,
 		Whirl,
 		VolcanoGate,
+		VolcTop,
+		VolcPlatform,
+		VolcPlatform2,
+		VolcEntrance,
+		VolcRoom1_1,
+		VolcRoom1_2,
+		VolcRoom2_1,
+		VolcRoom3,
+		VolcRoom4,
+		VolcRoom1_3,
 	}
 
 	public static (Component[,,], Component[,,], Component[,,]) DesignPrestory1()
@@ -397,7 +407,13 @@ public static class Util
 
 		configurableJoint.breakForce = break_force;
 		configurableJoint.breakTorque = break_torque;
+		if (unbreakable)
+		{
+			configurableJoint.breakForce = Mathf.Infinity;
+			configurableJoint.breakTorque = Mathf.Infinity;
+		}
 	}
+	public static bool unbreakable = false;
 	public static float break_force = 10000.0f;
 	public static float break_torque = 10000.0f;
 

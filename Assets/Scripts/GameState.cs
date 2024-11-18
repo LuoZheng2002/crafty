@@ -100,32 +100,36 @@ public class GameState : MonoBehaviour
 	//{
 	//	StartCoroutine(MoveCameraToGrid(false));
 	//}
-	void Init()
+	void Yikai()
 	{
-		// TransitionToStory(Util.StoryName.Crash);
+		TransitionToStory(Util.StoryName.Crash);
 		// TransitionToFirstBuild();
-		GridMatrix.Inst.InitMemory();
-		GameSave.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 0, 1] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 1, 0] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
-		GameSave.MemCrates[1, 1, 2] = Util.Component.WoodenCrate;
-		GameSave.MemLoads[1, 1, 2] = Util.Component.Pig;
-		GameSave.MemLoads[1, 0, 2] = Util.Component.Partner;
-		GameSave.MemAccessories[0, 0, 0] = Util.Component.Wheel;
-		GameSave.MemAccessories[0, 0, 2] = Util.Component.Wheel;
-		GameSave.MemAccessories[0, 1, 0] = Util.Component.Wheel;
-		GameSave.MemAccessories[0, 1, 2] = Util.Component.Wheel;
-		GameSave.IncrementGridSize(1, 1, 0);
-		GameSave.Inventory[Util.Component.MotorWheel] += 2;
-		GameSave.Inventory[Util.Component.TurnWheel] += 2;
-		GameSave.Inventory[Util.Component.WoodenCrate] = 9;
-		GameSave.Inventory[Util.Component.Rocket] = 9;
-		GameSave.Inventory[Util.Component.Umbrella] = 9;
+		//GridMatrix.Inst.InitMemory();
+		//GameSave.IncrementGridSize(1, 1, 0);
+		//GameSave.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
+		//GameSave.MemAccessories[1, 0, 1] = Util.Component.Rocket;
+		//GameSave.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
+		//GameSave.MemAccessories[1, 1, 0] = Util.Component.Rocket;
+		//GameSave.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
+		//GameSave.MemAccessories[1, 1, 2] = Util.Component.Rocket;
+		//GameSave.MemCrates[1, 2, 0] = Util.Component.WoodenCrate;
+		//GameSave.MemAccessories[1, 2, 1] = Util.Component.Rocket;
+		//GameSave.MemCrates[1, 2, 2] = Util.Component.WoodenCrate;
+		//GameSave.MemLoads[1, 2, 2] = Util.Component.Pig;
+		//GameSave.MemLoads[1, 0, 2] = Util.Component.Partner;
+		//GameSave.MemAccessories[0, 0, 0] = Util.Component.MotorWheel;
+		//GameSave.MemAccessories[0, 0, 2] = Util.Component.TurnWheel;
+		//GameSave.MemAccessories[0, 2, 0] = Util.Component.MotorWheel;
+		//GameSave.MemAccessories[0, 2, 2] = Util.Component.TurnWheel;
+		//GameSave.Inventory[Util.Component.MotorWheel] += 2;
+		//GameSave.Inventory[Util.Component.TurnWheel] += 2;
+		//GameSave.Inventory[Util.Component.WoodenCrate] = 9;
+		//GameSave.Inventory[Util.Component.Rocket] = 9;
+		//GameSave.Inventory[Util.Component.Umbrella] = 9;
 
-		// TransitionToStory(Util.StoryName.FallOffCliff);
-		GoToCheckpointAsync(Util.WaypointName.Whirl, true);
+		//// TransitionToStory(Util.StoryName.FallOffCliff);
+		//// GoToCheckpointAsync(Util.WaypointName.Whirl, true);
+		//GoToCheckpointAsync(Util.WaypointName.VolcRoom4, true);
 
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
 		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
@@ -217,6 +221,45 @@ public class GameState : MonoBehaviour
 				Retry.Inst.Show();
 				RebuildButton.Inst.StartScale();
 				break;
+			case WaypointName.VolcanoGate:
+				Checkpoint.Get(WaypointName.VolcRoom1_1).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_1;
+				break;
+			case WaypointName.VolcRoom1_1:
+				Checkpoint.Get(WaypointName.VolcRoom1_2).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_2;
+				break;
+			case WaypointName.VolcRoom1_2:
+				Checkpoint.Get(WaypointName.VolcRoom1_3).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_3;
+				break;
+			case WaypointName.VolcRoom1_3:
+				Checkpoint.Get(WaypointName.VolcRoom2_1).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom2_1;
+				break;
+			case WaypointName.VolcRoom2_1:
+				Checkpoint.Get(WaypointName.VolcRoom3).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom3;
+				break;
+			case WaypointName.VolcRoom3:
+				Checkpoint.Get(WaypointName.VolcRoom4).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom4;
+				break;
+			case WaypointName.VolcRoom4:
+				Checkpoint.Get(WaypointName.VolcTop).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcTop;
+				break;
+			case WaypointName.VolcTop:
+				Checkpoint.Get(WaypointName.VolcPlatform).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform;
+				break;
+			case WaypointName.VolcPlatform:
+				Checkpoint.Get(WaypointName.VolcPlatform2).Activate();
+				GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcPlatform2;
+				break;
+			case WaypointName.VolcPlatform2:
+				Util.unbreakable = true;
+				break;
 		}
 	}
 	private void Start()
@@ -226,7 +269,7 @@ public class GameState : MonoBehaviour
 		inst = this;
 		Util.Delay(this, () =>
 		{
-			Init();
+			Yikai();
 		});
 		EventBus.Subscribe<GoalReachedEvent>(OnGoalReached);
 		EventBus.Subscribe<TouchLavaEvent>(OnTouchLava);

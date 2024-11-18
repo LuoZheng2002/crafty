@@ -197,6 +197,10 @@ public partial class GridMatrix: MonoBehaviour
 			}
 		}
 		ConfirmButton.Inst.OnGridStateChanged();
+		Util.Delay(this, 5, () =>
+		{
+			EventBus.Publish(new NeighborChangedEvent());
+		});		
 	}
 	// Vector3 dragEulerAngle = Vector3.zero;
 	//void OnGridMatrixDrag(GridMatrixDragEvent e)
