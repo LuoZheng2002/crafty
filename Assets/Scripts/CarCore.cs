@@ -80,12 +80,25 @@ public class CarCore : MonoBehaviour
 		}
 		fix_joint = null;
 	}
+	bool container_activated = true;
 	public void ActivateContainer()
 	{
+		Debug.Assert(!container_activated);
+		container_activated = true;
 		container.gameObject.SetActive(true);
+		BindToPig();
+	}
+	void BindToPig()
+	{
 		Debug.Assert(joint == null);
 		joint = transform.AddComponent<FixedJoint>();
 		joint.connectedBody = PiggyPreview.Inst.RB;
+	}
+	void UnbindPig()
+	{
+		Debug.Assert(joint != null);
+		Destroy(joint);
+		joint = null;
 	}
 	public void Move()
 	{
@@ -93,21 +106,19 @@ public class CarCore : MonoBehaviour
 	}
 	public void DestroyComponents()
 	{
+		UnbindPig();
 		foreach (Transform child in container)
 		{
 			Debug.Assert(child.GetComponent<VehicleComponent>() != null);
 			Destroy(child.gameObject);
 		}
 	}
-	public void Build()
+	public IEnumerator Build()
 	{
-		foreach (Transform child in container)
-		{
-			Debug.Assert(child.GetComponent<VehicleComponent>() != null);
-			Destroy(child.gameObject);
-		}
-		AlignToGridMatrix();
-		ActivateContainer();
+		Debug.Assert(container.childCount == 0);
+		yield return AlignToGridMatrix();
+		BindToPig();
+		Debug.Assert(container_activated);
 	}
 	bool HasComponent()
 	{
@@ -122,15 +133,36 @@ public class CarCore : MonoBehaviour
 	}
 	public void DeactivateContainer()
 	{
+		Debug.Assert(container_activated);
+		container_activated = false;
 		container.gameObject.SetActive(false);
-		Debug.Assert(joint != null);
-		Destroy(joint);
-		joint = null;
+		UnbindPig();
 	}
-	public void AlignToGridMatrix()
+
+	public void AlignToGridMatrixAsync()
 	{
 		rb.MovePosition(GridMatrix.Inst.transform.position + GridMatrix.Inst.transform.rotation* GridMatrix.Inst.ProbeTargetPos);
 		rb.MoveRotation(GridMatrix.Inst.transform.rotation);
+	}
+
+	public IEnumerator AlignToGridMatrix()
+	{
+		Vector3 target_pos = GridMatrix.Inst.transform.position + GridMatrix.Inst.transform.rotation * GridMatrix.Inst.ProbeTargetPos;
+		Quaternion target_rotation = GridMatrix.Inst.transform.rotation;
+		Debug.Log($"Target pos: {target_pos}");
+		Debug.Log($"Target rotation: {target_rotation}");
+		rb.MovePosition(target_pos);
+		rb.MoveRotation(target_rotation);
+		while((transform.position - target_pos).magnitude > 0.01f || Quaternion.Angle(transform.rotation, target_rotation)>1.0f)
+		{
+			Debug.Log("Yield return!");
+			rb.MovePosition(target_pos);
+			rb.MoveRotation(target_rotation);
+			yield return null;
+		}
+		Debug.Log("Test completed!");
+		Debug.Log($"rb position: {rb.position}, rb rotation: {rb.rotation}");
+		Debug.Log($"position: {transform.position}, rotation: {transform.rotation}");
 	}
 	public float drag_rotation_speed = 1.0f;
 	Vector3 drag_euler_angle = new Vector3(0, 0, 0);

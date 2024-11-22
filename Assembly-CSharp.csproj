@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\UIScripts\BuildCanvas.cs" />
     <Compile Include="Assets\Scripts\Probe.cs" />
     <Compile Include="Assets\Scripts\Lava.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\StoryCanvas.cs" />
     <Compile Include="Assets\Scripts\Waypoint.cs" />
     <Compile Include="Assets\Scripts\TestWheel.cs" />
     <Compile Include="Assets\Scripts\UIScripts\ConfirmButton.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Assets\Scripts\UIScripts\MapImage.cs" />
     <Compile Include="Assets\Scripts\UIScripts\LevelCanvas.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Retry.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\ChapterCanvas.cs" />
     <Compile Include="Assets\Scripts\StoryAnimation.cs" />
     <Compile Include="Assets\Scripts\UIScripts\StarDisplayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\Choice.cs" />

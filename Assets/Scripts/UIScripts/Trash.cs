@@ -43,7 +43,7 @@ public class Trash : MonoBehaviour
     {
 		Debug.Log("Trashcan clicked");
 		GridMatrix.Inst.Dump();
-		EventBus.Publish(new ResetCountEvent());
+		
 		GameState.shown_trashcan = true;
 		buttonScale.ScaleStop();
     }

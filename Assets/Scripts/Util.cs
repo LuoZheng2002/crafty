@@ -178,6 +178,14 @@ public static class Util
 	};
 	// crate, accessory, load
 
+	public enum QuestName
+	{
+		None,
+		Volcano,
+		Quest1,
+		Quest2,
+	}
+
 	public enum StoryName
 	{
 		None,

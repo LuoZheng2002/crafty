@@ -61,11 +61,25 @@ public class PlayCanvas : MonoBehaviour
     }
 	private void Update()
 	{
-		if (Input.GetKey(KeyCode.Q))
+		if (Input.GetMouseButton(1))
         {
 			RocketFuel -= rocket_consumption_speed * Time.deltaTime;
 			SetRocketFill(RocketFuel);
 
 		}
+	}
+
+	public void OnStoryClicked()
+	{
+
+	}
+    public GameObject story;
+    public void ShowStory()
+    {
+        story.SetActive(true);
+    }
+	public void HideStory()
+	{
+		story.SetActive(false);
 	}
 }

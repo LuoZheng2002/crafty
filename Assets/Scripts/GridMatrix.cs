@@ -17,43 +17,32 @@ public class GridMatrixSizeChangedEvent { }
 
 public partial class GridMatrix: MonoBehaviour
 {
+	int design_number = 0;
+	public int DesignNumber
+	{
+		get { return design_number; }
+		set
+		{
+			design_number = value;
+			StartCoroutine(OnDesignNumberChanged());
+		}
+	}
+
+	public IEnumerator OnDesignNumberChanged()
+	{
+		Dump();
+		yield return null;
+		yield return null;
+		yield return null;
+		yield return null;
+		RebuildVehicle();
+	}
+
 	public GameObject gridPrefab;
 	public int activeLayerIndex = 0;
 	public float drag_rotation_speed = 0.05f;
 	public bool Active { get; private set; } = false;
 	public Probe Probe { get; private set; }
-
-	//Transform cameraPivot;
-	//Transform dummyCamera;
-	//public Transform DummyCamera
-	//{
-	//	get { Debug.Assert(dummyCamera != null); return dummyCamera; }
-	//}
-
-	//Subscription<GridMatrixDragEvent> dragEvent;
-	//public static GridMatrix Get(Util.WaypointName waypoint_name)
-	//{
-	//	Debug.Assert(grid_matrices.ContainsKey(waypoint_name));
-	//	return grid_matrices[waypoint_name];
-	//}
-	//bool Active
-	//{
-	//	get { return active; }
-	//	set {
-	//		if (active != value)
-	//		{
-	//			active = value;
-	//			if (active)
-	//			{
-	//				Activate();
-	//			}
-	//			else
-	//			{
-	//				Deactivate();
-	//			}
-	//		}
-	//	}
-	//}
 	GridCell[,,] grids;
 	public CrateComponent[,,] crates;
 	public AccessoryComponent[,,] accessories;
@@ -67,49 +56,11 @@ public partial class GridMatrix: MonoBehaviour
 	GridCell LastSelectedGrid { get; set; } = null;
 	RaycastHit[] hits = new RaycastHit[20];
 	public GridCell SelectedGrid{get; set;}
-	// static Dictionary<Util.WaypointName, GridMatrix> grid_matrices = new();
-	// public bool DisableDesign { get; set; } = false;
-	//public static GridMatrix Current
-	//{
-	//	get {
-	//		Debug.Assert(current != null, "Current Grid Matrix not set");
-	//		return current;
-	//	}
-	//}
-	//static GridMatrix current;
-
 	static GridMatrix inst;
 	public static GridMatrix Inst
 	{
 		get { Debug.Assert(inst != null); return inst; }
 	}
-	/// <summary>
-	/// Activate the GridMatrix corresponding to the level num, deactivate other GridMatrices, and update GridMatrix.Current
-	/// </summary>
-	//public static void SelectGridMatrix(Util.WaypointName waypoint_name, bool disable_design)
-	//{
-	//	Debug.Assert(grid_matrices.ContainsKey(waypoint_name));
-	//	if (current != null)
-	//	{
-	//		current.Active = false;
-	//	}
-	//	current = grid_matrices[waypoint_name];
-	//	Debug.Assert(current != null);
-	//	current.DisableDesign = disable_design;
-	//	current.Active = true;
-	//}
-	/// <summary>
-	/// Deactivate GridMatrix.Current and set it to null
-	/// </summary>
-	//public static void DeselectGridMatrix()
-	//{
-	//	if (current != null)
-	//	{
-	//		current.Active = false;
-	//		current = null;
-	//	}
-	//}
-
 	public void MoveToCheckpoint(Util.WaypointName waypoint_name)
 	{
 		Checkpoint checkpoint = Checkpoint.Get(waypoint_name);
@@ -118,12 +69,6 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	private void Start()
 	{
-		// Debug.Assert(!grid_matrices.ContainsKey(waypoint_name));
-		// grid_matrices.Add(waypoint_name, this);
-		// cameraPivot = transform.Find("CameraPivot");
-		// dummyCamera = cameraPivot.Find("DummyCamera");
-		// Debug.Assert(cameraPivot != null);
-		// Debug.Assert(dummyCamera != null);
 		
 		Util.Delay(this, () =>
 		{
@@ -137,7 +82,6 @@ public partial class GridMatrix: MonoBehaviour
 			inst = this;
 			
 			EventBus.Subscribe<GridMatrixSizeChangedEvent>(OnGridMatrixSizeChanged);
-			InitMemory();
 			InitComponentArray();
 			InitPhantom();
 			ProbeResize();
@@ -155,7 +99,6 @@ public partial class GridMatrix: MonoBehaviour
 	
 	public void OnGridMatrixSizeChanged(GridMatrixSizeChangedEvent e)
 	{
-		GameSave.ExpandMemory();
 		DestroyGrids();
 		SpawnGrids();
 		InitComponentArray();
@@ -167,7 +110,11 @@ public partial class GridMatrix: MonoBehaviour
 	
 	void RebuildVehicle()
 	{
-		Debug.Assert(GameSave.MemAccessories != null);
+		Debug.Assert(GameSave.CurrentMemory.MemAccessories != null);
+		var mem_accessories = GameSave.CurrentMemory.MemAccessories;
+		var mem_crates = GameSave.CurrentMemory.MemCrates;
+		var mem_loads = GameSave.CurrentMemory.MemLoads;
+		var accessory_directions = GameSave.CurrentMemory.AccessoryDirections;
 		(int h, int w, int l) = GameSave.GridSize;
 		for (int i = 0; i < h; i++)
 		{
@@ -175,17 +122,17 @@ public partial class GridMatrix: MonoBehaviour
 			{
 				for (int k = 0; k < l; k++)
 				{
-					if (GameSave.MemAccessories[i, j, k] != Util.Component.None)
+					if (mem_accessories[i, j, k] != Util.Component.None)
 					{
-						Util.Component component = GameSave.MemAccessories[i, j, k];
-						var inst = DragImage.DragImages[component].InstantiateComponent(grids[i, j, k].transform.localPosition, true, GameSave.AccessoryDirections[i, j, k]) as AccessoryComponent;
+						Util.Component component = mem_accessories[i, j, k];
+						var inst = DragImage.DragImages[component].InstantiateComponent(grids[i, j, k].transform.localPosition, true, accessory_directions[i, j, k]) as AccessoryComponent;
 						AddComponent(grids[i, j, k], Util.ComponentType.Accessory, inst);
 						DragImage.DragImages[component].Count--;
 					}
-					if (GameSave.MemLoads[i, j, k] != Util.Component.None)
+					if (mem_loads[i, j, k] != Util.Component.None)
 					{
-						Debug.Assert(GameSave.MemLoads != null);
-						Util.Component content = GameSave.MemLoads[i, j, k];
+						Debug.Assert(mem_loads != null);
+						Util.Component content = mem_loads[i, j, k];
 						// Debug.Log(content);
 						var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as LoadComponent;
 						Debug.Assert(loads != null);
@@ -193,9 +140,9 @@ public partial class GridMatrix: MonoBehaviour
 						AddComponent(grids[i, j, k], Util.ComponentType.Load, inst);
 						DragImage.DragImages[content].Count--;
 					}
-					if (GameSave.MemCrates[i, j, k] != Util.Component.None)
+					if (mem_crates[i, j, k] != Util.Component.None)
 					{
-						Util.Component content = GameSave.MemCrates[i, j, k];
+						Util.Component content = mem_crates[i, j, k];
 						var inst = DragImage.DragImages[content].InstantiateComponent(grids[i, j, k].transform.localPosition, true, 0) as CrateComponent;
 						Debug.Assert(inst != null);
 						AddComponent(grids[i, j, k], Util.ComponentType.Crate, inst);
@@ -210,29 +157,8 @@ public partial class GridMatrix: MonoBehaviour
 			EventBus.Publish(new NeighborChangedEvent());
 		});		
 	}
-	// Vector3 dragEulerAngle = Vector3.zero;
-	//void OnGridMatrixDrag(GridMatrixDragEvent e)
-	//{
-	//	float rotationX = -e.deltaY * drag_rotation_speed;  // Vertical rotation
-	//	float rotationY = e.deltaX * drag_rotation_speed;  // Horizontal rotation											   // Rotate the camera accordingly
-	//	dragEulerAngle += new Vector3(rotationX, rotationY, 0);
-	//	cameraPivot.rotation = Quaternion.Euler(dragEulerAngle);
-	//}
-
-
-	// collider 
-	// core disable
-	// activate: space enable, enable build canvas, update selected grid
-	public IEnumerator Activate(bool show_back)
+	public IEnumerator Activate()
 	{
-		if (show_back)
-		{
-			BackButton.Inst.Show();
-		}
-		else
-		{
-			BackButton.Inst.Hide();
-		}
 		Active = true;
 		ResetActiveLayer();
 		for (int i = 0; i < 5; i++)
@@ -242,9 +168,9 @@ public partial class GridMatrix: MonoBehaviour
 		RebuildVehicle();
 		yield return null;
 	}
-	public void ActivateAsync(bool show_back)
+	public void ActivateAsync()
 	{
-		StartCoroutine(Activate(show_back));
+		StartCoroutine(Activate());
 	}
 	//public void ShowDesign()
 	//{
@@ -355,18 +281,6 @@ public partial class GridMatrix: MonoBehaviour
 		}
 		transform.position = new Vector3(0, -1000, 0);
 	}
-	public ref Util.Component GetMemCrate(Vec3 pos)
-	{
-		return ref GameSave.MemCrates[pos.h, pos.w, pos.l];
-	}
-	public ref Util.Component GetMemAccessory(Vec3 pos)
-	{
-		return ref GameSave.MemAccessories[pos.h, pos.w, pos.l];
-	}
-	public ref Util.Component GetMemLoad(Vec3 pos)
-	{
-		return ref GameSave.MemLoads[pos.h, pos.w, pos.l];
-	}
 	void BuildAndStickCrates(Vec3 pos)
 	{
 		CrateComponent crate = GetCrate(pos);
@@ -427,7 +341,7 @@ public partial class GridMatrix: MonoBehaviour
 		}
 	}
 	bool q = false;
-	public void BuildAndDeactivate()
+	public IEnumerator BuildAndDeactivate()
 	{
 		PlayCanvas.Inst.HideUmbrella();
 		PlayCanvas.Inst.HideRocket();
@@ -437,7 +351,7 @@ public partial class GridMatrix: MonoBehaviour
 		ad = false;
 		q = false;
 
-		Memorize();
+		GameSave.CurrentMemory.Memorize();
 		(int h, int w, int l) = GameSave.GridSize;
 		for (int i = 0; i < h; i++)
 		{
@@ -469,7 +383,7 @@ public partial class GridMatrix: MonoBehaviour
 				}
 			}
 		}
-		AttachToCarCore();
+		yield return AttachToCarCore();
 		ClearComponents(false);
 		// Active = false;
 		PlayButtonsDisplayer.Inst.UpdateWASD(ws, ad, q);
@@ -503,6 +417,7 @@ public partial class GridMatrix: MonoBehaviour
 				}
 			}
 		}
+		EventBus.Publish(new ResetCountEvent());
 		ConfirmButton.Inst.OnGridStateChanged();
 	}
 	
@@ -746,6 +661,7 @@ public partial class GridMatrix: MonoBehaviour
 	}
 	IEnumerator ScanHelper()
 	{
+		Retry.Inst.CanRetry = false;
 		CarCore.Inst.Fix();
 		ShowProbe();
 		Vector3 start_position = CarCore.Inst.transform.position + new Vector3(0, start_scan_height, 0);
@@ -757,7 +673,14 @@ public partial class GridMatrix: MonoBehaviour
 		// Debug.Log($"angle: {angle}");
 		if (angle > 20)
 		{
-			transform.rotation = Quaternion.Euler(0, y_rotation, 0);
+			if (angle > 90)
+			{
+				transform.rotation = Quaternion.Euler(0, y_rotation + 180, 0);
+			}
+			else
+			{
+				transform.rotation = Quaternion.Euler(0, y_rotation, 0);
+			}
 		}
 		else
 		{
@@ -792,6 +715,7 @@ public partial class GridMatrix: MonoBehaviour
 				Debug.Log($"Success!");
 				EventBus.Publish(new ScanSuccessEvent());
 				HideProbe();
+				Retry.Inst.CanRetry = true;
 				yield break;
 			}
 			yield return null;
@@ -801,7 +725,7 @@ public partial class GridMatrix: MonoBehaviour
 		EventBus.Publish(new ScanFailEvent());
 		MoveProbeToGrid();
 		HideProbe();
-		CarCore.Inst.Unfix();
+		Retry.Inst.CanRetry = true;
 	}
 }
 

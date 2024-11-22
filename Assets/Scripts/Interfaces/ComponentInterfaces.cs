@@ -158,6 +158,8 @@ public abstract class AccessoryComponent : VehicleComponent
     // rotation, 
     protected CrateComponent GetCrateOnDirection(Vec3 dir)
     {
+        Debug.Assert(Pos != null);
+        Debug.Assert(dir != null);
         Vec3 new_pos = Pos + dir;
         if (!GridMatrix.InGrid(Pos + dir))
         {

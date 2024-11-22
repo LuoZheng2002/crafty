@@ -60,6 +60,7 @@ public class ToastManager : MonoBehaviour
 		// Init positions
 		hidden_pos = new Vector3(0, 120, 0);
 		visible_pos = new Vector3(0, -120, 0);
+		instance.toast_panel.gameObject.SetActive(false);
 	}
 
 	// "public static" makes this function accessible from anywhere.
@@ -89,34 +90,12 @@ public class ToastManager : MonoBehaviour
 
 	static IEnumerator DoToast(float duration_ease_sec, float duration_show_sec)
 	{
-		// Ease In the UI panel
-		float initial_time = Time.time;
-		float progress = (Time.time - initial_time) / duration_ease_sec;
-
-		while (progress < 1.0f)
+		instance.toast_panel.gameObject.SetActive(true);
+		while (!Input.GetMouseButtonDown(0))
 		{
-			progress = (Time.time - initial_time) / duration_ease_sec;
-			float eased_progress = instance.ease.Evaluate(progress);
-			instance.toast_panel.anchoredPosition = Vector3.LerpUnclamped(instance.hidden_pos, instance.visible_pos, eased_progress);
-
 			yield return null;
 		}
-
-		// Show the UI Panel for "duration_show_sec" seconds.
-		yield return new WaitForSeconds(duration_show_sec);
-
-		// Ease Out the UI panel
-		initial_time = Time.time;
-		progress = 0.0f;
-		while (progress < 1.0f)
-		{
-			progress = (Time.time - initial_time) / duration_ease_sec;
-			float eased_progress = instance.ease_out.Evaluate(progress);
-			instance.toast_panel.anchoredPosition = Vector3.LerpUnclamped(instance.hidden_pos, instance.visible_pos, 1.0f - eased_progress);
-
-			yield return null;
-		}
-
+		instance.toast_panel.gameObject.SetActive(false);
 		// When we're done toasting, we tell the "Update" function that we're ready for more requests.
 		instance.toasting = false;
 	}

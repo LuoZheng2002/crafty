@@ -19,24 +19,20 @@ public class Umbrella : AccessoryComponent
         RB.useGravity = true;
         c.enabled = true;
         built = true;
+        Open = false;
     }
 
     public override (bool wa, bool sd) GetWASD()
     {
         return (false, false);
     }
-
-
-    // Update is called once per frame
-    void Update()
+    public bool Open
     {
-        if (built)
+        get { return open; }
+        set
         {
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				open = !open;
-			}
-				if (open)
+            open = value;
+            if (open)
             {
                 RB.mass = 20;
                 RB.drag = damp;
@@ -46,11 +42,22 @@ public class Umbrella : AccessoryComponent
             else
             {
                 RB.mass = 2;
-				RB.drag = 0;
+                RB.drag = 0;
                 open_visual.SetActive(false);
                 close_visual.SetActive(true);
-			}
-            
+            }
+        }
+    }
+
+	// Update is called once per frame
+	void Update()
+    {
+        if (built)
+        {
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+                Open = !Open;
+			}            
         }
     }
     private void Start()

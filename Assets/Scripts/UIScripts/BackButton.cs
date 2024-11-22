@@ -17,6 +17,7 @@ public class BackButton : MonoBehaviour
 	{
 		Debug.Assert(inst == null);
 		inst = this;
+		Debug.LogError("Deprecated");
 	}
 	private void OnDestroy()
 	{

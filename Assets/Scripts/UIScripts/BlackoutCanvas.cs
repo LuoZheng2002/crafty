@@ -22,6 +22,7 @@ public class BlackoutCanvas : MonoBehaviour
         inst = this;
         SetImageAlpha(0.0f);
         SetTextAlpha(0.0f);
+        gameObject.SetActive(false);
 	}
     void SetImageAlpha(float alpha)
     {

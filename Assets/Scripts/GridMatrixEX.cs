@@ -138,51 +138,7 @@ public partial class GridMatrix: MonoBehaviour
 			// ConfirmButton.Inst.OnGridStateChanged();
 		}
 	}
-	public void InitMemory()
-	{
-		(int h, int w, int l) = GameSave.GridSize;
-		Debug.Assert(GameSave.MemCrates == null);
-		//if (GameSave.MemCrates != null)
-		//{
-		//	Debug.Assert(GameSave.MemAccessories != null);
-		//	Debug.Assert(GameSave.MemLoads != null);
-		//	Debug.Assert(GameSave.AccessoryDirections != null);
-		//	int old_h = GameSave.MemCrates.GetLength(0);
-		//	int old_w = GameSave.MemCrates.GetLength(1);
-		//	int old_l = GameSave.MemCrates.GetLength(2);
-		//	Debug.Assert(old_h <= h);
-		//	Debug.Assert(old_w <= w);
-		//	Debug.Assert(old_l <= l);
-		//	var temp_accessories = GameSave.MemAccessories.Clone() as Util.Component[,,];
-		//	var temp_loads = GameSave.MemLoads.Clone() as Util.Component[,,];
-		//	var temp_crates = GameSave.MemCrates.Clone() as Util.Component[,,];
-		//	var temp_directions = GameSave.AccessoryDirections.Clone() as int[,,];
-		//	GameSave.MemAccessories = new Util.Component[h, w, l];
-		//	GameSave.MemLoads = new Util.Component[h, w, l];
-		//	GameSave.MemCrates = new Util.Component[h, w, l];
-		//	GameSave.AccessoryDirections = new int[h, w, l];
-		//	for (int i = 0; i < old_h; i++)
-		//	{
-		//		for (int j = 0; j < old_w; j++)
-		//		{
-		//			for (int k = 0; k < old_l; k++)
-		//			{
-		//				GameSave.MemAccessories[i, j, k] = temp_accessories[i, j, k];
-		//				GameSave.MemLoads[i, j, k] = temp_loads[i, j, k];
-		//				GameSave.MemCrates[i, j, k] = temp_crates[i, j, k];
-		//				GameSave.AccessoryDirections[i, j, k] = temp_directions[i, j, k];
-		//			}
-		//		}
-		//	}
-		//}
-		//else
-		//{
-		GameSave.MemCrates = new Util.Component[h, w, l];
-		GameSave.MemAccessories = new Util.Component[h, w, l];
-		GameSave.MemLoads = new Util.Component[h, w, l];
-		GameSave.AccessoryDirections = new int[h, w, l];
-		// }
-	}
+	
 	void InitPhantom()
 	{
 		if (phantom_crates != null)
@@ -235,12 +191,12 @@ public partial class GridMatrix: MonoBehaviour
 			SetLayerActive(i, false);
 		}
 	}
-	void Memorize()
+	public void Memorize(GameSave.GridMemory grid_memory)
 	{
 		(int h, int w, int l) = (crates.GetLength(0), crates.GetLength(1), crates.GetLength(2));
-		Debug.Assert(GameSave.MemCrates.GetLength(0) >= h);
-		Debug.Assert(GameSave.MemCrates.GetLength(1) >= w);
-		Debug.Assert(GameSave.MemCrates.GetLength(2) >= l);
+		Debug.Assert(grid_memory.MemCrates.GetLength(0) >= h);
+		Debug.Assert(grid_memory.MemCrates.GetLength(1) >= w);
+		Debug.Assert(grid_memory.MemCrates.GetLength(2) >= l);
 		for (int i = 0;i < h;i++)
 		{
 			for(int j = 0;j <  w;j++)
@@ -249,28 +205,28 @@ public partial class GridMatrix: MonoBehaviour
 				{
 					if (crates[i, j, k] != null)
 					{
-						GameSave.MemCrates[i, j, k] = crates[i, j, k].Component;
+						grid_memory.MemCrates[i, j, k] = crates[i, j, k].Component;
 					}
 					else
 					{
-						GameSave.MemCrates[i, j, k] = Util.Component.None;
+						grid_memory.MemCrates[i, j, k] = Util.Component.None;
 					}
 					if (accessories[i, j, k] != null)
 					{
-						GameSave.MemAccessories[i, j, k] = accessories[i, j, k].Component;
-						GameSave.AccessoryDirections[i, j, k] = accessories[i, j, k].Direction;
+						grid_memory.MemAccessories[i, j, k] = accessories[i, j, k].Component;
+						grid_memory.AccessoryDirections[i, j, k] = accessories[i, j, k].Direction;
 					}
 					else
 					{
-						GameSave.MemAccessories[i, j, k] = Util.Component.None;
+						grid_memory.MemAccessories[i, j, k] = Util.Component.None;
 					}
 					if (loads[i, j, k] != null)
 					{
-						GameSave.MemLoads[i, j, k] = loads[i, j, k].Component;
+						grid_memory.MemLoads[i, j, k] = loads[i, j, k].Component;
 					}
 					else
 					{
-						GameSave.MemLoads[i, j, k] = Util.Component.None;
+						grid_memory.MemLoads[i, j, k] = Util.Component.None;
 					}
 				}
 			}
@@ -305,9 +261,9 @@ public partial class GridMatrix: MonoBehaviour
 			SetLayerActive(activeLayerIndex, true);
 		}
 	}
-	void AttachToCarCore()
+	IEnumerator AttachToCarCore()
 	{
-		CarCore.Inst.Build();
+		yield return CarCore.Inst.Build();
 		for (int i = 0; i < crates.GetLength(0); i++)
 		{
 			for (int j = 0; j < crates.GetLength(1); j++)

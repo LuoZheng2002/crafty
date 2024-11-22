@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildCanvas : MonoBehaviour
 {
@@ -93,5 +94,60 @@ public class BuildCanvas : MonoBehaviour
         }
         items_offset = 0;
         UpdateImages();
+    }
+    public Sprite one_selected;
+	public Sprite two_selected;
+	public Sprite three_selected;
+    public Sprite one_idle;
+    public Sprite two_idle;
+	public Sprite three_idle;
+    public Image one_image;
+    public Image two_image;
+	public Image three_image;
+	public void OnOneClicked()
+    {
+        one_image.sprite = one_selected;
+		two_image.sprite = two_idle;
+        three_image.sprite = three_idle;
+        OnNumberClicked(0);
+	}
+    public void OnTwoClicked()
+    {
+        one_image.sprite = one_idle;
+		two_image.sprite = two_selected;
+		three_image.sprite = three_idle;
+		OnNumberClicked(1);
+	}
+    public void OnThreeClicked()
+    {
+        one_image.sprite = one_idle;
+		two_image.sprite = two_idle;
+		three_image.sprite = three_selected;
+		OnNumberClicked(2);
+	}
+    void OnNumberClicked(int number)
+    {
+        EventBus.Publish(new OtherItemSelectedEvent());
+        Util.Delay(this, () =>
+        {
+            GameSave.CurrentMemory.Memorize();
+            if (GameSave.GridMemories[number].Empty())
+            {
+                GameSave.GridMemories[number].MemCrates = (Util.Component[,,])GameSave.CurrentMemory.MemCrates.Clone();
+				GameSave.GridMemories[number].MemAccessories = (Util.Component[,,])GameSave.CurrentMemory.MemAccessories.Clone();
+				GameSave.GridMemories[number].MemLoads = (Util.Component[,,])GameSave.CurrentMemory.MemLoads.Clone();
+                GameSave.GridMemories[number].AccessoryDirections = (int[,,])GameSave.CurrentMemory.AccessoryDirections.Clone();
+			}
+            GridMatrix.Inst.DesignNumber = number;
+        });        
+    }
+    public GameObject design_numbers;
+    public void ShowDesignNumbers()
+    {
+        design_numbers.SetActive(true);
+	}
+    public void HideDesignNumbers()
+    {
+        design_numbers.SetActive(false);
     }
 }

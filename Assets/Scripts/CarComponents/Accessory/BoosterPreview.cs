@@ -41,12 +41,12 @@ public abstract class BoosterPreview : AccessoryComponent
     {
         if (built)
         { 
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetMouseButton(1))
             {
                 if (PlayCanvas.Inst.RocketFuel >0.0f)
                 {
 					RB.AddForce(transform.up * thrust);
-					if (Input.GetKeyDown(KeyCode.Q))
+					if (Input.GetMouseButtonDown(1))
 					{
 						particle_system1.Play();
 						particle_system2.Play();
@@ -61,7 +61,7 @@ public abstract class BoosterPreview : AccessoryComponent
 				particle_system2.Stop();
 				particle_system3.Stop();
 			}
-            if (Input.GetKeyUp(KeyCode.Q))
+            if (Input.GetMouseButtonUp(1))
 			{
 				particle_system1.Stop();
 				particle_system2.Stop();

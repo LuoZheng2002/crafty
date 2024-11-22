@@ -78,11 +78,11 @@ public class PlayButtonsDisplayer : MonoBehaviour
                 AudioPlayer.Inst.MotorStart();
             }
         }
-        if (q && Input.GetKeyDown(KeyCode.Q))
+        if (q && Input.GetMouseButtonDown(1))
         {
             AudioPlayer.Inst.RocketStart();
         }
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetMouseButtonUp(1))
         {
             AudioPlayer.Inst.StopSoundEffect();
         }
