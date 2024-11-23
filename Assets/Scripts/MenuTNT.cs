@@ -36,6 +36,7 @@ public class MenuTNT : MonoBehaviour
 		StartCoroutine(GrowSphere());
 		EventBus.Publish(new MenuExplodeEvent());
 		particle_system.Play();
+		AudioPlayer.Inst.Explode();
 	}
 	IEnumerator Countdown()
 	{

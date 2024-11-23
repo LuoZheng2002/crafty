@@ -11,7 +11,7 @@ public class TouchSphere : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("Trigger enter!");
+		// Debug.Log("Trigger enter!");
 		Vector3 dir = (transform.position - other.transform.position).normalized;
 		float dist = (transform.position - other.transform.position).magnitude;
 		float power = 50.0f / (1.0f + dist);

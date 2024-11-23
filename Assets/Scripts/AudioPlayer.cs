@@ -13,6 +13,8 @@ public class AudioPlayer : MonoBehaviour
     public AudioClip wilhelm;
     public AudioClip motor;
     public AudioClip rocket;
+    public AudioClip explosion;
+    public AudioClip warning;
     AudioSource musicSource;
     AudioSource soundEffectSource;
     public float min_snore_interval = 10.0f;
@@ -26,6 +28,7 @@ public class AudioPlayer : MonoBehaviour
     }
     public bool is_transition3 = false;
     public bool is_transition1 = false;
+    public bool is_transition2 = false;
     void Start()
     {
         Debug.Assert(inst == null, "Audio Player already instantiated");
@@ -45,6 +48,10 @@ public class AudioPlayer : MonoBehaviour
         {
             StartCoroutine(DelayRocket());
         }
+        if (is_transition2)
+        {
+            StartCoroutine(DelayWarning());
+		}
     }
     IEnumerator DelayScream()
     {
@@ -55,6 +62,11 @@ public class AudioPlayer : MonoBehaviour
 	{
 		yield return new WaitForSeconds(0.4f);
         RocketStart();
+	}
+	IEnumerator DelayWarning()
+	{
+		yield return new WaitForSeconds(0.4f);
+		Warning();
 	}
 	private void OnDestroy()
 	{
@@ -80,7 +92,28 @@ public class AudioPlayer : MonoBehaviour
 		soundEffectSource.loop = false;
 		soundEffectSource.Play();
 	}
-    public void MotorStart()
+	public void Explode()
+	{
+		if (soundEffectSource.isPlaying)
+		{
+			soundEffectSource.Stop();
+		}
+        soundEffectSource.volume = 1.0f;
+		soundEffectSource.clip = explosion;
+		soundEffectSource.loop = false;
+		soundEffectSource.Play();
+	}
+	public void Warning()
+	{
+		if (soundEffectSource.isPlaying)
+		{
+			soundEffectSource.Stop();
+		}
+		soundEffectSource.clip = warning;
+		soundEffectSource.loop = false;
+		soundEffectSource.Play();
+	}
+	public void MotorStart()
     {
 		if (soundEffectSource.isPlaying)
 		{

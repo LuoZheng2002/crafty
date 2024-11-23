@@ -93,32 +93,32 @@ public class GameState : MonoBehaviour
 	void Yikai()
 	{
 		Util.unbreakable = true;
-		TransitionToStory(Util.StoryName.Crash);
+		// TransitionToStory(Util.StoryName.Crash);
 		// TransitionToFirstBuild();
-		//Util.unbreakable = false;
-		//GameSave.IncrementGridSize(1, 1, 0);
-		//GameSave.CurrentMemory. MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
-		//GameSave.CurrentMemory.MemAccessories[1, 0, 1] = Util.Component.Rocket;
-		//GameSave.CurrentMemory.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
-		//GameSave.CurrentMemory.MemAccessories[1, 1, 0] = Util.Component.Rocket;
-		//GameSave.CurrentMemory.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
-		//GameSave.CurrentMemory.MemAccessories[1, 1, 2] = Util.Component.Rocket;
-		//GameSave.CurrentMemory.MemCrates[1, 2, 0] = Util.Component.WoodenCrate;
-		//GameSave.CurrentMemory.MemAccessories[1, 2, 1] = Util.Component.Rocket;
-		//GameSave.CurrentMemory.MemCrates[1, 2, 2] = Util.Component.WoodenCrate;
-		//GameSave.CurrentMemory.MemLoads[1, 2, 2] = Util.Component.Pig;
-		//GameSave.CurrentMemory.MemLoads[1, 0, 2] = Util.Component.Partner;
-		//GameSave.CurrentMemory.MemAccessories[0, 0, 0] = Util.Component.MotorWheel;
-		//GameSave.CurrentMemory.MemAccessories[0, 0, 2] = Util.Component.TurnWheel;
-		//GameSave.CurrentMemory.MemAccessories[0, 2, 0] = Util.Component.MotorWheel;
-		//GameSave.CurrentMemory.MemAccessories[0, 2, 2] = Util.Component.TurnWheel;
-		//GameSave.Inventory[Util.Component.MotorWheel] += 2;
-		//GameSave.Inventory[Util.Component.TurnWheel] += 2;
-		//GameSave.Inventory[Util.Component.WoodenCrate] = 9;
-		//GameSave.Inventory[Util.Component.Rocket] = 9;
-		//GameSave.Inventory[Util.Component.Umbrella] = 9;
+		Util.unbreakable = false;
+		GameSave.IncrementGridSize(1, 1, 0);
+		GameSave.CurrentMemory.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
+		GameSave.CurrentMemory.MemAccessories[1, 0, 1] = Util.Component.Rocket;
+		GameSave.CurrentMemory.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
+		GameSave.CurrentMemory.MemAccessories[1, 1, 0] = Util.Component.Rocket;
+		GameSave.CurrentMemory.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
+		GameSave.CurrentMemory.MemAccessories[1, 1, 2] = Util.Component.Rocket;
+		GameSave.CurrentMemory.MemCrates[1, 2, 0] = Util.Component.WoodenCrate;
+		GameSave.CurrentMemory.MemAccessories[1, 2, 1] = Util.Component.Rocket;
+		GameSave.CurrentMemory.MemCrates[1, 2, 2] = Util.Component.WoodenCrate;
+		GameSave.CurrentMemory.MemLoads[1, 2, 2] = Util.Component.Pig;
+		GameSave.CurrentMemory.MemLoads[1, 0, 2] = Util.Component.Partner;
+		GameSave.CurrentMemory.MemAccessories[0, 0, 0] = Util.Component.MotorWheel;
+		GameSave.CurrentMemory.MemAccessories[0, 0, 2] = Util.Component.TurnWheel;
+		GameSave.CurrentMemory.MemAccessories[0, 2, 0] = Util.Component.MotorWheel;
+		GameSave.CurrentMemory.MemAccessories[0, 2, 2] = Util.Component.TurnWheel;
+		GameSave.Inventory[Util.Component.MotorWheel] += 2;
+		GameSave.Inventory[Util.Component.TurnWheel] += 2;
+		GameSave.Inventory[Util.Component.WoodenCrate] = 9;
+		GameSave.Inventory[Util.Component.Rocket] = 9;
+		GameSave.Inventory[Util.Component.Umbrella] = 9;
 
-		//GoToCheckpointAsync(Util.WaypointName.TownEntrance, true);
+		GoToCheckpointAsync(Util.WaypointName.VolcanoGate, true);
 		//GoToCheckpointAsync(Util.WaypointName.VolcRoom4, true);
 
 		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);

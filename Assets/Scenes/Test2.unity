@@ -2593,7 +2593,28 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5209071920316008400, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 4105773433391201107, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 8504774471122167331, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 5065730923660211440, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 5009087514341800860, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 2415660291015396390, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 7979889402941546889, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 4184836039218651837, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 1176768686872232940, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 3805542072387384482, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 405658578150695930, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 3340988896657763656, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 8252516678938416842, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 9176120267918812570, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 560747187923593975, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 9160968426599083435, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 4348416682222912876, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 8026826208794062859, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 3641583938807629021, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 4099204933242036820, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
+    - {fileID: 2508094739542616718, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1628759317056674886, guid: 277fc5ee3dbc1c6429b356b87b3f7251, type: 3}
     m_AddedGameObjects:
@@ -3581,7 +3602,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Umbrella
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6046221418540348074, guid: 920941b6d4c9544cb8a066b1cef1e5dd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -4531,6 +4553,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2891746525080496957, guid: 5ec1175764da889408db49a0584c24fa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1265941879}
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5ec1175764da889408db49a0584c24fa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 411660589}
@@ -6083,9 +6108,13 @@ MonoBehaviour:
   wilhelm: {fileID: 8300000, guid: d73051cd90c260e4fa222bef6f4cc313, type: 3}
   motor: {fileID: 8300000, guid: 26fa791501174e2479a47dfc12f2d1b3, type: 3}
   rocket: {fileID: 8300000, guid: c1f662d0426c7a04eae652a8ce021c21, type: 3}
+  explosion: {fileID: 0}
+  warning: {fileID: 0}
   min_snore_interval: 10
   max_snore_interval: 30
   is_transition3: 0
+  is_transition1: 0
+  is_transition2: 0
 --- !u!82 &1066998760
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7354,6 +7383,33 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4493585093827132993, guid: 5ec1175764da889408db49a0584c24fa, type: 3}
+--- !u!1 &1265941875 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2891746525080496957, guid: 5ec1175764da889408db49a0584c24fa, type: 3}
+  m_PrefabInstance: {fileID: 751785318}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1265941879
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265941875}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8792586484180348971, guid: 5ec1175764da889408db49a0584c24fa, type: 3}
 --- !u!1001 &1289120247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10295,7 +10351,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Umbrella (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6046221418540348074, guid: 920941b6d4c9544cb8a066b1cef1e5dd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
