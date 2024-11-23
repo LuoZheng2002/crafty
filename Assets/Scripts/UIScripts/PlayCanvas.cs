@@ -40,7 +40,7 @@ public class PlayCanvas : MonoBehaviour
     public Image rocket_fuel_image;
     public void SetRocketFill(float amount)
     {
-        Debug.Log($"Rocket fill amount: {amount}");
+        // Debug.Log($"Rocket fill amount: {amount}");
 		rocket_fuel_image.fillAmount = amount;
 	}
     public void ShowUmbrella()
@@ -78,6 +78,11 @@ public class PlayCanvas : MonoBehaviour
     {
         story.SetActive(true);
     }
+    public Text story_text;
+    public void SetStoryText(string text)
+    {
+        story_text.text = text;
+	}
 	public void HideStory()
 	{
 		story.SetActive(false);

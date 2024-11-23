@@ -24,6 +24,11 @@ public class ButtonScale : MonoBehaviour
 			coroutine = Scale();
 			StartCoroutine(coroutine);
 		}
+		else
+		{
+			coroutine = Scale();
+			StartCoroutine(coroutine);
+		}
 	}
 	public void ScaleStop()
 	{

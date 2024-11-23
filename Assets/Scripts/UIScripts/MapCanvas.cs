@@ -7,6 +7,7 @@ public class MapCanvas : MonoBehaviour
     static MapCanvas inst;
 	public WaypointButton waypoint_prefab;
 	public Transform container;
+	public bool ScaleTownWaypoint { get; set; } = false;
 	public List<Util.WaypointName> PermWaypoints { get; } = new();
 	public static MapCanvas Inst
 	{
@@ -35,6 +36,10 @@ public class MapCanvas : MonoBehaviour
 			Debug.Assert(button != null);
 			button.WaypointName = checkpoint;
 			button.Checkpoint = Checkpoint.Get(checkpoint);
+			if (ScaleTownWaypoint&& checkpoint == Util.WaypointName.TownWaypoint)
+			{
+				button.StartScale();
+			}
 		}
 		if (GameSave.CurrentCheckpoint != Util.WaypointName.None)
 		{
@@ -44,7 +49,7 @@ public class MapCanvas : MonoBehaviour
 			button.WaypointName = GameSave.CurrentCheckpoint;
 			button.Checkpoint = Checkpoint.Get(GameSave.CurrentCheckpoint);
 		}
-		ShowBack();
+		ShowBack();		
 	}
 	public GameObject back;
 	public void Deactivate()
@@ -75,5 +80,6 @@ public class MapCanvas : MonoBehaviour
 		Deactivate();
 		BigMapCamera.Inst.Deactivate();
 		PlayCanvas.Inst.Show();
+		ScaleTownWaypoint = false;
 	}
 }

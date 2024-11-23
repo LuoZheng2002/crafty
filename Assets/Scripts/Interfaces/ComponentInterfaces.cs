@@ -51,7 +51,7 @@ public abstract class VehicleComponent : MonoBehaviour
     GridMatrix grid_matrix;
     public void DampStart()
     {
-        RB.drag = 100;
+        RB.drag = 2;
     }
     public void DampStop()
     {

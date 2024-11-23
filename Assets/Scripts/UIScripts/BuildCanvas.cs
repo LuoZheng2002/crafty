@@ -30,7 +30,12 @@ public class BuildCanvas : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
-    }
+        if (GameState.Inst.IntroducePreset)
+        {
+            GameState.Inst.IntroducePreset = false;
+			// TODO for Gabriel: introduce preset
+		}
+	}
     public void Hide()
     {
         gameObject.SetActive(false);
@@ -56,17 +61,26 @@ public class BuildCanvas : MonoBehaviour
         }
         rightButton.SetParent(itemBar);
 	}
+    bool CanClickRight()
+    {
+        return nonzero_images.Count >= items_offset + 1 + 5;
+	}
+    bool CanClickLeft()
+    {
+        return items_offset > 0;
+	}
     public void OnRightClicked()
     {
-        if (nonzero_images.Count >= items_offset+1+5)
+        if (CanClickRight())
         {
             items_offset++;
             UpdateImages();
         }
+        button_scale.ScaleStop();
     }
     public void OnLeftClicked()
     {
-        if (items_offset >0)
+        if (CanClickLeft())
         {
             items_offset--;
             UpdateImages();
@@ -94,7 +108,17 @@ public class BuildCanvas : MonoBehaviour
         }
         items_offset = 0;
         UpdateImages();
+        Debug.Log("Tested");
+        if (CanClickRight())
+        {
+            Debug.Log("Succeed");
+            Util.Delay(this, 5, () =>
+            {
+                button_scale.ScaleStart();
+            });
+        }
     }
+    public ButtonScale button_scale;
     public Sprite one_selected;
 	public Sprite two_selected;
 	public Sprite three_selected;

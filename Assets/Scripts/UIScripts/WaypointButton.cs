@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class WaypointButton : MonoBehaviour
 {
 	Util.WaypointName waypoint_name;
+	ButtonScale button_scale;
     public Util.WaypointName WaypointName
 	{
 		get
@@ -21,17 +22,23 @@ public class WaypointButton : MonoBehaviour
 	public Checkpoint Checkpoint { get; set; }
 	public Text text;
 	Image image;
+	public void StartScale()
+	{
+		button_scale = GetComponent<ButtonScale>();
+		button_scale.ScaleStart();
+	}
 	private void Start()
 	{
 		image = GetComponent<Image>();
+		button_scale = GetComponent<ButtonScale>();
 		Debug.Assert(image != null);
-
 	}
 	public void OnClick()
 	{
 		MapCanvas.Inst.Deactivate();
 		BigMapCamera.Inst.Deactivate();
 		GameState.Inst.GoToCheckpointAsync(WaypointName);
+		button_scale.ScaleStop();
 	}
 	private void Update()
 	{
