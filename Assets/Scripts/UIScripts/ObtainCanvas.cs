@@ -44,6 +44,7 @@ public class ObtainCanvas : MonoBehaviour
 		img.sprite = dict[component].Item1;
 		text.text = dict[component].Item2;
 		// CarCore.Inst.Fix();
+		CarCore.Inst.DampStart();
 	}
 	private void Update()
 	{
@@ -51,6 +52,7 @@ public class ObtainCanvas : MonoBehaviour
 		{
 			// CarCore.Inst.Unfix();
 			gameObject.SetActive(false);
+			CarCore.Inst.DampStop();
 		}
 	}
 }

@@ -659,6 +659,10 @@ public partial class GridMatrix: MonoBehaviour
 		Probe.MovePosition(transform.position + transform.rotation*ProbeTargetPos);
 		Probe.MoveRotation(transform.rotation);
 	}
+	public void MoveProbeToOrigin()
+	{
+		Probe.MovePosition(new Vector3(0, -1000, 0));
+	}
 	IEnumerator ScanHelper()
 	{
 		Retry.Inst.CanRetry = false;

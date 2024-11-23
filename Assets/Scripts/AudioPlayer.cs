@@ -24,6 +24,8 @@ public class AudioPlayer : MonoBehaviour
     {
         get { Debug.Assert(inst != null, "Audio player not set");return inst; }
     }
+    public bool is_transition3 = false;
+    public bool is_transition1 = false;
     void Start()
     {
         Debug.Assert(inst == null, "Audio Player already instantiated");
@@ -34,8 +36,26 @@ public class AudioPlayer : MonoBehaviour
         musicSource.volume = 0.5f;
         soundEffectSource.volume = 0.2f;
         EventBus.Subscribe<ScreamEvent>(Scream);
-        StartCoroutine(Snore());
+        // StartCoroutine(Snore());
+        if (is_transition3)
+        {
+            StartCoroutine(DelayScream());
+		}
+        if (is_transition1)
+        {
+            StartCoroutine(DelayRocket());
+        }
     }
+    IEnumerator DelayScream()
+    {
+        yield return new WaitForSeconds(0.2f);
+		Scream(null);
+	}
+	IEnumerator DelayRocket()
+	{
+		yield return new WaitForSeconds(0.4f);
+        RocketStart();
+	}
 	private void OnDestroy()
 	{
         inst = null;

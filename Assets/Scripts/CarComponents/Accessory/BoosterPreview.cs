@@ -37,6 +37,12 @@ public abstract class BoosterPreview : AccessoryComponent
 	public ParticleSystem particle_system2;
 	public ParticleSystem particle_system3;
     bool exhausted = false;
+    public void PlayParticle()
+    {
+		particle_system1.Play();
+		particle_system2.Play();
+		particle_system3.Play();
+	}
 	void Update()
     {
         if (built)
@@ -48,9 +54,7 @@ public abstract class BoosterPreview : AccessoryComponent
 					RB.AddForce(transform.up * thrust);
 					if (Input.GetMouseButtonDown(1))
 					{
-						particle_system1.Play();
-						particle_system2.Play();
-						particle_system3.Play();
+                        PlayParticle();
 					}
 				}				
 			}

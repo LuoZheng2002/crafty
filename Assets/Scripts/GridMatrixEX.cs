@@ -294,7 +294,7 @@ public partial class GridMatrix: MonoBehaviour
 		(int h, int w, int l) = GameSave.GridSize;
 		Probe.transform.localScale = new Vector3(w, h, l);
 		ProbeTargetPos = new Vector3(0, ((float)h - 1.0f) / 2.0f, 0);
-		MoveProbeToGrid();
+		// MoveProbeToGrid();
 	}
 	public bool CollisionFlag { get; set; } = false;
 	

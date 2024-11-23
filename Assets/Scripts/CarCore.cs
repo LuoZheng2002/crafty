@@ -138,7 +138,22 @@ public class CarCore : MonoBehaviour
 		container.gameObject.SetActive(false);
 		UnbindPig();
 	}
-
+	public void DampStart()
+	{
+		foreach(Transform child in container)
+		{
+			VehicleComponent vehicle_component = child.GetComponent<VehicleComponent>();
+			vehicle_component.DampStart();
+		}
+	}
+	public void DampStop()
+	{
+		foreach (Transform child in container)
+		{
+			VehicleComponent vehicle_component = child.GetComponent<VehicleComponent>();
+			vehicle_component.DampStop();
+		}
+	}
 	public void AlignToGridMatrixAsync()
 	{
 		rb.MovePosition(GridMatrix.Inst.transform.position + GridMatrix.Inst.transform.rotation* GridMatrix.Inst.ProbeTargetPos);
