@@ -90,50 +90,60 @@ public class GameState : MonoBehaviour
 	//{
 	//	StartCoroutine(MoveCameraToGrid(false));
 	//}
+	bool official_start = false;
 	void Yikai()
 	{
-		Util.unbreakable = true;
-		// TransitionToStory(Util.StoryName.Crash);
-		// TransitionToFirstBuild();
 		Util.unbreakable = false;
-		GameSave.IncrementGridSize(1, 1, 0);
-		GameSave.CurrentMemory. MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
-		GameSave.CurrentMemory.MemAccessories[1, 0, 1] = Util.Component.Rocket;
-		GameSave.CurrentMemory.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
-		GameSave.CurrentMemory.MemAccessories[1, 1, 0] = Util.Component.Rocket;
-		GameSave.CurrentMemory.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
-		GameSave.CurrentMemory.MemAccessories[1, 1, 2] = Util.Component.Rocket;
-		GameSave.CurrentMemory.MemCrates[1, 2, 0] = Util.Component.WoodenCrate;
-		GameSave.CurrentMemory.MemAccessories[1, 2, 1] = Util.Component.Rocket;
-		GameSave.CurrentMemory.MemCrates[1, 2, 2] = Util.Component.WoodenCrate;
-		GameSave.CurrentMemory.MemLoads[1, 2, 2] = Util.Component.Pig;
-		GameSave.CurrentMemory.MemLoads[1, 0, 2] = Util.Component.Partner;
-		GameSave.CurrentMemory.MemAccessories[0, 0, 0] = Util.Component.MotorWheel;
-		GameSave.CurrentMemory.MemAccessories[0, 0, 2] = Util.Component.TurnWheel;
-		GameSave.CurrentMemory.MemAccessories[0, 2, 0] = Util.Component.MotorWheel;
-		GameSave.CurrentMemory.MemAccessories[0, 2, 2] = Util.Component.TurnWheel;
-		GameSave.Inventory[Util.Component.MotorWheel] += 2;
-		GameSave.Inventory[Util.Component.TurnWheel] += 2;
-		GameSave.Inventory[Util.Component.WoodenCrate] = 9;
-		GameSave.Inventory[Util.Component.Rocket] = 9;
-		GameSave.Inventory[Util.Component.Umbrella] = 9;
+		
+		if (official_start)
+		{
+			TransitionToStory(Util.StoryName.Crash);
+		}
+		else
+		{
+			Util.unbreakable = true;
+			GameSave.IncrementGridSize(1, 1, 0);
+			GameSave.CurrentMemory.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
+			GameSave.CurrentMemory.MemAccessories[1, 0, 1] = Util.Component.Rocket;
+			GameSave.CurrentMemory.MemCrates[1, 0, 2] = Util.Component.WoodenCrate;
+			GameSave.CurrentMemory.MemAccessories[1, 1, 0] = Util.Component.Rocket;
+			GameSave.CurrentMemory.MemCrates[1, 1, 1] = Util.Component.WoodenCrate;
+			GameSave.CurrentMemory.MemAccessories[1, 1, 2] = Util.Component.Rocket;
+			GameSave.CurrentMemory.MemCrates[1, 2, 0] = Util.Component.WoodenCrate;
+			GameSave.CurrentMemory.MemAccessories[1, 2, 1] = Util.Component.Rocket;
+			GameSave.CurrentMemory.MemCrates[1, 2, 2] = Util.Component.WoodenCrate;
+			GameSave.CurrentMemory.MemLoads[1, 2, 2] = Util.Component.Pig;
+			GameSave.CurrentMemory.MemLoads[1, 0, 2] = Util.Component.Partner;
+			GameSave.CurrentMemory.MemAccessories[0, 0, 0] = Util.Component.MotorWheel;
+			GameSave.CurrentMemory.MemAccessories[0, 0, 2] = Util.Component.TurnWheel;
+			GameSave.CurrentMemory.MemAccessories[0, 2, 0] = Util.Component.MotorWheel;
+			GameSave.CurrentMemory.MemAccessories[0, 2, 2] = Util.Component.TurnWheel;
+			GameSave.Inventory[Util.Component.MotorWheel] += 2;
+			GameSave.Inventory[Util.Component.TurnWheel] += 2;
+			GameSave.Inventory[Util.Component.WoodenCrate] = 9;
+			GameSave.Inventory[Util.Component.Rocket] = 9;
+			GameSave.Inventory[Util.Component.Umbrella] = 9;
+			BuildCanvas.Inst.ShowDesignNumbers();
+			GoToCheckpointAsync(Util.WaypointName.TownEntrance, true);
+		}
+        // TransitionToFirstBuild();
 
-		GoToCheckpointAsync(Util.WaypointName.TownEntrance, true);
-		//GoToCheckpointAsync(Util.WaypointName.VolcRoom4, true);
 
-		// TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
-		//  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
-		// TransitionToStory(Util.StoryName.TownWaypoint);
-		// town_waypoint_met = true;
-		// TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.None);
-		// TransitionToStory(Util.StoryName.C1S1);
-		// TransitionToBuild(Util.WaypointName.Volcano, Util.GoalName.VolcBottom);
-		// TransitionToBuild(Util.WaypointName.VolcBottom, Util.GoalName.VolcTop);
-		// FirstPerson.Inst.Show();
-		// Retry.Inst.Show();
-		// GoalCanvas.Inst.GoalToFollow = Util.GoalName.PreStory1;
-		// Goal.Activate(Util.GoalName.PreStory1);
-		PlayCanvas.Inst.HideUmbrella();
+        //GoToCheckpointAsync(Util.WaypointName.VolcRoom4, true);
+
+        // TransitionToBuild(Util.WaypointName.PreStory2, Util.GoalName.PreStory2);
+        //  TransitionToBuild(Util.WaypointName.None, Util.GoalName.PreStory2);
+        // TransitionToStory(Util.StoryName.TownWaypoint);
+        // town_waypoint_met = true;
+        // TransitionToBuild(Util.WaypointName.C1S1, Util.GoalName.None);
+        // TransitionToStory(Util.StoryName.C1S1);
+        //TransitionToBuild(Util.WaypointName.Volcano, Util.GoalName.VolcBottom);
+        // TransitionToBuild(Util.WaypointName.VolcBottom, Util.GoalName.VolcTop);
+        // FirstPerson.Inst.Show();
+        // Retry.Inst.Show();
+        // GoalCanvas.Inst.GoalToFollow = Util.GoalName.PreStory1;
+        // Goal.Activate(Util.GoalName.PreStory1);
+        PlayCanvas.Inst.HideUmbrella();
 		PlayCanvas.Inst.HideRocket();
 	}
 	IEnumerator AtTownWaypoint()
@@ -233,9 +243,12 @@ public class GameState : MonoBehaviour
 					Checkpoint.Get(WaypointName.VolcRoom1_1).Activate();
 					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_1;
 					break;
-				case WaypointName.VolcRoom1_1:
-					Checkpoint.Get(WaypointName.VolcRoom1_2).Activate();
-					GoalCanvas.Inst.CheckpointToFollow = WaypointName.VolcRoom1_2;
+				case WaypointName.BeforeDesign1:
+					BuildCanvas.Inst.ShowDesignNumbers();
+					Checkpoint.Get(WaypointName.BeforeDesign2).Activate();
+					GoalCanvas.Inst.CheckpointToFollow = WaypointName.BeforeDesign2;
+					IntroducePreset = true;
+					StartCoroutine(PresetIntroduction());
 					break;
 				case WaypointName.VolcRoom1_2:
 					Checkpoint.Get(WaypointName.VolcRoom1_3).Activate();
@@ -1165,7 +1178,17 @@ public class GameState : MonoBehaviour
 		yield return BlackoutCanvas.Inst.DisplaySub("More Contents Coming Soon", 1.5f, 1.0f, 0.0f);
 		yield return BlackoutCanvas.Inst.Blackout(0.5f, 1.0f, 0.0f);
 	}
-	Util.WaypointName current_waypoint;
+
+	public IEnumerator PresetIntroduction()
+	{
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Now, we can use Presets to save different builds!", Character.Partner);
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForEvent("Shirley", "Click on the Rebuild button.", (RebuildButtonClickedEvent e) => true);
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForEvent("Shirley", "Click on the 1st Preset button to try it out.", (PresetButtonClickedEvent e) => true);
+		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Great! Now you can revisit this build anytime to use or edit!", Character.Partner);
+        LineCanvas.Bottom.Hide();
+    }
+
+    Util.WaypointName current_waypoint;
 
 
 	public void TryScan()

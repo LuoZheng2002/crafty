@@ -10139,6 +10139,26 @@ PrefabInstance:
       propertyPath: componentDesignPrefab
       value: 
       objectReference: {fileID: 7430232153015806799, guid: 6d32ce1a2d6cce34ba4ae67afb730fac, type: 3}
+    - target: {fileID: 237224758562840912, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 237224758562840912, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 237224758562840912, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 237224758562840912, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 237224758562840912, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 405382181262800415, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10163,6 +10183,26 @@ PrefabInstance:
       propertyPath: componentDesignPrefab
       value: 
       objectReference: {fileID: 5184445184715894536, guid: 2f2b7ac70ad060d438ad37c06f8dd160, type: 3}
+    - target: {fileID: 829144672162755945, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 829144672162755945, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 829144672162755945, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 829144672162755945, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 829144672162755945, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1497855097830855560, guid: 4a6597d01efdcff4e92047a4971f3c4c, type: 3}
       propertyPath: componentDesignPrefab
       value: 

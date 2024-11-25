@@ -710,7 +710,11 @@ public partial class GridMatrix: MonoBehaviour
 			yield return null;
 			yield return null;
 			yield return null;
-			if (!CollisionFlag)
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            if (!CollisionFlag)
 			{
 				Debug.Log($"Success!");
 				EventBus.Publish(new ScanSuccessEvent());
