@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\CarComponents\Crate\WoodenCrate.cs" />
     <Compile Include="Assets\Scripts\GameSave.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\UIScripts\PresetButton.cs" />
     <Compile Include="Assets\Scripts\UIScripts\MiniMapFollowPlayer.cs" />
     <Compile Include="Assets\Scripts\UIScripts\BuildCanvas.cs" />
     <Compile Include="Assets\Scripts\Probe.cs" />

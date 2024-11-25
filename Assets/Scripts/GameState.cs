@@ -90,10 +90,10 @@ public class GameState : MonoBehaviour
 	//{
 	//	StartCoroutine(MoveCameraToGrid(false));
 	//}
-	bool official_start = true;
+	bool official_start = false;
 	void Yikai()
 	{
-		Util.unbreakable = true;
+		Util.unbreakable = false;
 		
 		if (official_start)
 		{
@@ -101,7 +101,7 @@ public class GameState : MonoBehaviour
 		}
 		else
 		{
-			Util.unbreakable = false;
+			Util.unbreakable = true;
 			GameSave.IncrementGridSize(1, 1, 0);
 			GameSave.CurrentMemory.MemCrates[1, 0, 0] = Util.Component.WoodenCrate;
 			GameSave.CurrentMemory.MemAccessories[1, 0, 1] = Util.Component.Rocket;
@@ -124,7 +124,7 @@ public class GameState : MonoBehaviour
 			GameSave.Inventory[Util.Component.Rocket] = 9;
 			GameSave.Inventory[Util.Component.Umbrella] = 9;
 			BuildCanvas.Inst.ShowDesignNumbers();
-			GoToCheckpointAsync(Util.WaypointName.TownEntrance, true);
+			GoToCheckpointAsync(Util.WaypointName.VolcanoGate, true);
 		}
 		// TransitionToFirstBuild();
 		
@@ -251,13 +251,14 @@ public class GameState : MonoBehaviour
 					Checkpoint.Get(WaypointName.BeforeDesign1).Activate();
 					GoalCanvas.Inst.CheckpointToFollow = WaypointName.BeforeDesign1;
 					break;
-				case WaypointName.BeforeDesign1:
-					BuildCanvas.Inst.ShowDesignNumbers();
-					Checkpoint.Get(WaypointName.BeforeDesign2).Activate();
-					GoalCanvas.Inst.CheckpointToFollow = WaypointName.BeforeDesign2;
-					IntroducePreset = true;
-					break;
-				case WaypointName.BeforeDesign2:
+                case WaypointName.BeforeDesign1:
+                    BuildCanvas.Inst.ShowDesignNumbers();
+                    Checkpoint.Get(WaypointName.BeforeDesign2).Activate();
+                    GoalCanvas.Inst.CheckpointToFollow = WaypointName.BeforeDesign2;
+                    IntroducePreset = true;
+                    StartCoroutine(PresetIntroduction());
+                    break;
+                case WaypointName.BeforeDesign2:
 					Checkpoint.Get(WaypointName.BeforeDesign3).Activate();
 					GoalCanvas.Inst.CheckpointToFollow = WaypointName.BeforeDesign3;
 					break;
@@ -1114,4 +1115,13 @@ public class GameState : MonoBehaviour
 		yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Drive straight into the winding valley. That's the shortest path.", null);
 		LineCanvas.Bottom.Hide();
 	}
+
+    public IEnumerator PresetIntroduction()
+    {
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Now, we can use Presets to save different builds!", Character.Partner);
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForEvent("Shirley", "Click on the Rebuild button.", (RebuildButtonClickedEvent e) => true);
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForEvent("Shirley", "Click on the 1st Preset button to try it out.", (PresetButtonClickedEvent e) => true);
+        yield return LineCanvas.Bottom.DisplayLineAndWaitForClick("Shirley", "Great! Now you can revisit this build anytime to use or edit!", Character.Partner);
+        LineCanvas.Bottom.Hide();
+    }
 }
